@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { FaHome, FaUser, FaStar, FaServicestack, FaEnvelope, FaTwitter, FaFacebook, FaInstagram, FaSkype, FaLinkedin, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaPython, FaDatabase, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaNetworkWired, FaServer } from 'react-icons/fa';
-import { SiTailwindcss, SiExpress, SiAxios, SiMysql, SiVuedotjs, SiVite, SiVuetify, SiPinia, SiNodedotjs, SiJsonwebtokens, SiSendgrid, SiVercel } from 'react-icons/si';
+import { FaHome, FaUser, FaStar, FaServicestack, FaEnvelope, FaTwitter, FaFacebook, FaInstagram, FaSkype, FaLinkedin, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug } from 'react-icons/fa';
+import { SiTailwindcss, SiExpress, SiAxios, SiMysql, SiVercel } from 'react-icons/si';
 import Typed from 'typed.js';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -145,7 +145,7 @@ function App() {
           <img src="5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg" alt="Profile" className="img-fluid rounded-circle" />
         </div>
 
-        <a className="logo d-flex align-items-center justify-content-center">
+        <a href="#" className="logo d-flex align-items-center justify-content-center">
           <h1 className="sitename">John Carlo Aganan</h1>
         </a>
 
