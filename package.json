@@ -20,7 +20,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "vercel-build": "npx react-scripts build"
+    "vercel-build": "npx --yes react-scripts build",
+    "postinstall": "chmod +x node_modules/.bin/react-scripts || true"
   },
   "eslintConfig": {
     "extends": [
