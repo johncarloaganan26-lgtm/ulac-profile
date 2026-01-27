@@ -26,7 +26,11 @@
   "eslintConfig": {
     "extends": [
       "react-app"
-    ]
+    ],
+    "rules": {
+      "no-unused-vars": "warn",
+      "jsx-a11y/anchor-is-valid": "warn"
+    }
   },
   "browserslist": {
     "production": [
