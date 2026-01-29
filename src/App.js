@@ -189,6 +189,7 @@ function App() {
         </div>
 
         <div className="logo d-flex align-items-center justify-content-center">
+          <img src={`${process.env.PUBLIC_URL}/ChatGPT Image Jan 30, 2026, 02_34_49 AM.png`} alt="Logo" style={{width: '40px', height: '40px', marginRight: '10px', borderRadius: '8px'}} />
           <h1 className="sitename">John Carlo Aganan</h1>
         </div>
 
