@@ -122,24 +122,52 @@ function App() {
         </button>
       )}
 
+      {/* Burger Menu Toggle Button */}
+      <motion.button 
+        className={`sidebar-toggle burger-menu ${!sidebarCollapsed ? 'active' : ''}`}
+        onClick={() => setSidebarCollapsed(!sidebarCollapsed)} 
+        title="Toggle Sidebar"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        <motion.i 
+          className="bi bi-list"
+          animate={{ 
+            opacity: sidebarCollapsed ? 1 : 0,
+            rotate: sidebarCollapsed ? 0 : -90
+          }}
+          transition={{ duration: 0.2 }}
+        />
+        <motion.i 
+          className="bi bi-x-lg"
+          style={{ position: 'absolute' }}
+          animate={{ 
+            opacity: sidebarCollapsed ? 0 : 1,
+            rotate: sidebarCollapsed ? -90 : 0
+          }}
+          transition={{ duration: 0.2 }}
+        />
+      </motion.button>
+
+      {/* Mobile Overlay */}
+      <motion.div 
+        className="sidebar-overlay"
+        initial={{ opacity: 0, pointerEvents: 'none' }}
+        animate={{ 
+          opacity: sidebarCollapsed ? 0 : 0.5,
+          pointerEvents: sidebarCollapsed ? 'none' : 'auto'
+        }}
+        transition={{ duration: 0.3 }}
+        onClick={() => setSidebarCollapsed(true)}
+      />
+
       {/* Header Sidebar */}
-      <header className={`header dark-background ${sidebarCollapsed ? 'collapsed' : ''}`}>
-        <button className="header-toggle d-xl-none" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}>
-          <i className="bi bi-list"></i>
-        </button>
-        <motion.button 
-          className="sidebar-toggle" 
-          onClick={() => setSidebarCollapsed(!sidebarCollapsed)} 
-          title="Toggle Sidebar"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <motion.i 
-            className={`bi ${sidebarCollapsed ? 'bi-chevron-right' : 'bi-chevron-left'}`}
-            animate={{ rotate: sidebarCollapsed ? 0 : 180 }}
-            transition={{ duration: 0.3 }}
-          />
-        </motion.button>
+      <motion.header 
+        className="header dark-background"
+        initial={{ x: -280 }}
+        animate={{ x: sidebarCollapsed ? -280 : 0 }}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
+      >
 
         <div className="profile-img">
           <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} alt="Profile" className="img-fluid rounded-circle" />
@@ -186,7 +214,7 @@ function App() {
             </motion.li>
           </ul>
         </nav>
-      </header>
+      </motion.header>
 
       {/* Main Content */}
       <main className="main">

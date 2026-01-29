@@ -493,6 +493,87 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/*--------------------------------------------------------------
+# Burger Menu & Sidebar Slide Out
+--------------------------------------------------------------*/
+.sidebar-toggle.burger-menu {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  width: 40px;
+  height: 40px;
+  background: var(--accent-color);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 1001;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-toggle.burger-menu:hover {
+  background: color-mix(in srgb, var(--accent-color), transparent 20%);
+  transform: scale(1.05);
+}
+
+.sidebar-toggle.burger-menu i {
+  font-size: 20px;
+  position: absolute;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 998;
+  transition: opacity 0.3s ease;
+}
+
+/* Main content margin when sidebar is visible */
+.main {
+  margin-left: 300px;
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1199px) {
+  .main {
+    margin-left: 0;
+  }
+
+  .sidebar-toggle.burger-menu {
+    display: flex;
+  }
+
+  .header {
+    left: -300px;
+    z-index: 999;
+  }
+
+  .header.sidebar-exited {
+    left: -300px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .sidebar-toggle.burger-menu {
+    display: none;
+  }
+
+  .sidebar-overlay {
+    display: none;
+  }
+
+  .main {
+    margin-left: 300px;
+  }
+}
+
 .profile-img img {
   margin: 15px auto;
   display: block;
