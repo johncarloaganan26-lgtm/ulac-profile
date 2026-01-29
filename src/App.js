@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { FaHome, FaUser, FaStar, FaServicestack, FaEnvelope, FaTwitter, FaFacebook, FaInstagram, FaSkype, FaLinkedin, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug } from 'react-icons/fa';
+import { FaHome, FaUser, FaStar, FaServicestack, FaEnvelope, FaTwitter, FaFacebook, FaInstagram, FaSkype, FaLinkedin, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun } from 'react-icons/fa';
 import { SiTailwindcss, SiExpress, SiAxios, SiMysql, SiVercel } from 'react-icons/si';
 import Typed from 'typed.js';
 import AOS from 'aos';
@@ -10,6 +10,7 @@ import 'aos/dist/aos.css';
 import 'glightbox/dist/css/glightbox.css';
 import GLightbox from 'glightbox';
 import project1Image from './Screenshot 2026-01-28 035743.png';
+import logoImage from './ChatGPT Image Jan 30, 2026, 02_34_49 AM.png';
 
 // Framer Motion skill icon component with continuous bounce animation
 const SkillIcon = ({ icon: Icon, style, delay = 0 }) => (
@@ -37,7 +38,7 @@ const SkillIcon = ({ icon: Icon, style, delay = 0 }) => (
 function App() {
   const [preloaderRemoved, setPreloaderRemoved] = useState(false);
   const [scrollTopActive, setScrollTopActive] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const typedRef = useRef(null);
 
   useEffect(() => {
@@ -111,7 +112,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
       {/* Preloader */}
       {!preloaderRemoved && <div id="preloader"></div>}
 
@@ -122,39 +123,24 @@ function App() {
         </button>
       )}
 
-      {/* Burger Menu Toggle Button */}
+      {/* Dark Mode Toggle */}
       <motion.button 
-        className="sidebar-toggle burger-menu"
-        onClick={() => setSidebarCollapsed(!sidebarCollapsed)} 
-        title="Toggle Sidebar"
+        className="dark-mode-toggle"
+        onClick={() => setDarkMode(!darkMode)} 
+        title="Toggle Dark Mode"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >
-        <i className="bi bi-list"></i>
+        {darkMode ? <FaSun /> : <FaMoon />}
       </motion.button>
 
-      {/* Mobile Overlay */}
-      <motion.div 
-        className="sidebar-overlay"
-        initial={{ opacity: 0, pointerEvents: 'none' }}
-        animate={{ 
-          opacity: sidebarCollapsed ? 0 : 0.5,
-          pointerEvents: sidebarCollapsed ? 'none' : 'auto'
-        }}
-        transition={{ duration: 0.3 }}
-        onClick={() => setSidebarCollapsed(true)}
-      />
-
       {/* Header Sidebar */}
-      <motion.header 
-        className="header dark-background"
-        initial={{ x: -300 }}
-        animate={{ x: sidebarCollapsed ? -300 : 0 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
+      <header 
+        className={`header ${darkMode ? 'dark-background' : ''}`}
       >
 
         <div className="profile-img">
-          <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} alt="Profile" className="img-fluid rounded-circle" />
+          <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} alt="Profile" className="img-fluid rounded-circle" style={{width: '120px', height: '120px', objectFit: 'cover'}} />
         </div>
 
         <div className="logo d-flex align-items-center justify-content-center">
@@ -198,10 +184,10 @@ function App() {
             </motion.li>
           </ul>
         </nav>
-      </motion.header>
+      </header>
 
       {/* Main Content */}
-      <main className={`main ${!sidebarCollapsed ? 'sidebar-open' : ''}`}>
+      <main className="main sidebar-open">
         {/* Hero Section */}
         <section id="hero" className="hero section dark-background">
           <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} alt="John Carlo Aganan" data-aos="fade-in" />
@@ -215,14 +201,14 @@ function App() {
 
         {/* About Section */}
         <section id="about" className="about section light-mode-section">
-          <div className="container section-title" data-aos="fade-up">
+          <div className="container section-title text-center" data-aos="fade-up">
             <h2>About Me</h2>
             <p>I'm a passionate BSIT student in my 4th year, driven by a genuine love for building modern, scalable web applications.</p>
           </div>
           <div className="container" data-aos="fade-up" data-aos-delay="100">
             <div className="row gy-4 justify-content-center">
-              <div className="col-lg-4">
-                <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} className="img-fluid" alt="Profile" />
+              <div className="col-lg-4 text-center">
+                <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} className="img-fluid shadow-lg" alt="Profile" style={{maxWidth: '100%', maxHeight: '400px', height: 'auto'}} />
               </div>
               <div className="col-lg-8 content">
                 <h2>Full-Stack Web Developer</h2>
@@ -233,7 +219,7 @@ function App() {
                   <div className="col-lg-6">
                     <ul>
                       <li><i className="bi bi-chevron-right"></i> <strong>Education:</strong> <span>Cavite State University Cavite City Campus - BSIT 4th yr</span></li>
-                      <li><i className="bi bi-chevron-right"></i> <strong>Website:</strong> <span>www.yourwebsite.com</span></li>
+                      <li><i className="bi bi-chevron-right"></i> <strong>Website:</strong> <span>biblebaptistekklesiaofkawit.xyz</span></li>
                       <li><i className="bi bi-chevron-right"></i> <strong>Country:</strong> <span>Philippines</span></li>
                       <li><i className="bi bi-chevron-right"></i> <strong>Status:</strong> <span>Available for hire</span></li>
                     </ul>
@@ -263,7 +249,7 @@ function App() {
 
         {/* Skills Section */}
         <section id="skills" className="skills section">
-          <div className="container section-title" data-aos="fade-up">
+          <div className="container section-title text-center" data-aos="fade-up">
             <h2>Skills & Technologies</h2>
             <p>A comprehensive set of technologies and tools I work with to build modern web applications</p>
           </div>
@@ -398,21 +384,21 @@ function App() {
 
         {/* Projects Section */}
         <section id="projects" className="projects section">
-          <div className="container section-title" data-aos="fade-up">
+          <div className="container section-title text-center" data-aos="fade-up">
             <h2>Projects</h2>
             <p>Here are some of the projects I've worked on</p>
           </div>
           <div className="container" data-aos="fade-up" data-aos-delay="100">
-            <div className="row justify-content-start">
-              <div className="col-lg-8 portfolio-item">
+            <div className="row justify-content-center">
+              <div className="col-lg-10 portfolio-item">
                 <div className="portfolio-content h-100">
-                  <a href={project1Image} data-gallery="portfolio-gallery" className="glightbox" data-glightbox="title: BBEK Church Management System; description: <p>BBEK Church Management System is a comprehensive church administration platform designed to manage church records, events, services, and community engagement. Built with role-based access control (admin, pastor, member), it includes modules for member management, event coordination, service records, donations, announcements, and content management. Optimized for church operations with features like bulk operations, reporting, email notifications, and secure data handling.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'><SiMysql /> MySQL</span><span class='glightbox-tech-item'><SiVuedotjs /> Vue.js</span><span class='glightbox-tech-item'><SiExpress /> Express</span><span class='glightbox-tech-item'><SiNodedotjs /> Node.js</span><span class='glightbox-tech-item'><SiVuetify /> Vuetify</span><span class='glightbox-tech-item'>📦 Element Plus</span><span class='glightbox-tech-item'><SiPinia /> Pinia</span><span class='glightbox-tech-item'><SiAxios /> Axios</span><span class='glightbox-tech-item'><SiJsonwebtokens /> JWT</span><span class='glightbox-tech-item'><SiSendgrid /> SendGrid</span><span class='glightbox-tech-item'>📊 ExcelJS</span><span class='glightbox-tech-item'>📄 CSV Parser</span><span class='glightbox-tech-item'><SiVite /> Vite</span><span class='glightbox-tech-item'>🪟 Winser</span></div></div>; descPosition: right;">
-                    <img src={project1Image} className="img-fluid" style={{ width: '100%', height: '350px', objectFit: 'cover' }} alt="Church Website" />
+                  <a href={project1Image} data-gallery="portfolio-gallery" className="glightbox d-flex justify-content-center align-items-center" style={{minHeight: '450px', padding: '20px'}} data-glightbox="title: BBEK Church Management System; description: <p>BBEK Church Management System is a comprehensive church administration platform designed to manage church records, events, services, and community engagement. Built with role-based access control (admin, pastor, member), it includes modules for member management, event coordination, service records, donations, announcements, and content management. Optimized for church operations with features like bulk operations, reporting, email notifications, and secure data handling.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'><SiMysql /> MySQL</span><span class='glightbox-tech-item'><SiVuedotjs /> Vue.js</span><span class='glightbox-tech-item'><SiExpress /> Express</span><span class='glightbox-tech-item'><SiNodedotjs /> Node.js</span><span class='glightbox-tech-item'><SiVuetify /> Vuetify</span><span class='glightbox-tech-item'>📦 Element Plus</span><span class='glightbox-tech-item'><SiPinia /> Pinia</span><span class='glightbox-tech-item'><SiAxios /> Axios</span><span class='glightbox-tech-item'><SiJsonwebtokens /> JWT</span><span class='glightbox-tech-item'><SiSendgrid /> SendGrid</span><span class='glightbox-tech-item'>📊 ExcelJS</span><span class='glightbox-tech-item'>📄 CSV Parser</span><span class='glightbox-tech-item'><SiVite /> Vite</span><span class='glightbox-tech-item'>🪟 Winser</span></div></div>; descPosition: right;">
+                    <img src={project1Image} className="img-fluid rounded shadow" style={{ maxWidth: '100%', maxHeight: '500px', width: 'auto', height: 'auto', objectFit: 'contain' }} alt="Church Website" />
                   </a>
                   <div className="portfolio-info">
                     <h4>BBEK Church Management System</h4>
                     <p>A comprehensive church administration platform with role-based access control and various modules.</p>
-                    <a href="https://biblebaptistekklesiaofkawit.xyz/" target="_blank" rel="noopener noreferrer" className="visit-site-btn">View Project</a>
+                    <a href="https://biblebaptistekklesiaofkawit.xyz/" target="_blank" rel="noopener noreferrer" className="visit-site-btn btn-lg px-4 py-2 rounded-pill shadow-sm">View Project <i className="bi bi-arrow-right ms-2"></i></a>
                   </div>
                 </div>
               </div>
@@ -422,7 +408,7 @@ function App() {
 
         {/* Contact Section */}
         <section id="contact" className="contact section">
-          <div className="container section-title" data-aos="fade-up">
+          <div className="container section-title text-center" data-aos="fade-up">
             <h2>Contact</h2>
             <p>Get in touch with me for any inquiries or collaboration opportunities.</p>
           </div>
@@ -482,15 +468,6 @@ function App() {
           </div>
         </section>
       </main>
-
-      {/* Footer */}
-      <footer className="footer dark-background">
-        <div className="container">
-          <div className="copyright text-center">
-            <p>© <span>Copyright</span> <strong className="px-1 sitename">MyPortfolio</strong> <span>All Rights Reserved</span></p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

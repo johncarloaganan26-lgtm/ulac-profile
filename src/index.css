@@ -8,6 +8,284 @@
 }
 
 /*--------------------------------------------------------------
+# Dark Mode Toggle Button
+--------------------------------------------------------------*/
+.dark-mode-toggle {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  width: 44px;
+  height: 44px;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1002;
+  transition: all 0.3s ease;
+  color: #374151;
+  font-size: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode-toggle:hover {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #ffffff;
+}
+
+.dark-mode .dark-mode-toggle {
+  background: #0f0f23;
+  border-color: #1a1a3e;
+  color: #fbbf24;
+}
+
+/*--------------------------------------------------------------
+# Dark Mode Styles
+--------------------------------------------------------------*/
+.dark-mode body {
+  background-color: #0f0f23;
+  color: #e5e7eb;
+}
+
+.dark-mode .App {
+  background-color: #0f0f23;
+}
+
+.dark-mode .header {
+  background-color: #0f0f23;
+  color: #e5e7eb;
+  border-color: #1a1a3e;
+}
+
+.dark-mode .profile-img img {
+  border-color: #1a1a3e;
+}
+
+.dark-mode .logo h1 {
+  color: #ffffff;
+}
+
+.dark-mode .social-links a {
+  background: #1a1a3e;
+  color: #e5e7eb;
+}
+
+.dark-mode .social-links a:hover {
+  background: var(--accent-color);
+  color: #ffffff;
+}
+
+.dark-mode .navmenu a {
+  color: #d1d5db;
+}
+
+.dark-mode .navmenu a:hover,
+.dark-mode .navmenu .active {
+  color: var(--accent-color);
+}
+
+/* Dark mode for all content sections - same color as sidebar */
+.dark-mode .main {
+  background-color: #0f0f23;
+}
+
+.dark-mode .about.section,
+.dark-mode .skills.section,
+.dark-mode .projects.section,
+.dark-mode .contact.section {
+  background-color: #0f0f23;
+  color: #e5e7eb;
+}
+
+.dark-mode .about.section h2,
+.dark-mode .skills.section h2,
+.dark-mode .projects.section h2,
+.dark-mode .contact.section h2 {
+  color: #ffffff;
+}
+
+.dark-mode .about.section p,
+.dark-mode .skills.section p,
+.dark-mode .projects.section p,
+.dark-mode .contact.section p {
+  color: #d1d5db;
+}
+
+.dark-mode .about.section li,
+.dark-mode .skills.section li,
+.dark-mode .projects.section li,
+.dark-mode .contact.section li {
+  color: #d1d5db;
+}
+
+.dark-mode .about.section h4,
+.dark-mode .skills.section h3,
+.dark-mode .projects.section h4,
+.dark-mode .contact.section h2,
+.dark-mode .contact.section h3 {
+  color: #ffffff;
+}
+
+.dark-mode .strengths-list li {
+  color: #d1d5db;
+}
+
+/* Skills section dark mode */
+.dark-mode .progress {
+  background: #1a1a3e;
+}
+
+.dark-mode .skill {
+  color: #e5e7eb !important;
+}
+
+.dark-mode .skill .val {
+  color: #d1d5db;
+}
+
+.dark-mode .progress-bar-wrap {
+  background: #1a1a3e;
+}
+
+.dark-mode .progress-bar {
+  background-color: var(--accent-color);
+}
+
+.dark-mode .info-wrap {
+  background: #0f0f23;
+  border: 1px solid #1a1a3e;
+  padding: 25px;
+}
+
+.dark-mode .info-item {
+  color: #d1d5db;
+  padding: 15px 0;
+}
+
+.dark-mode .info-item h3 {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.dark-mode .info-item p {
+  color: #d1d5db;
+  margin: 0;
+}
+
+.dark-mode .info-item i,
+.dark-mode .info-item img {
+  filter: invert(1) grayscale(1) brightness(1.5);
+}
+
+.dark-mode .php-email-form {
+  background: #0f0f23;
+  border: 1px solid #1a1a3e;
+  padding: 30px;
+}
+
+.dark-mode .php-email-form label {
+  color: #e5e7eb;
+  font-weight: 500;
+}
+
+.dark-mode .php-email-form .form-control {
+  background: #1a1a3e;
+  border: 1px solid #2d2d5a;
+  color: #e5e7eb;
+  padding: 12px 15px;
+  border-radius: 4px;
+}
+
+.dark-mode .php-email-form .form-control::placeholder {
+  color: #9ca3af;
+}
+
+.dark-mode .php-email-form .form-control:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.2rem rgba(20, 157, 221, 0.25);
+}
+
+.dark-mode .php-email-form textarea.form-control {
+  resize: vertical;
+}
+
+.dark-mode .php-email-form button[type="submit"] {
+  background: var(--accent-color);
+  color: #ffffff;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.dark-mode .php-email-form button[type="submit"]:hover {
+  background: color-mix(in srgb, var(--accent-color), transparent 20%);
+}
+
+.dark-mode .section-title::before {
+  background: #1a1a3e;
+}
+
+.dark-mode .section-title h2 {
+  color: #ffffff;
+}
+
+.dark-mode .section-title p {
+  color: #d1d5db;
+}
+
+.dark-mode .portfolio-content {
+  background: #0f0f23;
+  border: 1px solid #1a1a3e;
+}
+
+.dark-mode .portfolio-info {
+  background: #1a1a3e;
+}
+
+.dark-mode .portfolio-info h4 {
+  color: #ffffff;
+}
+
+.dark-mode .portfolio-info p {
+  color: #d1d5db;
+}
+
+.dark-mode .visit-site-btn {
+  background: linear-gradient(135deg, var(--accent-color), #0d6efd);
+  color: #ffffff !important;
+  box-shadow: 0 4px 15px rgba(20, 157, 221, 0.3);
+}
+
+.dark-mode .visit-site-btn:hover {
+  background: linear-gradient(135deg, #0d6efd, var(--accent-color));
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(20, 157, 221, 0.4);
+}
+
+.dark-mode .footer {
+  background: #0f0f23;
+  color: #e5e7eb;
+  border-top: 1px solid #1a1a3e;
+}
+
+.dark-mode .scroll-top {
+  background-color: var(--accent-color);
+}
+
+.dark-mode .scroll-top i {
+  color: #ffffff;
+}
+
+/*--------------------------------------------------------------
 # Glightbox Custom - Floating Modal Overlay (High Priority)
 --------------------------------------------------------------*/
 body .glightbox-container {
@@ -364,6 +642,15 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--heading-font);
 }
 
+.dark-mode h1, 
+.dark-mode h2, 
+.dark-mode h3, 
+.dark-mode h4, 
+.dark-mode h5, 
+.dark-mode h6 {
+  color: #ffffff !important;
+}
+
 /*--------------------------------------------------------------
 # Preloader
 --------------------------------------------------------------*/
@@ -432,8 +719,8 @@ h1, h2, h3, h4, h5, h6 {
 # Header Styles
 --------------------------------------------------------------*/
 .header {
-  color: var(--default-color);
-  background-color: var(--background-color);
+  color: #272829;
+  background-color: #ffffff;
   position: fixed;
   top: 0;
   left: 0;
@@ -443,7 +730,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: all ease-in-out 0.3s;
   overflow-y: auto;
   z-index: 997;
-  border-right: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+  border-right: 1px solid #e5e7eb;
 }
 
 .header.collapsed {
@@ -459,80 +746,9 @@ h1, h2, h3, h4, h5, h6 {
   visibility: hidden;
 }
 
-.header.collapsed .profile-img img {
-  width: 50px;
-  height: 50px;
-  margin: 10px auto;
-}
-
-.sidebar-toggle {
-  position: absolute;
-  top: 15px;
-  right: -15px;
-  width: 30px;
-  height: 30px;
-  background: var(--accent-color);
-  border: none;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  z-index: 1000;
-}
-
-.sidebar-toggle:hover {
-  background: color-mix(in srgb, var(--accent-color), transparent 20%);
-}
-
-@media (min-width: 1200px) {
-  .header.collapsed ~ .main {
-    margin-left: 80px;
-  }
-}
-
 /*--------------------------------------------------------------
-# Burger Menu & Sidebar Slide Out
+# Sidebar Styles
 --------------------------------------------------------------*/
-.sidebar-toggle.burger-menu {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  width: 40px;
-  height: 40px;
-  background: var(--accent-color);
-  border: none;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  z-index: 1001;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-.sidebar-toggle.burger-menu:hover {
-  background: color-mix(in srgb, var(--accent-color), transparent 20%);
-  transform: scale(1.05);
-}
-
-.sidebar-toggle.burger-menu i {
-  font-size: 20px;
-  position: absolute;
-}
-
-.sidebar-overlay {
-  position: fixed;
-  inset: 0;
-  background: #000;
-  z-index: 998;
-  transition: opacity 0.3s ease;
-}
-
 /* Main content margin when sidebar is visible */
 .main {
   margin-left: 0;
@@ -544,11 +760,6 @@ h1, h2, h3, h4, h5, h6 {
   margin-left: 300px;
 }
 
-/* Burger menu button always visible */
-.sidebar-toggle.burger-menu {
-  display: flex;
-}
-
 /* Responsive adjustments */
 @media (max-width: 1199px) {
   .header {
@@ -556,19 +767,12 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 999;
   }
 }
-
-@media (min-width: 1200px) {
-  .sidebar-overlay {
-    display: none;
-  }
-}
-
 .profile-img img {
   margin: 15px auto;
   display: block;
   width: 120px;
   height: 120px;
-  border: 8px solid color-mix(in srgb, var(--default-color), transparent 85%);
+  border: 8px solid #e5e7eb;
   object-fit: cover;
   object-position: center;
 }
@@ -577,7 +781,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 24px;
   margin: 0;
   font-weight: 700;
-  color: var(--heading-color);
+  color: #050d18;
 }
 
 .social-links {
@@ -589,8 +793,8 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: color-mix(in srgb, var(--default-color), transparent 90%);
-  color: var(--default-color);
+  background: #f3f4f6;
+  color: #374151;
   margin: 0 2px;
   border-radius: 50%;
   text-align: center;
@@ -600,7 +804,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .social-links a:hover {
-  color: var(--contrast-color);
+  color: #ffffff;
   background: var(--accent-color);
 }
 
@@ -614,7 +818,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navmenu a {
-  color: var(--nav-color);
+  color: #4b5563;
   padding: 15px 10px;
   font-family: var(--nav-font);
   font-size: 16px;
@@ -628,7 +832,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .navmenu a:hover,
 .navmenu .active {
-  color: var(--nav-hover-color);
+  color: var(--accent-color);
 }
 
 .navmenu a .navicon {
@@ -691,11 +895,16 @@ section,
   content: "";
   position: absolute;
   display: block;
-  width: 50px;
+  width: 80px;
   height: 3px;
   background: var(--accent-color);
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   bottom: 0;
+}
+
+.dark-mode .section-title h2:after {
+  background: var(--accent-color);
 }
 
 .section-title p {
@@ -1010,23 +1219,25 @@ section,
   position: relative;
   overflow: hidden;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--surface-color);
+}
+
+.dark-mode .portfolio .portfolio-content {
+  background: #0f0f23;
+  border: 1px solid #1a1a3e;
 }
 
 .portfolio .portfolio-content img {
   transition: 0.3s;
   cursor: pointer;
-  width: 100%;
-}
-
-.portfolio .portfolio-content img {
-  transition: 0.3s;
-  cursor: pointer;
-  width: 100%;
-}
-
-.portfolio .portfolio-content img {
-  transition: 0.3s;
-  cursor: pointer;
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 .portfolio .portfolio-content:hover img {
@@ -1073,19 +1284,38 @@ section,
 }
 
 .portfolio .portfolio-info .visit-site-btn {
-  background-color: var(--accent-color);
+  background: linear-gradient(135deg, var(--accent-color), #0d6efd);
   color: #fff;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 15px;
   font-weight: 600;
-  margin-top: 10px;
-  transition: 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(20, 157, 221, 0.3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
 }
 
 .portfolio .portfolio-info .visit-site-btn:hover {
-  background-color: color-mix(in srgb, var(--accent-color), transparent 20%);
+  background: linear-gradient(135deg, #0d6efd, var(--accent-color));
   color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(20, 157, 221, 0.4);
+}
+
+.portfolio .portfolio-info .visit-site-btn i {
+  font-size: 16px;
+  transition: transform 0.3s ease;
+}
+
+.portfolio .portfolio-info .visit-site-btn:hover i {
+  transform: translateX(5px);
 }
 
 .portfolio .portfolio-info .close-link {
@@ -1140,8 +1370,30 @@ section,
   padding: 30px;
 }
 
+.dark-mode .contact .info-wrap {
+  background-color: #0f0f23 !important;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid #1a1a3e;
+}
+
 .contact .info-item {
   margin-bottom: 40px;
+}
+
+.dark-mode .contact .info-item {
+  margin-bottom: 40px;
+}
+
+.dark-mode .contact .info-item h3 {
+  color: #ffffff !important;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.dark-mode .contact .info-item p {
+  color: #d1d5db !important;
+  margin: 0;
 }
 
 .contact .info-item i,
@@ -1166,40 +1418,68 @@ section,
   color: var(--contrast-color);
 }
 
-.contact .info-item h3 {
+.dark-mode .contact .info-item i,
+.dark-mode .contact .info-item svg,
+.dark-mode .contact .info-item img {
+  color: var(--accent-color);
+  background: #1a1a3e;
+}
+
+.dark-mode .contact .info-item:hover i,
+.dark-mode .contact .info-item:hover svg,
+.dark-mode .contact .info-item:hover img {
+  background: var(--accent-color);
+  color: #ffffff;
+}
+
+.dark-mode .contact .info-item h3 {
   padding: 0;
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 5px;
+  color: #ffffff !important;
 }
 
-.contact .php-email-form {
-  background-color: var(--surface-color);
+.dark-mode .contact .info-item p {
+  color: #d1d5db !important;
+}
+
+.dark-mode .contact .php-email-form {
+  background-color: #0f0f23 !important;
   height: 100%;
   padding: 30px;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid #1a1a3e;
 }
 
-.contact .php-email-form input,
-.contact .php-email-form textarea {
+.dark-mode .contact .php-email-form input,
+.dark-mode .contact .php-email-form textarea {
   font-size: 14px;
-  padding: 10px 15px;
+  padding: 12px 15px;
   box-shadow: none;
-  border-radius: 0;
-  color: var(--default-color);
-  background-color: var(--surface-color);
-  border: 1px solid color-mix(in srgb, var(--default-color), transparent 80%);
+  border-radius: 4px;
+  color: #e5e7eb !important;
+  background-color: #1a1a3e !important;
+  border: 1px solid #2d2d5a !important;
   width: 100%;
   margin-bottom: 15px;
 }
 
-.contact .php-email-form input:focus,
-.contact .php-email-form textarea:focus {
+.dark-mode .contact .php-email-form input:focus,
+.dark-mode .contact .php-email-form textarea:focus {
   border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.2rem rgba(20, 157, 221, 0.25);
+}
+
+.dark-mode .contact .php-email-form label {
+  color: #e5e7eb !important;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 8px;
 }
 
 .contact .php-email-form button[type="submit"] {
-  color: var(--contrast-color);
+  color: #ffffff;
   background: var(--accent-color);
   border: 0;
   padding: 10px 30px;
@@ -1208,9 +1488,26 @@ section,
   cursor: pointer;
 }
 
+.dark-mode .contact .php-email-form button[type="submit"] {
+  color: #ffffff !important;
+  background: var(--accent-color) !important;
+}
+
+.dark-mode .contact .php-email-form button[type="submit"]:hover {
+  background: color-mix(in srgb, var(--accent-color), transparent 25%) !important;
+}
+
+.dark-mode .contact .info-item {
+  background: transparent;
+}
+
 .contact .php-email-form button[type="submit"]:hover {
   background: color-mix(in srgb, var(--accent-color), transparent 25%);
 }
+
+/*--------------------------------------------------------------
+# Footer
+--------------------------------------------------------------*/
 
 /*--------------------------------------------------------------
 # Footer
