@@ -285,130 +285,135 @@ function App() {
             <p>A comprehensive set of technologies and tools I work with to build modern web applications</p>
           </div>
           <div className="container" data-aos="fade-up" data-aos-delay="100">
-            <h3 className="pb-4">Frontend</h3>
-            <div className="row skills-content">
-              <div className="col-lg-6">
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={FaHtml5} style={{fontSize: '3rem', color: '#e34f26'}} delay={0} /> HTML5 <i className="val">60%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+            <h3 className="pb-4 text-center">Frontend</h3>
+            <div className="skills-grid">
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={FaHtml5} style={{fontSize: '3rem', color: '#e34f26'}} delay={0} />
                 </div>
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={FaCss3} style={{fontSize: '3rem', color: '#1572b6'}} delay={0.1} /> CSS3 <i className="val">55%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                <h4>HTML5</h4>
+                <div className="skill-badge">60%</div>
+              </motion.div>
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={FaCss3} style={{fontSize: '3rem', color: '#1572b6'}} delay={0.1} />
                 </div>
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={FaJs} style={{fontSize: '3rem', color: '#f7df1e'}} delay={0.2} /> JavaScript <i className="val">50%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                <h4>CSS3</h4>
+                <div className="skill-badge">55%</div>
+              </motion.div>
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={FaJs} style={{fontSize: '3rem', color: '#f7df1e'}} delay={0.2} />
                 </div>
-              </div>
-              <div className="col-lg-6">
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={FaReact} style={{fontSize: '3rem', color: '#61dafb'}} delay={0.3} /> React <i className="val">45%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                <h4>JavaScript</h4>
+                <div className="skill-badge">50%</div>
+              </motion.div>
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={FaReact} style={{fontSize: '3rem', color: '#61dafb'}} delay={0.3} />
                 </div>
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={FaVuejs} style={{fontSize: '3rem', color: '#42b883'}} delay={0.4} /> Vue.js <i className="val">40%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                <h4>React</h4>
+                <div className="skill-badge">45%</div>
+              </motion.div>
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={FaVuejs} style={{fontSize: '3rem', color: '#42b883'}} delay={0.4} />
                 </div>
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={SiTailwindcss} style={{fontSize: '3rem', color: '#06b6d4'}} delay={0.5} /> Tailwind CSS <i className="val">45%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                <h4>Vue.js</h4>
+                <div className="skill-badge">40%</div>
+              </motion.div>
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={SiTailwindcss} style={{fontSize: '3rem', color: '#06b6d4'}} delay={0.5} />
                 </div>
-              </div>
+                <h4>Tailwind CSS</h4>
+                <div className="skill-badge">45%</div>
+              </motion.div>
             </div>
             
-            <h3 className="py-4">Backend</h3>
-            <div className="row skills-content">
-              <div className="col-lg-6">
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={FaNodeJs} style={{fontSize: '3rem', color: '#68a063'}} delay={0.1} /> Node.js <i className="val">40%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+            <h3 className="py-4 text-center">Backend</h3>
+            <div className="skills-grid">
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={FaNodeJs} style={{fontSize: '3rem', color: '#68a063'}} delay={0.1} />
                 </div>
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={SiExpress} style={{fontSize: '3rem', color: '#000000'}} delay={0.2} /> Express.js <i className="val">35%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                <h4>Node.js</h4>
+                <div className="skill-badge">40%</div>
+              </motion.div>
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={SiExpress} style={{fontSize: '3rem', color: '#000000'}} delay={0.2} />
                 </div>
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={SiMysql} style={{fontSize: '3rem', color: '#4479a1'}} delay={0.3} /> MySQL <i className="val">45%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                <h4>Express.js</h4>
+                <div className="skill-badge">35%</div>
+              </motion.div>
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={SiMysql} style={{fontSize: '3rem', color: '#4479a1'}} delay={0.3} />
                 </div>
-              </div>
-              <div className="col-lg-6">
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={FaPhp} style={{fontSize: '3rem', color: '#777bb4'}} delay={0.4} /> PHP <i className="val">30%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                <h4>MySQL</h4>
+                <div className="skill-badge">45%</div>
+              </motion.div>
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={FaPhp} style={{fontSize: '3rem', color: '#777bb4'}} delay={0.4} />
                 </div>
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={FaPlug} style={{fontSize: '3rem', color: '#6c5ce7'}} delay={0.5} /> REST APIs <i className="val">40%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                <h4>PHP</h4>
+                <div className="skill-badge">30%</div>
+              </motion.div>
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={FaPlug} style={{fontSize: '3rem', color: '#6c5ce7'}} delay={0.5} />
                 </div>
-              </div>
+                <h4>REST APIs</h4>
+                <div className="skill-badge">40%</div>
+              </motion.div>
             </div>
             
-            <h3 className="py-4">Tools & Other</h3>
-            <div className="row skills-content">
-              <div className="col-lg-6">
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={FaGit} style={{fontSize: '3rem', color: '#f05032'}} delay={0.1} /> Git <i className="val">50%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+            <h3 className="py-4 text-center">Tools & Other</h3>
+            <div className="skills-grid">
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={FaGit} style={{fontSize: '3rem', color: '#f05032'}} delay={0.1} />
                 </div>
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={FaGithub} style={{fontSize: '3rem', color: '#181717'}} delay={0.2} /> GitHub <i className="val">55%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                <h4>Git</h4>
+                <div className="skill-badge">50%</div>
+              </motion.div>
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={FaGithub} style={{fontSize: '3rem', color: '#181717'}} delay={0.2} />
                 </div>
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={SiVercel} style={{fontSize: '3rem', color: '#000000'}} delay={0.3} /> Vercel <i className="val">50%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                <h4>GitHub</h4>
+                <div className="skill-badge">55%</div>
+              </motion.div>
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={SiVercel} style={{fontSize: '3rem', color: '#000000'}} delay={0.3} />
                 </div>
-              </div>
-              <div className="col-lg-6">
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={FaCode} style={{fontSize: '3rem', color: '#007acc'}} delay={0.4} /> VS Code <i className="val">65%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                <h4>Vercel</h4>
+                <div className="skill-badge">50%</div>
+              </motion.div>
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={FaCode} style={{fontSize: '3rem', color: '#007acc'}} delay={0.4} />
                 </div>
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={FaNpm} style={{fontSize: '3rem', color: '#cb3837'}} delay={0.5} /> npm <i className="val">45%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                <h4>VS Code</h4>
+                <div className="skill-badge">65%</div>
+              </motion.div>
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={FaNpm} style={{fontSize: '3rem', color: '#cb3837'}} delay={0.5} />
                 </div>
-                <div className="progress">
-                  <span className="skill"><SkillIcon icon={SiAxios} style={{fontSize: '3rem', color: '#5a29ee'}} delay={0.6} /> Axios <i className="val">40%</i></span>
-                  <div className="progress-bar-wrap">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                <h4>npm</h4>
+                <div className="skill-badge">45%</div>
+              </motion.div>
+              <motion.div className="skill-card" whileHover={{ scale: 1.05, y: -5 }}>
+                <div className="skill-icon-wrapper">
+                  <SkillIcon icon={SiAxios} style={{fontSize: '3rem', color: '#5a29ee'}} delay={0.6} />
                 </div>
-              </div>
+                <h4>Axios</h4>
+                <div className="skill-badge">40%</div>
+              </motion.div>
             </div>
           </div>
         </section>

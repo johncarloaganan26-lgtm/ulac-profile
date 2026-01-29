@@ -497,6 +497,62 @@ body .glightbox-tech-item {
   transform: translateY(-3px) scale(1.15);
 }
 
+/* Skills Grid Layout */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 25px;
+  padding: 20px 0;
+}
+
+.skill-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 25px 20px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.skill-icon-wrapper {
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.skill-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 10px;
+}
+
+.skill-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  background: linear-gradient(135deg, var(--accent-color), #0d6efd);
+  color: #ffffff;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Dark mode for skill cards */
+.dark-mode .skill-card {
+  background: #1a1a3e;
+}
+
+.dark-mode .skill-card h4 {
+  color: #e5e7eb;
+}
+
 /* Close Button */
 body .glightbox-close {
   top: 12px !important;
