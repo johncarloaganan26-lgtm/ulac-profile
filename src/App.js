@@ -238,9 +238,7 @@ function App() {
         <section id="hero" className="hero section dark-background">
           <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} alt="John Carlo Aganan" data-aos="fade-in" />
           <div className="container" data-aos="fade-up" data-aos-delay="100">
-            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '15px'}}>
-              <h2>John Carlo Aganan</h2>
-            </div>
+            <h2>John Carlo Aganan</h2>
             <p>
               I'm <span ref={typedRef}></span>
             </p>
