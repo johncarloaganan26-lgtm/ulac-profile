@@ -857,10 +857,247 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 1199px) {
   .header {
     left: -100%;
+    width: 280px;
+    z-index: 9999;
+  }
+  
+  .header.active {
+    left: 0;
   }
   
   .main {
     margin-left: 0;
+  }
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  /* Header/Sidebar */
+  .header {
+    width: 280px;
+  }
+  
+  .profile-img img {
+    width: 100px;
+    height: 100px;
+    margin: 10px auto;
+  }
+  
+  .logo h1 {
+    font-size: 18px;
+  }
+  
+  .social-links a {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+  
+  /* Navigation */
+  .navmenu a {
+    padding: 12px 10px;
+    font-size: 14px;
+  }
+  
+  .navmenu a .navicon {
+    font-size: 18px;
+    margin-right: 8px;
+  }
+  
+  /* Dark Mode Toggle */
+  .dark-mode-toggle {
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+  
+  /* Hero Section */
+  .hero {
+    padding: 80px 15px 60px;
+  }
+  
+  .hero h2 {
+    font-size: 28px;
+  }
+  
+  .hero p {
+    font-size: 16px;
+  }
+  
+  /* Section Titles */
+  .section-title {
+    padding-bottom: 40px;
+  }
+  
+  .section-title h2 {
+    font-size: 24px;
+    padding-bottom: 15px;
+  }
+  
+  .section-title h2:after {
+    width: 60px;
+    height: 2px;
+  }
+  
+  .section-title p {
+    font-size: 14px;
+  }
+  
+  /* About Section */
+  .about.section {
+    padding: 60px 15px;
+  }
+  
+  .about .row {
+    flex-direction: column-reverse;
+  }
+  
+  .about .col-lg-4,
+  .about .col-lg-8 {
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+  
+  .about .col-lg-4 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .about .col-lg-4 img {
+    max-width: 80%;
+    margin: 0 auto;
+  }
+  
+  .about h2 {
+    font-size: 24px;
+  }
+  
+  .about .content h2 {
+    font-size: 22px;
+  }
+  
+  .about p {
+    font-size: 14px;
+  }
+  
+  .about .col-lg-6 {
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+  
+  /* Skills Section */
+  .skills.section {
+    padding: 60px 15px;
+  }
+  
+  .skills h3 {
+    font-size: 20px;
+  }
+  
+  .progress {
+    margin-bottom: 20px;
+  }
+  
+  .skill {
+    font-size: 14px;
+  }
+  
+  .skill svg,
+  .skill i {
+    font-size: 2rem !important;
+  }
+  
+  /* Projects Section */
+  .projects.section {
+    padding: 60px 15px;
+  }
+  
+  .portfolio .portfolio-item {
+    margin-bottom: 30px;
+  }
+  
+  .portfolio-content {
+    padding: 15px;
+  }
+  
+  .portfolio-content img {
+    max-height: 300px;
+  }
+  
+  .portfolio-info h4 {
+    font-size: 18px;
+  }
+  
+  .portfolio-info p {
+    font-size: 14px;
+  }
+  
+  /* Contact Section */
+  .contact.section {
+    padding: 60px 15px;
+  }
+  
+  .contact .info-wrap {
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .contact .info-item {
+    margin-bottom: 20px;
+  }
+  
+  .contact .info-item h3 {
+    font-size: 16px;
+  }
+  
+  .contact .php-email-form {
+    padding: 20px;
+  }
+  
+  .contact .php-email-form .col-md-6 {
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+  
+  /* Footer */
+  .footer {
+    padding: 30px 15px;
+  }
+  
+  .footer .copyright {
+    font-size: 12px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .hero h2 {
+    font-size: 24px;
+  }
+  
+  .section-title h2 {
+    font-size: 22px;
+  }
+  
+  .profile-img img {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .logo h1 {
+    font-size: 16px;
+  }
+  
+  .social-links a {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+  
+  .about .col-lg-4 img {
+    max-width: 100%;
   }
 }
 
