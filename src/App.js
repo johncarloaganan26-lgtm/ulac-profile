@@ -189,7 +189,6 @@ function App() {
         </div>
 
         <div className="logo d-flex align-items-center justify-content-center">
-          <img src={`${process.env.PUBLIC_URL}/ChatGPT Image Jan 30, 2026, 02_34_49 AM.png`} alt="Logo" style={{width: '40px', height: '40px', marginRight: '10px', borderRadius: '8px'}} />
           <h1 className="sitename">John Carlo Aganan</h1>
         </div>
 
@@ -239,7 +238,10 @@ function App() {
         <section id="hero" className="hero section dark-background">
           <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} alt="John Carlo Aganan" data-aos="fade-in" />
           <div className="container" data-aos="fade-up" data-aos-delay="100">
-            <h2>John Carlo Aganan</h2>
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '15px'}}>
+              <img src={`${process.env.PUBLIC_URL}/ChatGPT Image Jan 30, 2026, 02_34_49 AM.png`} alt="Logo" style={{width: '50px', height: '50px', marginRight: '15px', borderRadius: '10px'}} />
+              <h2>John Carlo Aganan</h2>
+            </div>
             <p>
               I'm <span ref={typedRef}></span>
             </p>
