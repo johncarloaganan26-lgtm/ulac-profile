@@ -760,13 +760,6 @@ h1, h2, h3, h4, h5, h6 {
   margin-left: 300px;
 }
 
-/* Responsive adjustments */
-@media (max-width: 1199px) {
-  .header {
-    left: -300px;
-    z-index: 999;
-  }
-}
 .profile-img img {
   margin: 15px auto;
   display: block;
@@ -854,19 +847,51 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Mobile Responsive Styles */
 @media (max-width: 1199px) {
+  /* Hide sidebar by default on mobile */
   .header {
-    left: -100%;
+    position: fixed;
+    top: 0;
+    left: -300px;
     width: 280px;
+    height: 100vh;
     z-index: 9999;
+    transition: left 0.3s ease;
+    padding: 0 15px;
+    overflow-y: auto;
   }
   
-  .header.active {
+  .header.mobile-open {
     left: 0;
+    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.2);
   }
   
+  /* Show burger menu button */
+  .mobile-menu-toggle {
+    display: flex;
+  }
+  
+  /* Show overlay */
+  .mobile-menu-overlay {
+    display: block;
+  }
+  
+  /* Adjust main content */
   .main {
     margin-left: 0;
+    width: 100%;
+  }
+  
+  /* Dark Mode Toggle positioning */
+  .dark-mode-toggle {
+    top: 75px;
+    right: 15px;
+  }
+  
+  /* Adjust scroll top button */
+  .scroll-top {
+    right: 80px;
   }
 }
 
@@ -1275,6 +1300,53 @@ h1, h2, h3, h4, h5, h6 {
   .contact .php-email-form {
     padding: 20px;
   }
+}
+
+/*--------------------------------------------------------------
+# Mobile Burger Menu
+--------------------------------------------------------------*/
+/* Mobile Menu Toggle Button */
+.mobile-menu-toggle {
+  display: none;
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 10000;
+  width: 50px;
+  height: 50px;
+  background: var(--background-color);
+  border: 2px solid var(--accent-color);
+  border-radius: 10px;
+  color: var(--default-color);
+  font-size: 24px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle:hover {
+  background: var(--accent-color);
+  color: white;
+  transform: scale(1.05);
+}
+
+.mobile-menu-toggle:active {
+  transform: scale(0.95);
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9990;
+  backdrop-filter: blur(3px);
 }
 
 /*--------------------------------------------------------------

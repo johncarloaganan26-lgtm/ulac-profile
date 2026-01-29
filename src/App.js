@@ -1,8 +1,8 @@
 
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { FaHome, FaUser, FaStar, FaServicestack, FaEnvelope, FaTwitter, FaFacebook, FaInstagram, FaSkype, FaLinkedin, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaHome, FaUser, FaStar, FaServicestack, FaEnvelope, FaTwitter, FaFacebook, FaInstagram, FaSkype, FaLinkedin, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaBars, FaTimes } from 'react-icons/fa';
 import { SiTailwindcss, SiExpress, SiAxios, SiMysql, SiVercel } from 'react-icons/si';
 import Typed from 'typed.js';
 import AOS from 'aos';
@@ -38,6 +38,7 @@ function App() {
   const [preloaderRemoved, setPreloaderRemoved] = useState(false);
   const [scrollTopActive, setScrollTopActive] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const typedRef = useRef(null);
 
   useEffect(() => {
@@ -108,6 +109,7 @@ function App() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+    setMobileMenuOpen(false);
   };
 
   return (
@@ -133,10 +135,39 @@ function App() {
         {darkMode ? <FaSun /> : <FaMoon />}
       </motion.button>
 
-      {/* Header Sidebar */}
-      <header 
-        className={`header ${darkMode ? 'dark-background' : ''}`}
+      {/* Mobile Menu Burger Button */}
+      <motion.button 
+        className="mobile-menu-toggle"
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        title="Toggle Menu"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
       >
+        {mobileMenuOpen ? <FaTimes /> : <FaBars />}
+      </motion.button>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            className="mobile-menu-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setMobileMenuOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Header Sidebar */}
+      <AnimatePresence mode="wait">
+        <motion.header
+          className={`header ${darkMode ? 'dark-background' : ''} ${mobileMenuOpen ? 'mobile-open' : ''}`}
+          initial={{ x: -300 }}
+          animate={{ x: 0 }}
+          exit={{ x: -300 }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+        >
 
         <div className="profile-img">
           <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} alt="Profile" className="img-fluid rounded-circle" style={{width: '120px', height: '120px', objectFit: 'cover'}} />
@@ -183,7 +214,8 @@ function App() {
             </motion.li>
           </ul>
         </nav>
-      </header>
+      </motion.header>
+      </AnimatePresence>
 
       {/* Main Content */}
       <main className="main sidebar-open">
