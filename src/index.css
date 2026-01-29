@@ -553,6 +553,97 @@ body .glightbox-tech-item {
   color: #e5e7eb;
 }
 
+/* Contact Cards Layout */
+.contact-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.contact-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 30px 25px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.contact-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.contact-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px;
+  background: linear-gradient(135deg, var(--accent-color), #0d6efd);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.contact-card:hover .contact-icon {
+  transform: scale(1.1);
+}
+
+.contact-icon img {
+  width: 32px;
+  height: 32px;
+  filter: brightness(0) invert(1);
+}
+
+.contact-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 10px;
+}
+
+.contact-card p {
+  font-size: 15px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.contact-form-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Dark mode for contact cards */
+.dark-mode .contact-card {
+  background: #1a1a3e;
+}
+
+.dark-mode .contact-card h3 {
+  color: #e5e7eb;
+}
+
+.dark-mode .contact-card p {
+  color: #d1d5db;
+}
+
+.dark-mode .contact-form-card {
+  background: #1a1a3e;
+  border: 1px solid #2d2d5a;
+}
+
+.dark-mode .php-email-form label {
+  color: #e5e7eb;
+}
+
+.dark-mode .php-email-form .form-control {
+  background: #0f0f23;
+  border: 1px solid #2d2d5a;
+  color: #e5e7eb;
+}
+
 /* Close Button */
 body .glightbox-close {
   top: 12px !important;

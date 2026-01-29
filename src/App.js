@@ -449,58 +449,92 @@ function App() {
             <p>Get in touch with me for any inquiries or collaboration opportunities.</p>
           </div>
           <div className="container" data-aos="fade-up" data-aos-delay="100">
-            <div className="row gy-4">
-              <div className="col-lg-5">
-                <div className="info-wrap">
-                  <div className="info-item d-flex" data-aos="fade-up" data-aos-delay="200">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath fill='%23149ddd' d='M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z'/%3E%3C/svg%3E" alt="Location" style={{width: '28px', height: '28px', marginRight: '15px', flexShrink: 0}} />
-                    <div>
-                      <h3>Location</h3>
-                      <p>Naic Cavite Philippines</p>
-                    </div>
+            <div className="contact-cards">
+              <motion.div 
+                className="contact-card"
+                whileHover={{ scale: 1.02, y: -5 }}
+                data-aos="fade-up" 
+                data-aos-delay="200"
+              >
+                <div className="contact-icon">
+                  <img 
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath fill='%23149ddd' d='M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z'/%3E%3C/svg%3E" 
+                    alt="Location" 
+                  />
+                </div>
+                <h3>Location</h3>
+                <p>Naic Cavite Philippines</p>
+              </motion.div>
+              
+              <motion.div 
+                className="contact-card"
+                whileHover={{ scale: 1.02, y: -5 }}
+                data-aos="fade-up" 
+                data-aos-delay="300"
+              >
+                <div className="contact-icon">
+                  <img 
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23149ddd' d='M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z'/%3E%3C/svg%3E" 
+                    alt="Email" 
+                  />
+                </div>
+                <h3>Email</h3>
+                <p>johncarloaganan26@gmail.com</p>
+              </motion.div>
+              
+              <motion.div 
+                className="contact-card"
+                whileHover={{ scale: 1.02, y: -5 }}
+                data-aos="fade-up" 
+                data-aos-delay="400"
+              >
+                <div className="contact-icon">
+                  <img 
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23149ddd' d='M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z'/%3E%3C/svg%3E" 
+                    alt="Phone" 
+                  />
+                </div>
+                <h3>Phone</h3>
+                <p>09543300228</p>
+              </motion.div>
+            </div>
+            
+            <motion.div 
+              className="contact-form-card"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <form className="php-email-form">
+                <div className="row gy-4">
+                  <div className="col-md-6">
+                    <label htmlFor="name-field" className="pb-2">Name</label>
+                    <input type="text" name="name" id="name-field" className="form-control" required placeholder="Your Name" />
                   </div>
-                  <div className="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23149ddd' d='M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z'/%3E%3C/svg%3E" alt="Email" style={{width: '28px', height: '28px', marginRight: '15px', flexShrink: 0}} />
-                    <div>
-                      <h3>Email Us</h3>
-                      <p>johncarloaganan26@gmail.com</p>
-                    </div>
+                  <div className="col-md-6">
+                    <label htmlFor="email-field" className="pb-2">Email</label>
+                    <input type="email" className="form-control" name="email" id="email-field" required placeholder="your@email.com" />
                   </div>
-                  <div className="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23149ddd' d='M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z'/%3E%3C/svg%3E" alt="Phone" style={{width: '28px', height: '28px', marginRight: '15px', flexShrink: 0}} />
-                    <div>
-                      <h3>Call Us</h3>
-                      <p>09543300228</p>
-                    </div>
+                  <div className="col-md-12">
+                    <label htmlFor="subject-field" className="pb-2">Subject</label>
+                    <input type="text" className="form-control" name="subject" id="subject-field" required placeholder="What's this about?" />
+                  </div>
+                  <div className="col-md-12">
+                    <label htmlFor="message-field" className="pb-2">Message</label>
+                    <textarea className="form-control" name="message" rows="8" id="message-field" required placeholder="Your message..."></textarea>
+                  </div>
+                  <div className="col-md-12 text-center">
+                    <motion.button 
+                      type="submit"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Send Message
+                    </motion.button>
                   </div>
                 </div>
-              </div>
-              <div className="col-lg-7">
-                <form className="php-email-form">
-                  <div className="row gy-4">
-                    <div className="col-md-6">
-                      <label htmlFor="name-field" className="pb-2">Name</label>
-                      <input type="text" name="name" id="name-field" className="form-control" required />
-                    </div>
-                    <div className="col-md-6">
-                      <label htmlFor="email-field" className="pb-2">Your Email</label>
-                      <input type="email" className="form-control" name="email" id="email-field" required />
-                    </div>
-                    <div className="col-md-12">
-                      <label htmlFor="subject-field" className="pb-2">Subject</label>
-                      <input type="text" className="form-control" name="subject" id="subject-field" required />
-                    </div>
-                    <div className="col-md-12">
-                      <label htmlFor="message-field" className="pb-2">Message</label>
-                      <textarea className="form-control" name="message" rows="10" id="message-field" required></textarea>
-                    </div>
-                    <div className="col-md-12 text-center">
-                      <button type="submit">Send Message</button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
+              </form>
+            </motion.div>
           </div>
         </section>
       </main>
