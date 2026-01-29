@@ -142,19 +142,19 @@ function App() {
         </motion.button>
 
         <div className="profile-img">
-          <img src="5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg" alt="Profile" className="img-fluid rounded-circle" />
+          <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} alt="Profile" className="img-fluid rounded-circle" />
         </div>
 
-        <a href="#" className="logo d-flex align-items-center justify-content-center">
+        <div className="logo d-flex align-items-center justify-content-center">
           <h1 className="sitename">John Carlo Aganan</h1>
-        </a>
+        </div>
 
         <div className="social-links text-center">
-          <motion.a href="#" className="twitter" whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.95 }}><FaTwitter /></motion.a>
-          <motion.a href="#" className="facebook" whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.95 }}><FaFacebook /></motion.a>
-          <motion.a href="#" className="instagram" whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.95 }}><FaInstagram /></motion.a>
-          <motion.a href="#" className="google-plus" whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.95 }}><FaSkype /></motion.a>
-          <motion.a href="#" className="linkedin" whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.95 }}><FaLinkedin /></motion.a>
+          <motion.a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="twitter" whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.95 }}><FaTwitter /></motion.a>
+          <motion.a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="facebook" whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.95 }}><FaFacebook /></motion.a>
+          <motion.a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="instagram" whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.95 }}><FaInstagram /></motion.a>
+          <motion.a href="https://skype.com" target="_blank" rel="noopener noreferrer" className="google-plus" whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.95 }}><FaSkype /></motion.a>
+          <motion.a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="linkedin" whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.95 }}><FaLinkedin /></motion.a>
         </div>
 
         <nav className="navmenu">
@@ -192,7 +192,7 @@ function App() {
       <main className="main">
         {/* Hero Section */}
         <section id="hero" className="hero section dark-background">
-          <img src="5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg" alt="John Carlo Aganan" data-aos="fade-in" />
+          <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} alt="John Carlo Aganan" data-aos="fade-in" />
           <div className="container" data-aos="fade-up" data-aos-delay="100">
             <h2>John Carlo Aganan</h2>
             <p>
@@ -210,7 +210,7 @@ function App() {
           <div className="container" data-aos="fade-up" data-aos-delay="100">
             <div className="row gy-4 justify-content-center">
               <div className="col-lg-4">
-                <img src="5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg" className="img-fluid" alt="Profile" />
+                <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} className="img-fluid" alt="Profile" />
               </div>
               <div className="col-lg-8 content">
                 <h2>Full-Stack Web Developer</h2>

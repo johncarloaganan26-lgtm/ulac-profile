@@ -1,6 +1,7 @@
 {
   "name": "portfolio-react",
   "version": "1.0.0",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@types/aos": "^3.0.7",
