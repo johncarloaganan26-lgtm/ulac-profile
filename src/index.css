@@ -535,38 +535,31 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Main content margin when sidebar is visible */
 .main {
-  margin-left: 300px;
+  margin-left: 0;
   min-height: 100vh;
   transition: margin-left 0.3s ease;
 }
 
+.main.sidebar-open {
+  margin-left: 300px;
+}
+
+/* Burger menu button always visible */
+.sidebar-toggle.burger-menu {
+  display: flex;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1199px) {
-  .main {
-    margin-left: 0;
-  }
-
-  .sidebar-toggle.burger-menu {
-    display: flex;
-  }
-
   .header {
     left: -300px;
     z-index: 999;
-  }
-
-  .header.sidebar-exited {
-    left: -300px;
   }
 }
 
 @media (min-width: 1200px) {
   .sidebar-overlay {
     display: none;
-  }
-
-  .main {
-    margin-left: 300px;
   }
 }
 

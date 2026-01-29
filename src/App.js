@@ -124,29 +124,13 @@ function App() {
 
       {/* Burger Menu Toggle Button */}
       <motion.button 
-        className={`sidebar-toggle burger-menu ${!sidebarCollapsed ? 'active' : ''}`}
+        className="sidebar-toggle burger-menu"
         onClick={() => setSidebarCollapsed(!sidebarCollapsed)} 
         title="Toggle Sidebar"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >
-        <motion.i 
-          className="bi bi-list"
-          animate={{ 
-            opacity: sidebarCollapsed ? 1 : 0,
-            rotate: sidebarCollapsed ? 0 : -90
-          }}
-          transition={{ duration: 0.2 }}
-        />
-        <motion.i 
-          className="bi bi-x-lg"
-          style={{ position: 'absolute' }}
-          animate={{ 
-            opacity: sidebarCollapsed ? 0 : 1,
-            rotate: sidebarCollapsed ? -90 : 0
-          }}
-          transition={{ duration: 0.2 }}
-        />
+        <i className="bi bi-list"></i>
       </motion.button>
 
       {/* Mobile Overlay */}
@@ -164,8 +148,8 @@ function App() {
       {/* Header Sidebar */}
       <motion.header 
         className="header dark-background"
-        initial={{ x: -280 }}
-        animate={{ x: sidebarCollapsed ? -280 : 0 }}
+        initial={{ x: -300 }}
+        animate={{ x: sidebarCollapsed ? -300 : 0 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
       >
 
@@ -217,7 +201,7 @@ function App() {
       </motion.header>
 
       {/* Main Content */}
-      <main className="main">
+      <main className={`main ${!sidebarCollapsed ? 'sidebar-open' : ''}`}>
         {/* Hero Section */}
         <section id="hero" className="hero section dark-background">
           <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} alt="John Carlo Aganan" data-aos="fade-in" />
