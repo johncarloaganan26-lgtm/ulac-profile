@@ -10,7 +10,6 @@ import 'aos/dist/aos.css';
 import 'glightbox/dist/css/glightbox.css';
 import GLightbox from 'glightbox';
 import project1Image from './Screenshot 2026-01-28 035743.png';
-import logoImage from './logo-image.png';
 
 // Framer Motion skill icon component with continuous bounce animation
 const SkillIcon = ({ icon: Icon, style, delay = 0 }) => (
