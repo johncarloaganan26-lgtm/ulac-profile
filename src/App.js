@@ -250,44 +250,37 @@ function App() {
 
         {/* About Section */}
         <section id="about" className="about section light-mode-section">
-          <div className="container section-title text-center" data-aos="fade-up">
-            <h2>About Me</h2>
-            <p>I'm a passionate BSIT student in my 4th year, driven by a genuine love for building modern, scalable web applications.</p>
-          </div>
           <div className="container" data-aos="fade-up" data-aos-delay="100">
-            <div className="row gy-4 justify-content-center">
+            <div className="row gy-4 align-items-center">
               <div className="col-lg-4 text-center">
-                <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} className="img-fluid shadow-lg" alt="Profile" style={{maxWidth: '100%', maxHeight: '400px', height: 'auto'}} />
+                <img 
+                  src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} 
+                  className="img-fluid shadow-lg" 
+                  alt="Profile" 
+                  style={{maxWidth: '100%', maxHeight: '350px', height: 'auto', borderRadius: '12px'}} 
+                />
               </div>
               <div className="col-lg-8 content">
-                <h2>Full-Stack Web Developer</h2>
-                <p className="fst-italic py-3">My journey in web development started with a curiosity about how things work, and it has evolved into a career pursuit filled with continuous learning and growth.</p>
-                <p className="py-2">I specialize in creating responsive, user-centered web experiences using modern technologies like React, Vue, and Node.js. Whether it's frontend interfaces or backend systems, I approach every project with attention to detail and a commitment to clean, maintainable code.</p>
-                <p className="py-2">Currently seeking opportunities for junior developer roles or internships where I can contribute my skills, collaborate with experienced developers, and continue expanding my expertise in full-stack development.</p>
-                <div className="row py-3">
-                  <div className="col-lg-6">
-                    <ul>
-                      <li><i className="bi bi-chevron-right"></i> <strong>Education:</strong> <span>Cavite State University Cavite City Campus - BSIT 4th yr</span></li>
-                      <li><i className="bi bi-chevron-right"></i> <strong>Website:</strong> <span>biblebaptistekklesiaofkawit.xyz</span></li>
-                      <li><i className="bi bi-chevron-right"></i> <strong>Country:</strong> <span>Philippines</span></li>
-                      <li><i className="bi bi-chevron-right"></i> <strong>Status:</strong> <span>Available for hire</span></li>
+                <h2 style={{fontSize: '2rem', marginBottom: '15px', fontWeight: '600'}}>About Me</h2>
+                <p className="py-3" style={{color: '#555', lineHeight: '1.8', fontSize: '1.05rem'}}>
+                  I'm a <strong>4th year BSIT student</strong> at Cavite State University with a passion for building modern, scalable web applications. I specialize in creating responsive, user-centered experiences using technologies like React, Vue, and Node.js.
+                </p>
+                <p className="py-2" style={{color: '#555', lineHeight: '1.8', fontSize: '1.05rem'}}>
+                  Currently seeking <strong>junior developer roles or internships</strong> where I can contribute my skills, collaborate with experienced developers, and continue expanding my expertise in full-stack development.
+                </p>
+                <div className="row py-4">
+                  <div className="col-md-6">
+                    <ul style={{listStyle: 'none', padding: 0}}>
+                      <li style={{marginBottom: '12px'}}><span style={{fontWeight: '600', color: '#149ddd'}}>Education:</span> <span style={{marginLeft: '10px'}}>Cavite State University - BSIT 4th yr</span></li>
+                      <li style={{marginBottom: '12px'}}><span style={{fontWeight: '600', color: '#149ddd'}}>Email:</span> <span style={{marginLeft: '10px'}}>johncarloaganan26@gmail.com</span></li>
+                      <li style={{marginBottom: '12px'}}><span style={{fontWeight: '600', color: '#149ddd'}}>Country:</span> <span style={{marginLeft: '10px'}}>Philippines</span></li>
                     </ul>
                   </div>
-                  <div className="col-lg-6">
-                    <ul>
-                      <li><i className="bi bi-chevron-right"></i> <strong>Focus:</strong> <span>Full-Stack Development</span></li>
-                      <li><i className="bi bi-chevron-right"></i> <strong>Email:</strong> <span>johncarloaganan26@gmail.com</span></li>
-                      <li><i className="bi bi-chevron-right"></i> <strong>Internship:</strong> <span>Open to opportunities</span></li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="row py-3">
-                  <div className="col-12">
-                    <h4 className="py-2">Key Strengths:</h4>
-                    <ul className="strengths-list">
-                      <li><i className="bi bi-check-circle text-primary"></i> Problem-solving and analytical thinking</li>
-                      <li><i className="bi bi-check-circle text-primary"></i> Quick learner with strong fundamentals</li>
-                      <li><i className="bi bi-check-circle text-primary"></i> Attention to detail in UI/UX implementation</li>
+                  <div className="col-md-6">
+                    <ul style={{listStyle: 'none', padding: 0}}>
+                      <li style={{marginBottom: '12px'}}><span style={{fontWeight: '600', color: '#149ddd'}}>Focus:</span> <span style={{marginLeft: '10px'}}>Full-Stack Development</span></li>
+                      <li style={{marginBottom: '12px'}}><span style={{fontWeight: '600', color: '#149ddd'}}>Website:</span> <span style={{marginLeft: '10px'}}>biblebaptistekklesiaofkawit.xyz</span></li>
+                      <li style={{marginBottom: '12px'}}><span style={{fontWeight: '600', color: '#149ddd'}}>Status:</span> <span style={{marginLeft: '10px'}}><span style={{color: '#28a745', fontWeight: '500'}}>Available for hire</span></span></li>
                     </ul>
                   </div>
                 </div>
