@@ -430,13 +430,6 @@ function App() {
                 <div className="skill-badge">40%</div>
               </motion.div>
             </div>
-            
-            <div className="ai-tools-note text-center mt-4" style={{maxWidth: '800px', margin: '30px auto', padding: '20px', background: 'linear-gradient(135deg, rgba(20, 157, 221, 0.1), rgba(13, 110, 253, 0.1))', borderRadius: '12px'}}>
-              <h4 style={{marginBottom: '10px'}}>AI-Powered Development</h4>
-              <p style={{margin: 0, fontSize: '15px', lineHeight: '1.7'}}>
-                Additionally, I leverage AI tools like Kilo Code (using free tier model) and Cursor AI to enhance coding efficiency and accelerate development workflows.
-              </p>
-            </div>
           </div>
         </section>
 
