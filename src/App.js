@@ -11,6 +11,8 @@ import 'glightbox/dist/css/glightbox.css';
 import GLightbox from 'glightbox';
 import project1Image from './Screenshot 2026-01-28 035743.png';
 
+// For build folder images, we'll reference them via PUBLIC_URL in the component
+
 // Framer Motion skill icon component with continuous bounce animation
 const SkillIcon = ({ icon: Icon, style, delay = 0 }) => (
   <motion.div
@@ -443,6 +445,18 @@ function App() {
                     <h4>BBEK Church Management System</h4>
                     <p>A comprehensive church administration platform with role-based access control and various modules.</p>
                     <a href="https://biblebaptistekklesiaofkawit.xyz/" target="_blank" rel="noopener noreferrer" className="visit-site-btn btn-lg px-4 py-2 rounded-pill shadow-sm">View Project <i className="bi bi-arrow-right ms-2"></i></a>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-10 portfolio-item mt-4">
+                <div className="portfolio-content h-100">
+                  <a href={`${process.env.PUBLIC_URL}/Screenshot 2026-01-31 091212.png`} data-gallery="portfolio-gallery" className="glightbox d-flex justify-content-center align-items-center" style={{minHeight: '450px', padding: '20px'}} data-glightbox="title: Baby Bliss Booking; description: <p>Baby Bliss Booking is an online appointment scheduling system for a baby spa and wellness center. It allows customers to book appointments for baby massage, spa treatments, and wellness services. Features include service selection, time slot availability, booking confirmation, and admin management for appointments.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'><FaReact /> React</span><span class='glightbox-tech-item'><SiTailwindcss /> Tailwind CSS</span><span class='glightbox-tech-item'><SiVercel /> Vercel</span></div></div>; descPosition: right;">
+                    <img src={`${process.env.PUBLIC_URL}/Screenshot 2026-01-31 091212.png`} className="img-fluid rounded shadow" style={{ maxWidth: '100%', maxHeight: '500px', width: 'auto', height: 'auto', objectFit: 'contain' }} alt="Baby Bliss Booking" />
+                  </a>
+                  <div className="portfolio-info">
+                    <h4>Baby Bliss Booking</h4>
+                    <p>An online appointment scheduling system for a baby spa and wellness center.</p>
+                    <a href="https://babyblissbooking.vercel.app/" target="_blank" rel="noopener noreferrer" className="visit-site-btn btn-lg px-4 py-2 rounded-pill shadow-sm">View Project <i className="bi bi-arrow-right ms-2"></i></a>
                   </div>
                 </div>
               </div>
