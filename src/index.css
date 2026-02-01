@@ -832,6 +832,43 @@ input:not(:checked) + .switch-slider .switch-icon.moon {
 
 .dark-mode .about.section {
   background: rgba(30, 30, 30, 0.95);
+  position: relative;
+}
+
+/* Corner accents for dark mode */
+.dark-mode .about.section::before,
+.dark-mode .about.section::after,
+.dark-mode .skills.section::before,
+.dark-mode .skills.section::after,
+.dark-mode .projects.section::before,
+.dark-mode .projects.section::after,
+.dark-mode .contact.section::before,
+.dark-mode .contact.section::after {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
+}
+
+.dark-mode .about.section::before,
+.dark-mode .skills.section::before,
+.dark-mode .projects.section::before,
+.dark-mode .contact.section::before {
+  top: 0;
+  left: 0;
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.3) 0%, transparent 50%);
+  border-top-left-radius: 16px;
+}
+
+.dark-mode .about.section::after,
+.dark-mode .skills.section::after,
+.dark-mode .projects.section::after,
+.dark-mode .contact.section::after {
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(315deg, rgba(96, 165, 250, 0.3) 0%, transparent 50%);
+  border-bottom-right-radius: 16px;
 }
 
 .dark-mode .about.section h2 {
