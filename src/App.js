@@ -13,29 +13,6 @@ import project1Image from './Screenshot 2026-01-28 035743.png';
 
 // For build folder images, we'll reference them via PUBLIC_URL in the component
 
-// Framer Motion skill icon component with continuous bounce animation
-const SkillIcon = ({ icon: Icon, style, delay = 0 }) => (
-  <motion.div
-    style={{ display: 'inline-block', ...style }}
-    initial={{ y: 0 }}
-    animate={{
-      y: [0, -8, 0],
-      rotate: [0, 3, -3, 0],
-    }}
-    transition={{
-      duration: 2,
-      repeat: Infinity,
-      repeatType: "reverse",
-      delay: delay,
-      ease: "easeInOut"
-    }}
-    whileHover={{ scale: 1.3, rotate: 5 }}
-    whileTap={{ scale: 0.95 }}
-  >
-    <Icon />
-  </motion.div>
-);
-
 // Unique Animation Skill Icon Component
 const AnimatedSkillIcon = ({ icon: Icon, delay, color, percentage, name, animationType = 'none', size = '3.5rem', setToast }) => {
   const handleMouseEnter = () => {
