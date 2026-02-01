@@ -14,14 +14,60 @@ import project1Image from './Screenshot 2026-01-28 035743.png';
 // For build folder images, we'll reference them via PUBLIC_URL in the component
 
 // Unique Animation Skill Icon Component
-const AnimatedSkillIcon = ({ icon: Icon, delay, color, percentage, name, animationType = 'none', size = '3.5rem', setToast }) => {
-  const handleMouseEnter = () => {
-    setToast({ show: true, name, percentage });
+const AnimatedSkillIcon = ({ icon: Icon, delay, color, percentage, name, animationType = 'rotate', size = '3.5rem' }) => {
+  // Define different animation configurations based on animationType
+  const getAnimationConfig = (type) => {
+    switch (type) {
+      case 'bounce':
+        return {
+          y: [0, -10, 0],
+          transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut", delay }
+        };
+      case 'pulse':
+        return {
+          scale: [1, 1.15, 1],
+          transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut", delay }
+        };
+      case 'rotate':
+        return {
+          rotate: [0, 10, -10, 0],
+          transition: { duration: 3, repeat: Infinity, ease: "easeInOut", delay }
+        };
+      case 'spin':
+        return {
+          rotate: [0, 360],
+          transition: { duration: 8, repeat: Infinity, ease: "linear", delay }
+        };
+      case 'wobble':
+        return {
+          rotate: [0, -15, 15, 0],
+          transition: { duration: 2.5, repeat: Infinity, ease: "easeInOut", delay }
+        };
+      case 'float':
+        return {
+          y: [0, -8, 0],
+          rotate: [0, 3, -3, 0],
+          transition: { duration: 2, repeat: Infinity, ease: "easeInOut", delay }
+        };
+      case 'swing':
+        return {
+          rotate: [0, 20, -20, 0],
+          transition: { duration: 3, repeat: Infinity, ease: "easeInOut", delay }
+        };
+      case 'tilt':
+        return {
+          rotate: [0, -10, 10, 0, -5, 5, 0],
+          transition: { duration: 2, repeat: Infinity, ease: "easeInOut", delay }
+        };
+      default:
+        return {
+          rotate: [0, 360],
+          transition: { duration: 8, repeat: Infinity, ease: "linear", delay }
+        };
+    }
   };
 
-  const handleMouseLeave = () => {
-    setToast({ show: false, name: '', percentage: '' });
-  };
+  const animationConfig = getAnimationConfig(animationType);
 
   return (
     <motion.div
@@ -31,13 +77,13 @@ const AnimatedSkillIcon = ({ icon: Icon, delay, color, percentage, name, animati
         display: 'inline-flex',
         flexDirection: 'column',
         alignItems: 'center',
+        justifyContent: 'center',
         margin: '0',
         cursor: 'pointer'
       }}
-      initial={{ y: 0 }}
+      initial={{ rotate: 0 }}
+      animate={animationConfig}
       whileHover={{ scale: 1.2 }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
       <span className="skill-label-top">{percentage}%</span>
       <Icon style={{
@@ -52,23 +98,23 @@ const AnimatedSkillIcon = ({ icon: Icon, delay, color, percentage, name, animati
 // Skills Animation Container Component
 const SkillsAnimation = () => {
   const skills = [
-    { icon: FaHtml5, color: '#e34f26', percentage: 60, name: 'HTML5' },
-    { icon: FaCss3, color: '#1572b6', percentage: 55, name: 'CSS3' },
-    { icon: FaJs, color: '#f7df1e', percentage: 50, name: 'JavaScript' },
-    { icon: FaReact, color: '#61dafb', percentage: 45, name: 'React' },
-    { icon: FaVuejs, color: '#42b883', percentage: 40, name: 'Vue.js' },
-    { icon: SiTailwindcss, color: '#06b6d4', percentage: 45, name: 'Tailwind CSS' },
-    { icon: FaNodeJs, color: '#68a063', percentage: 40, name: 'Node.js' },
-    { icon: SiExpress, color: '#000000', percentage: 35, name: 'Express.js' },
-    { icon: SiMysql, color: '#4479a1', percentage: 45, name: 'MySQL' },
-    { icon: FaPhp, color: '#777bb4', percentage: 30, name: 'PHP' },
-    { icon: FaPlug, color: '#6c5ce7', percentage: 40, name: 'REST APIs' },
-    { icon: FaGit, color: '#f05032', percentage: 50, name: 'Git' },
-    { icon: FaGithub, color: '#181717', percentage: 55, name: 'GitHub' },
-    { icon: SiVercel, color: '#000000', percentage: 50, name: 'Vercel' },
-    { icon: FaCode, color: '#007acc', percentage: 65, name: 'VS Code' },
-    { icon: FaNpm, color: '#cb3837', percentage: 45, name: 'npm' },
-    { icon: SiAxios, color: '#5a29ee', percentage: 40, name: 'Axios' },
+    { icon: FaHtml5, color: '#e34f26', percentage: 60, name: 'HTML5', animationType: 'bounce' },
+    { icon: FaCss3, color: '#1572b6', percentage: 55, name: 'CSS3', animationType: 'pulse' },
+    { icon: FaJs, color: '#f7df1e', percentage: 50, name: 'JavaScript', animationType: 'rotate' },
+    { icon: FaReact, color: '#61dafb', percentage: 45, name: 'React', animationType: 'spin' },
+    { icon: FaVuejs, color: '#42b883', percentage: 40, name: 'Vue.js', animationType: 'wobble' },
+    { icon: SiTailwindcss, color: '#06b6d4', percentage: 45, name: 'Tailwind CSS', animationType: 'float' },
+    { icon: FaNodeJs, color: '#68a063', percentage: 40, name: 'Node.js', animationType: 'swing' },
+    { icon: SiExpress, color: '#000000', percentage: 35, name: 'Express.js', animationType: 'tilt' },
+    { icon: SiMysql, color: '#4479a1', percentage: 45, name: 'MySQL', animationType: 'pulse' },
+    { icon: FaPhp, color: '#777bb4', percentage: 30, name: 'PHP', animationType: 'bounce' },
+    { icon: FaPlug, color: '#6c5ce7', percentage: 40, name: 'REST APIs', animationType: 'rotate' },
+    { icon: FaGit, color: '#f05032', percentage: 50, name: 'Git', animationType: 'spin' },
+    { icon: FaGithub, color: '#181717', percentage: 55, name: 'GitHub', animationType: 'float' },
+    { icon: SiVercel, color: '#000000', percentage: 50, name: 'Vercel', animationType: 'wobble' },
+    { icon: FaCode, color: '#007acc', percentage: 65, name: 'VS Code', animationType: 'swing' },
+    { icon: FaNpm, color: '#cb3837', percentage: 45, name: 'npm', animationType: 'pulse' },
+    { icon: SiAxios, color: '#5a29ee', percentage: 40, name: 'Axios', animationType: 'tilt' },
   ];
 
   // Duplicate skills list 3 times to ensure smooth infinite scrolling for all screen sizes
@@ -81,11 +127,11 @@ const SkillsAnimation = () => {
           <AnimatedSkillIcon
             key={`${skill.name}-${index}`}
             icon={skill.icon}
-            delay={0} // No delay for static marquee
+            delay={0}
             color={skill.color}
             percentage={skill.percentage}
             name={skill.name}
-            animationType="none" // Disable individual wobbles, just scroll
+            animationType={skill.animationType}
           />
         ))}
       </div>
@@ -98,6 +144,7 @@ function App() {
   const [scrollTopActive, setScrollTopActive] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const typedRef = useRef(null);
 
   useEffect(() => {
     // Initialize AOS animations
@@ -352,7 +399,7 @@ function App() {
           </div>
 
           {/* Skills Animation - Unique Animations for Each Icon */}
-          <SkillsAnimation setToast={setToast} />
+          <SkillsAnimation />
         </section>
 
         {/* Projects Section */}
