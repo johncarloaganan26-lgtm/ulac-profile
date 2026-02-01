@@ -117,6 +117,15 @@ body {
   padding: 0;
 }
 
+.scroller-skill-cards .skill-card {
+  padding: 0 !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
 .skills-scroller:hover .scroller-track {
   animation-play-state: paused;
 }

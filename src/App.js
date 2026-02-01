@@ -76,7 +76,7 @@ const SkillsAnimation = ({ setToast }) => {
 
   return (
     <div className="skills-scroller">
-      <div className="scroller-track">
+      <div className="scroller-track scroller-skill-cards">
         {duplicatedSkills.map((skill, index) => (
           <AnimatedSkillIcon
             key={`${skill.name}-${index}`}
