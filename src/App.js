@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaHome, FaUser, FaStar, FaServicestack, FaEnvelope, FaTwitter, FaFacebook, FaInstagram, FaSkype, FaLinkedin, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaBars, FaTimes, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
@@ -14,7 +12,7 @@ import project1Image from './Screenshot 2026-01-28 035743.png';
 // For build folder images, we'll reference them via PUBLIC_URL in the component
 
 // Unique Animation Skill Icon Component
-const AnimatedSkillIcon = ({ icon: Icon, delay, color, percentage, name, animationType = 'rotate', size = '3.5rem' }) => {
+const AnimatedSkillIcon = ({ icon: Icon, delay, color, percentage, name, animationType = 'rotate', size = '2.5rem', setToast }) => {
   // Define different animation configurations based on animationType
   const getAnimationConfig = (type) => {
     switch (type) {
@@ -69,6 +67,25 @@ const AnimatedSkillIcon = ({ icon: Icon, delay, color, percentage, name, animati
 
   const animationConfig = getAnimationConfig(animationType);
 
+  const handleMouseEnter = (e) => {
+    if (setToast) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      setToast({ 
+        show: true, 
+        name, 
+        percentage,
+        x: rect.left + rect.width / 2,
+        y: rect.top - 15 // Position above the logo
+      });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (setToast) {
+      setToast({ show: false, name: '', percentage: '', x: 0, y: 0 });
+    }
+  };
+
   return (
     <motion.div
       className="skill-card"
@@ -84,19 +101,19 @@ const AnimatedSkillIcon = ({ icon: Icon, delay, color, percentage, name, animati
       initial={{ rotate: 0 }}
       animate={animationConfig}
       whileHover={{ scale: 1.2 }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
-      <span className="skill-label-top">{percentage}%</span>
       <Icon style={{
         fontSize: size,
         color: color
       }} />
-      <span className="skill-label-bottom">{name}</span>
     </motion.div>
   );
 };
 
 // Skills Animation Container Component
-const SkillsAnimation = () => {
+const SkillsAnimation = ({ setToast }) => {
   const skills = [
     { icon: FaHtml5, color: '#e34f26', percentage: 60, name: 'HTML5', animationType: 'bounce' },
     { icon: FaCss3, color: '#1572b6', percentage: 55, name: 'CSS3', animationType: 'pulse' },
@@ -132,6 +149,7 @@ const SkillsAnimation = () => {
             percentage={skill.percentage}
             name={skill.name}
             animationType={skill.animationType}
+            setToast={setToast}
           />
         ))}
       </div>
@@ -144,6 +162,8 @@ function App() {
   const [scrollTopActive, setScrollTopActive] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [toast, setToast] = useState({ show: false, name: '', percentage: '', x: 0, y: 0 });
+  const [activeSection, setActiveSection] = useState('hero');
   const typedRef = useRef(null);
 
   useEffect(() => {
@@ -190,11 +210,35 @@ function App() {
       }
     };
 
+    // Active section tracking with IntersectionObserver
+    const sections = ['hero', 'about', 'skills', 'projects', 'contact'];
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -70% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((sectionId) => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
     window.addEventListener('scroll', handleScroll);
 
     return () => {
       clearTimeout(timer);
       window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
       lightbox.destroy();
       if (typedInstance) {
         typedInstance.destroy();
@@ -244,146 +288,152 @@ function App() {
         </button>
       )}
 
-      {/* Dark Mode Toggle */}
-      <motion.button
-        className="dark-mode-toggle"
-        onClick={() => setDarkMode(!darkMode)}
-        title="Toggle Dark Mode"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        {darkMode ? <FaSun /> : <FaMoon />}
-      </motion.button>
-
-      {/* Mobile Menu Burger Button */}
-      <motion.button
-        className="mobile-menu-toggle"
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        title="Toggle Menu"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        {mobileMenuOpen ? <FaTimes /> : <FaBars />}
-      </motion.button>
-
-      {/* Mobile Menu Overlay */}
+      {/* Toast Notification */}
       <AnimatePresence>
-        {mobileMenuOpen && (
+        {toast.show && (
           <motion.div
-            className="mobile-menu-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setMobileMenuOpen(false)}
-          />
+            className="skill-toast-container"
+            style={{ left: toast.x, top: toast.y }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="skill-toast-percentage">{toast.percentage}%</div>
+            <div className="skill-toast-name">{toast.name}</div>
+          </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Header Sidebar */}
-      <AnimatePresence mode="wait">
-        <motion.header
-          className={`header ${darkMode ? 'dark-background' : ''} ${mobileMenuOpen ? 'mobile-open' : ''}`}
-          initial={{ x: -300 }}
-          animate={{ x: 0 }}
-          exit={{ x: -300 }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
-        >
-
-          <div className="profile-img">
-            <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} alt="Profile" className="img-fluid rounded-circle" style={{ width: '120px', height: '120px', objectFit: 'cover' }} />
+      {/* Top Navigation Header */}
+      <motion.header
+        className={`nav-header ${darkMode ? 'dark-background' : ''}`}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <nav className="nav-container">
+          {/* Logo - Left side */}
+          <div className="nav-logo">
+            <img src={`${process.env.PUBLIC_URL}/ChatGPT Image Feb 1, 2026, 05_43_42 PM.png`} alt="Logo" className="nav-logo-img" />
           </div>
-
-          <div className="logo d-flex align-items-center justify-content-center">
-            <h1 className="sitename">John Carlo Aganan</h1>
+          
+          {/* Center Menu */}
+          <ul className="nav-menu-center">
+            <motion.li>
+              <a href="#hero" className={activeSection === 'hero' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('hero'); }}>
+                Home
+              </a>
+            </motion.li>
+            <motion.li>
+              <a href="#about" className={activeSection === 'about' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>
+                About
+              </a>
+            </motion.li>
+            <motion.li>
+              <a href="#skills" className={activeSection === 'skills' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('skills'); }}>
+                Skills
+              </a>
+            </motion.li>
+            <motion.li>
+              <a href="#projects" className={activeSection === 'projects' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}>
+                Projects
+              </a>
+            </motion.li>
+            <motion.li>
+              <a href="#contact" className={activeSection === 'contact' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>
+                Contact
+              </a>
+            </motion.li>
+          </ul>
+          
+          {/* Right Side: Dark Mode Toggle Switch */}
+          <div className="nav-right">
+            <label className="dark-mode-toggle">
+              <input 
+                type="checkbox" 
+                checked={darkMode}
+                onChange={() => setDarkMode(!darkMode)}
+              />
+              <span className="switch-slider">
+                <span className="switch-icon moon"><FaMoon /></span>
+                <span className="switch-icon sun"><FaSun /></span>
+              </span>
+            </label>
           </div>
+        </nav>
+      </motion.header>
 
-          <div className="social-links text-center">
-            <motion.a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="twitter" whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.95 }}><FaTwitter /></motion.a>
-            <motion.a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="facebook" whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.95 }}><FaFacebook /></motion.a>
-            <motion.a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="instagram" whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.95 }}><FaInstagram /></motion.a>
-            <motion.a href="https://skype.com" target="_blank" rel="noopener noreferrer" className="google-plus" whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.95 }}><FaSkype /></motion.a>
-            <motion.a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="linkedin" whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.95 }}><FaLinkedin /></motion.a>
-          </div>
-
-          <nav className="navmenu">
-            <ul>
-              <motion.li whileHover={{ x: 5 }}>
-                <a href="#hero" className="active" onClick={(e) => { e.preventDefault(); scrollToSection('hero'); }}>
-                  <FaHome className="navicon" /> Home
-                </a>
-              </motion.li>
-              <motion.li whileHover={{ x: 5 }}>
-                <a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>
-                  <FaUser className="navicon" /> About
-                </a>
-              </motion.li>
-              <motion.li whileHover={{ x: 5 }}>
-                <a href="#skills" onClick={(e) => { e.preventDefault(); scrollToSection('skills'); }}>
-                  <FaStar className="navicon" /> Skills
-                </a>
-              </motion.li>
-              <motion.li whileHover={{ x: 5 }}>
-                <a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}>
-                  <FaServicestack className="navicon" /> Projects
-                </a>
-              </motion.li>
-              <motion.li whileHover={{ x: 5 }}>
-                <a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>
-                  <FaEnvelope className="navicon" /> Contact
-                </a>
-              </motion.li>
-            </ul>
-          </nav>
-        </motion.header>
-      </AnimatePresence>
+      {/* Social Icons - Right Side of Page */}
+      <div className="page-social">
+        <motion.a href="https://twitter.com" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.95 }}><FaTwitter /></motion.a>
+        <motion.a href="https://facebook.com" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.95 }}><FaFacebook /></motion.a>
+        <motion.a href="https://instagram.com" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.95 }}><FaInstagram /></motion.a>
+        <motion.a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.95 }}><FaLinkedin /></motion.a>
+      </div>
 
       {/* Main Content */}
-      <main className="main sidebar-open">
+      <main className="main">
         {/* Hero Section */}
-        <section id="hero" className="hero section dark-background">
-          <img src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`} alt="John Carlo Aganan" data-aos="fade-in" />
-          <div className="container" data-aos="fade-up" data-aos-delay="100">
-            <h2>John Carlo Aganan</h2>
-            <p>
-              I'm <span ref={typedRef}></span>
-            </p>
+        <section id="hero" className="hero section">
+          <div className="hero-container">
+            {/* Left side: Content */}
+            <div className="hero-left" data-aos="fade-up" data-aos-delay="100">
+              <h2 style={{ fontSize: '3.5rem', marginBottom: '20px', fontWeight: '800', color: '#333' }}>Aspiring Full Stack Developer</h2>
+              <p style={{ fontSize: '1.4rem', color: '#555', marginBottom: '30px', fontStyle: 'italic' }}>
+                Extreme passion for building and designing web applications
+              </p>
+            </div>
+            {/* Right side: Image */}
+            <div className="hero-right" style={{ display: 'flex', justifyContent: 'center' }}>
+              <div className="hero-image">
+                <img 
+                  src={`${process.env.PUBLIC_URL}/ChatGPT Image Feb 1, 2026, 05_43_42 PM.png`} 
+                  alt="Full Stack Developer" 
+                  data-aos="fade-in"
+                  style={{ maxWidth: '800px', width: '100%', borderRadius: '20px' }}
+                />
+              </div>
+            </div>
           </div>
         </section>
 
         {/* About Section */}
-        <section id="about" className="about section light-mode-section">
+        <section id="about" className="about section">
           <div className="container" data-aos="fade-up" data-aos-delay="100">
-            <div className="row gy-4 align-items-center">
-              <div className="col-lg-4 text-center">
-                <img
-                  src={`${process.env.PUBLIC_URL}/5518c04f-68ec-4ae8-9b34-6c02f9ff5102.jpg`}
-                  className="img-fluid shadow-lg"
-                  alt="Profile"
-                  style={{ maxWidth: '100%', maxHeight: '350px', height: 'auto', borderRadius: '12px' }}
+            <h2 style={{ fontSize: '2rem', marginBottom: '30px', fontWeight: '600', textAlign: 'center' }}>About Me</h2>
+            <div className="about-container" style={{ display: 'flex', gap: '40px', alignItems: 'flex-start', justifyContent: 'center', flexWrap: 'wrap' }}>
+              {/* Left side: Image */}
+              <div className="about-image" style={{ flex: '0 0 350px', maxWidth: '350px' }} data-aos="fade-right">
+                <img 
+                  src={`${process.env.PUBLIC_URL}/dsa.jpg`} 
+                  alt="About Me" 
+                  style={{ width: '100%', borderRadius: '16px', boxShadow: '0 8px 30px rgba(0, 0, 0, 0.12)' }}
                 />
               </div>
-              <div className="col-lg-8 content">
-                <h2 style={{ fontSize: '2rem', marginBottom: '15px', fontWeight: '600' }}>About Me</h2>
+              {/* Right side: Content */}
+              <div className="about-content" style={{ flex: '1', maxWidth: '600px', minWidth: '300px' }} data-aos="fade-left">
                 <p className="py-3" style={{ color: '#555', lineHeight: '1.8', fontSize: '1.05rem' }}>
                   I'm a <strong>4th year BSIT student</strong> at Cavite State University with a passion for building modern, scalable web applications. I specialize in creating responsive, user-centered experiences using technologies like React, Vue, and Node.js.
                 </p>
                 <p className="py-2" style={{ color: '#555', lineHeight: '1.8', fontSize: '1.05rem' }}>
                   Currently seeking <strong>junior developer roles or internships</strong> where I can contribute my skills, collaborate with experienced developers, and continue expanding my expertise in full-stack development.
                 </p>
-                <div className="row py-4">
-                  <div className="col-md-6">
-                    <ul style={{ listStyle: 'none', padding: 0 }}>
-                      <li style={{ marginBottom: '12px' }}><span style={{ fontWeight: '600', color: '#149ddd' }}>Education:</span> <span style={{ marginLeft: '10px' }}>Cavite State University - BSIT 4th yr</span></li>
-                      <li style={{ marginBottom: '12px' }}><span style={{ fontWeight: '600', color: '#149ddd' }}>Email:</span> <span style={{ marginLeft: '10px' }}>johncarloaganan26@gmail.com</span></li>
-                      <li style={{ marginBottom: '12px' }}><span style={{ fontWeight: '600', color: '#149ddd' }}>Country:</span> <span style={{ marginLeft: '10px' }}>Philippines</span></li>
-                    </ul>
-                  </div>
-                  <div className="col-md-6">
-                    <ul style={{ listStyle: 'none', padding: 0 }}>
-                      <li style={{ marginBottom: '12px' }}><span style={{ fontWeight: '600', color: '#149ddd' }}>Focus:</span> <span style={{ marginLeft: '10px' }}>Full-Stack Development</span></li>
-                      <li style={{ marginBottom: '12px' }}><span style={{ fontWeight: '600', color: '#149ddd' }}>Website:</span> <span style={{ marginLeft: '10px' }}>biblebaptistekklesiaofkawit.xyz</span></li>
-                      <li style={{ marginBottom: '12px' }}><span style={{ fontWeight: '600', color: '#149ddd' }}>Status:</span> <span style={{ marginLeft: '10px' }}><span style={{ color: '#28a745', fontWeight: '500' }}>Available for hire</span></span></li>
-                    </ul>
+                <div className="about-details" style={{ marginTop: '30px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                    <div>
+                      <ul style={{ listStyle: 'none', padding: 0 }}>
+                        <li style={{ marginBottom: '12px' }}><span className="about-label">Education:</span> <span style={{ marginLeft: '10px', color: '#555' }}>Cavite State University - BSIT 4th yr (Cavite City Campus)</span></li>
+                        <li style={{ marginBottom: '12px' }}><span className="about-label">Email:</span> <span style={{ marginLeft: '10px', color: '#555' }}>johncarloaganan26@gmail.com</span></li>
+                        <li style={{ marginBottom: '12px' }}><span className="about-label">Country:</span> <span style={{ marginLeft: '10px', color: '#555' }}>Philippines</span></li>
+                      </ul>
+                    </div>
+                    <div>
+                      <ul style={{ listStyle: 'none', padding: 0 }}>
+                        <li style={{ marginBottom: '12px' }}><span className="about-label">Focus:</span> <span style={{ marginLeft: '10px', color: '#555' }}>Full-Stack Development</span></li>
+                        <li style={{ marginBottom: '12px' }}><span className="about-label">Status:</span> <span style={{ marginLeft: '10px', color: '#28a745', fontWeight: '500' }}>Available for hire</span></li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -399,7 +449,7 @@ function App() {
           </div>
 
           {/* Skills Animation - Unique Animations for Each Icon */}
-          <SkillsAnimation />
+          <SkillsAnimation setToast={setToast} />
         </section>
 
         {/* Projects Section */}
@@ -412,7 +462,7 @@ function App() {
             <div className="row justify-content-center">
               <div className="col-lg-10 portfolio-item">
                 <div className="portfolio-content h-100">
-                  <a href={project1Image} data-gallery="portfolio-gallery" className="glightbox d-flex justify-content-center align-items-center" style={{ minHeight: '450px', padding: '20px' }} data-glightbox="title: BBEK Church Management System; description: <p>BBEK Church Management System is a comprehensive church administration platform designed to manage church records, events, services, and community engagement. Built with role-based access control (admin, pastor, member), it includes modules for member management, event coordination, service records, donations, announcements, and content management. Optimized for church operations with features like bulk operations, reporting, email notifications, and secure data handling.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'><SiMysql /> MySQL</span><span class='glightbox-tech-item'><SiVuedotjs /> Vue.js</span><span class='glightbox-tech-item'><SiExpress /> Express</span><span class='glightbox-tech-item'><SiNodedotjs /> Node.js</span><span class='glightbox-tech-item'><SiVuetify /> Vuetify</span><span class='glightbox-tech-item'>📦 Element Plus</span><span class='glightbox-tech-item'><SiPinia /> Pinia</span><span class='glightbox-tech-item'><SiAxios /> Axios</span><span class='glightbox-tech-item'><SiJsonwebtokens /> JWT</span><span class='glightbox-tech-item'><SiSendgrid /> SendGrid</span><span class='glightbox-tech-item'>📊 ExcelJS</span><span class='glightbox-tech-item'>📄 CSV Parser</span><span class='glightbox-tech-item'><SiVite /> Vite</span><span class='glightbox-tech-item'>🪟 Winser</span></div></div>; descPosition: right;">
+                  <a href={project1Image} data-gallery="portfolio-gallery" className="glightbox d-flex justify-content-center align-items-center" style={{ minHeight: '450px' }} data-glightbox="title: BBEK Church Management System; description: <p>BBEK Church Management System is a comprehensive church administration platform designed to manage church records, events, services, and community engagement. Built with role-based access control (admin, pastor, member), it includes modules for member management, event coordination, service records, donations, announcements, and content management. Optimized for church operations with features like bulk operations, reporting, email notifications, and secure data handling.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'><SiMysql /> MySQL</span><span class='glightbox-tech-item'><SiVuedotjs /> Vue.js</span><span class='glightbox-tech-item'><SiExpress /> Express</span><span class='glightbox-tech-item'><SiNodedotjs /> Node.js</span><span class='glightbox-tech-item'><SiVuetify /> Vuetify</span><span class='glightbox-tech-item'>📦 Element Plus</span><span class='glightbox-tech-item'><SiPinia /> Pinia</span><span class='glightbox-tech-item'><SiAxios /> Axios</span><span class='glightbox-tech-item'><SiJsonwebtokens /> JWT</span><span class='glightbox-tech-item'><SiSendgrid /> SendGrid</span><span class='glightbox-tech-item'>📊 ExcelJS</span><span class='glightbox-tech-item'>📄 CSV Parser</span><span class='glightbox-tech-item'><SiVite /> Vite</span><span class='glightbox-tech-item'>🪟 Winser</span></div></div>; descPosition: right;">
                     <img src={project1Image} className="img-fluid rounded shadow" style={{ maxWidth: '100%', maxHeight: '500px', width: 'auto', height: 'auto', objectFit: 'contain' }} alt="Church Website" />
                   </a>
                   <div className="portfolio-info">
@@ -424,7 +474,7 @@ function App() {
               </div>
               <div className="col-lg-10 portfolio-item mt-4">
                 <div className="portfolio-content h-100">
-                  <a href={`${process.env.PUBLIC_URL}/Screenshot 2026-01-31 091212.png`} data-gallery="portfolio-gallery" className="glightbox d-flex justify-content-center align-items-center" style={{ minHeight: '450px', padding: '20px' }} data-glightbox="title: Baby Bliss Booking; description: <p>Baby Bliss Booking is an online appointment scheduling system for a baby spa and wellness center. It allows customers to book appointments for baby massage, spa treatments, and wellness services. Features include service selection, time slot availability, booking confirmation, and admin management for appointments.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'><FaReact /> React</span><span class='glightbox-tech-item'><SiTailwindcss /> Tailwind CSS</span><span class='glightbox-tech-item'><SiVercel /> Vercel</span></div></div>; descPosition: right;">
+                  <a href={`${process.env.PUBLIC_URL}/Screenshot 2026-01-31 091212.png`} data-gallery="portfolio-gallery" className="glightbox d-flex justify-content-center align-items-center" style={{ minHeight: '450px' }} data-glightbox="title: Baby Bliss Booking; description: <p>Baby Bliss Booking is an online appointment scheduling system for a baby spa and wellness center. It allows customers to book appointments for baby massage, spa treatments, and wellness services. Features include service selection, time slot availability, booking confirmation, and admin management for appointments.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'><FaReact /> React</span><span class='glightbox-tech-item'><SiTailwindcss /> Tailwind CSS</span><span class='glightbox-tech-item'><SiVercel /> Vercel</span></div></div>; descPosition: right;">
                     <img src={`${process.env.PUBLIC_URL}/Screenshot 2026-01-31 091212.png`} className="img-fluid rounded shadow" style={{ maxWidth: '100%', maxHeight: '500px', width: 'auto', height: 'auto', objectFit: 'contain' }} alt="Baby Bliss Booking" />
                   </a>
                   <div className="portfolio-info">
