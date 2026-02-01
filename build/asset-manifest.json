@@ -1,15 +1,14 @@
 {
   "files": {
-    "main.css": "./static/css/main.e4f20f61.css",
-    "main.js": "./static/js/main.14b8d1f5.js",
+    "main.css": "./static/css/main.6f5db902.css",
+    "main.js": "./static/js/main.d374cec0.js",
     "static/media/Screenshot 2026-01-28 035743.png": "./static/media/Screenshot 2026-01-28 035743.f703da5b58f5f1c0b9d5.png",
-    "static/media/ChatGPT Image Jan 30, 2026, 02_34_49 AM.png": "./static/media/ChatGPT Image Jan 30, 2026, 02_34_49 AM.76e31e6efa903bd597d9.png",
     "index.html": "./index.html",
-    "main.e4f20f61.css.map": "./static/css/main.e4f20f61.css.map",
-    "main.14b8d1f5.js.map": "./static/js/main.14b8d1f5.js.map"
+    "main.6f5db902.css.map": "./static/css/main.6f5db902.css.map",
+    "main.d374cec0.js.map": "./static/js/main.d374cec0.js.map"
   },
   "entrypoints": [
-    "static/css/main.e4f20f61.css",
-    "static/js/main.14b8d1f5.js"
+    "static/css/main.6f5db902.css",
+    "static/js/main.d374cec0.js"
   ]
 }
