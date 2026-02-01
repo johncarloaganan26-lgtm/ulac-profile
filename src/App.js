@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaHome, FaUser, FaStar, FaServicestack, FaEnvelope, FaTwitter, FaFacebook, FaInstagram, FaSkype, FaLinkedin, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaBars, FaTimes, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaMapMarkerAlt, FaPhone, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaTwitter, FaFacebook, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { SiTailwindcss, SiExpress, SiAxios, SiMysql, SiVercel } from 'react-icons/si';
 import Typed from 'typed.js';
 import AOS from 'aos';
@@ -161,7 +161,6 @@ function App() {
   const [preloaderRemoved, setPreloaderRemoved] = useState(false);
   const [scrollTopActive, setScrollTopActive] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [toast, setToast] = useState({ show: false, name: '', percentage: '', x: 0, y: 0 });
   const [activeSection, setActiveSection] = useState('hero');
   const typedRef = useRef(null);
@@ -258,7 +257,6 @@ function App() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
-    setMobileMenuOpen(false);
   };
 
   return (
