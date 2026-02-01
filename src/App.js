@@ -50,7 +50,7 @@ const AnimatedSkillIcon = ({ icon: Icon, delay, color, percentage, name, animati
 };
 
 // Skills Animation Container Component
-const SkillsAnimation = ({ setToast }) => {
+const SkillsAnimation = () => {
   const skills = [
     { icon: FaHtml5, color: '#e34f26', percentage: 60, name: 'HTML5' },
     { icon: FaCss3, color: '#1572b6', percentage: 55, name: 'CSS3' },
@@ -86,7 +86,6 @@ const SkillsAnimation = ({ setToast }) => {
             percentage={skill.percentage}
             name={skill.name}
             animationType="none" // Disable individual wobbles, just scroll
-            setToast={setToast}
           />
         ))}
       </div>
@@ -99,7 +98,6 @@ function App() {
   const [scrollTopActive, setScrollTopActive] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [toast, setToast] = useState({ show: false, name: '', percentage: '' });
 
   useEffect(() => {
     // Initialize AOS animations
@@ -209,22 +207,6 @@ function App() {
       >
         {darkMode ? <FaSun /> : <FaMoon />}
       </motion.button>
-
-      {/* Toast Notification */}
-      <AnimatePresence>
-        {toast.show && (
-          <motion.div
-            className="skill-toast"
-            initial={{ opacity: 0, y: 20, scale: 0.8 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.8 }}
-            transition={{ duration: 0.2 }}
-          >
-            <span className="toast-percentage">{toast.percentage}%</span>
-            <span className="toast-name">{toast.name}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Mobile Menu Burger Button */}
       <motion.button
