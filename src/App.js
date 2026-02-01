@@ -100,7 +100,6 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [toast, setToast] = useState({ show: false, name: '', percentage: '' });
-  const typedRef = useRef(null);
 
   useEffect(() => {
     // Initialize AOS animations
