@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaUser, FaEnvelope, FaMapMarkerAlt, FaPhone, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaTwitter, FaFacebook, FaInstagram, FaLinkedin } from 'react-icons/fa';
+import { FaHome, FaUser, FaEnvelope, FaMapMarkerAlt, FaPhone, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaTwitter, FaFacebook, FaInstagram, FaLinkedin, FaBriefcase, FaBars, FaTimes } from 'react-icons/fa';
 import { SiTailwindcss, SiExpress, SiAxios, SiMysql, SiVercel } from 'react-icons/si';
 import Typed from 'typed.js';
 import AOS from 'aos';
@@ -163,6 +163,7 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [toast, setToast] = useState({ show: false, name: '', percentage: '', x: 0, y: 0 });
   const [activeSection, setActiveSection] = useState('hero');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const typedRef = useRef(null);
 
   useEffect(() => {
@@ -316,30 +317,40 @@ function App() {
             <img src={`${process.env.PUBLIC_URL}/ChatGPT Image Feb 1, 2026, 05_43_42 PM.png`} alt="Logo" className="nav-logo-img" />
           </div>
           
-          {/* Center Menu */}
+          {/* Burger Menu Button - Mobile */}
+          <button className="burger-menu" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <FaTimes /> : <FaBars />}
+          </button>
+          
+          {/* Center Menu - Desktop */}
           <ul className="nav-menu-center">
             <motion.li>
               <a href="#hero" className={activeSection === 'hero' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('hero'); }}>
+                <FaHome style={{ marginRight: '8px', verticalAlign: 'middle' }} />
                 Home
               </a>
             </motion.li>
             <motion.li>
               <a href="#about" className={activeSection === 'about' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>
+                <FaUser style={{ marginRight: '8px', verticalAlign: 'middle' }} />
                 About
               </a>
             </motion.li>
             <motion.li>
               <a href="#skills" className={activeSection === 'skills' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('skills'); }}>
+                <FaCode style={{ marginRight: '8px', verticalAlign: 'middle' }} />
                 Skills
               </a>
             </motion.li>
             <motion.li>
               <a href="#projects" className={activeSection === 'projects' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}>
+                <FaBriefcase style={{ marginRight: '8px', verticalAlign: 'middle' }} />
                 Projects
               </a>
             </motion.li>
             <motion.li>
               <a href="#contact" className={activeSection === 'contact' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>
+                <FaEnvelope style={{ marginRight: '8px', verticalAlign: 'middle' }} />
                 Contact
               </a>
             </motion.li>
@@ -361,6 +372,43 @@ function App() {
           </div>
         </nav>
       </motion.header>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div 
+            className="mobile-menu-overlay"
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="mobile-menu-header">
+              <img src={`${process.env.PUBLIC_URL}/ChatGPT Image Feb 1, 2026, 05_43_42 PM.png`} alt="Logo" className="mobile-menu-logo" />
+              <button className="close-menu" onClick={() => setMobileMenuOpen(false)}>
+                <FaTimes />
+              </button>
+            </div>
+            <ul className="mobile-menu">
+              <motion.li onClick={() => { scrollToSection('hero'); setMobileMenuOpen(false); }}>
+                <FaHome /> <span>Home</span>
+              </motion.li>
+              <motion.li onClick={() => { scrollToSection('about'); setMobileMenuOpen(false); }}>
+                <FaUser /> <span>About</span>
+              </motion.li>
+              <motion.li onClick={() => { scrollToSection('skills'); setMobileMenuOpen(false); }}>
+                <FaCode /> <span>Skills</span>
+              </motion.li>
+              <motion.li onClick={() => { scrollToSection('projects'); setMobileMenuOpen(false); }}>
+                <FaBriefcase /> <span>Projects</span>
+              </motion.li>
+              <motion.li onClick={() => { scrollToSection('contact'); setMobileMenuOpen(false); }}>
+                <FaEnvelope /> <span>Contact</span>
+              </motion.li>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Social Icons - Right Side of Page */}
       <div className="page-social">
