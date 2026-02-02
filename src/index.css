@@ -767,6 +767,11 @@ input:not(:checked) + .switch-slider .switch-icon.moon {
 
 /* Mobile Responsive Navigation */
 @media (max-width: 992px) {
+  /* Show burger menu on tablets and mobile */
+  .burger-menu {
+    display: block;
+  }
+
   .nav-container {
     padding: 0 20px;
   }
@@ -776,20 +781,13 @@ input:not(:checked) + .switch-slider .switch-icon.moon {
     height: 60px;
   }
 
+  /* Hide desktop menu on tablets and mobile */
   .nav-menu-center {
-    gap: 20px;
-  }
-
-  .nav-menu-center a {
-    font-size: 1rem;
+    display: none;
   }
 }
 
 @media (max-width: 768px) {
-  .burger-menu {
-    display: block;
-  }
-
   .nav-header {
     padding: 10px 0;
   }
@@ -806,11 +804,6 @@ input:not(:checked) + .switch-slider .switch-icon.moon {
   .nav-logo-img {
     width: 50px;
     height: 50px;
-  }
-
-  /* Hide desktop menu on mobile */
-  .nav-menu-center {
-    display: none;
   }
 
   .nav-right {
