@@ -278,7 +278,13 @@ function App() {
       <div className="geometric-bg"></div>
 
       {/* Preloader */}
-      {!preloaderRemoved && <div id="preloader"></div>}
+      {!preloaderRemoved && (
+        <div id="preloader">
+          <div className="logo-container">
+            <img src={`${process.env.PUBLIC_URL}/ChatGPT Image Feb 1, 2026, 05_43_42 PM.png`} alt="Logo" />
+          </div>
+        </div>
+      )}
 
       {/* Scroll Top Button */}
       {scrollTopActive && (
