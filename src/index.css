@@ -657,7 +657,7 @@ input:not(:checked) + .switch-slider .switch-icon.moon {
   cursor: pointer;
   padding: 8px;
   transition: all 0.3s ease;
-  z-index: 1001;
+  z-index: 10000;
 }
 
 .burger-menu:hover {
@@ -679,9 +679,10 @@ input:not(:checked) + .switch-slider .switch-icon.moon {
   height: 100vh;
   background: white;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  z-index: 9999;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .dark-mode .mobile-menu-overlay {
@@ -763,6 +764,17 @@ input:not(:checked) + .switch-slider .switch-icon.moon {
 
 .mobile-menu li svg {
   font-size: 1.2rem;
+}
+
+/* Mobile Dark Mode Toggle */
+.mobile-dark-mode-toggle {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.dark-mode .mobile-dark-mode-toggle {
+  border-top: 1px solid #374151;
 }
 
 /* Mobile Responsive Navigation */

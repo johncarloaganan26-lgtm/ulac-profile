@@ -405,6 +405,12 @@ function App() {
               <motion.li onClick={() => { scrollToSection('contact'); setMobileMenuOpen(false); }}>
                 <FaEnvelope /> <span>Contact</span>
               </motion.li>
+              
+              {/* Dark Mode Toggle in Mobile Menu */}
+              <motion.li className="mobile-dark-mode-toggle" onClick={() => setDarkMode(!darkMode)}>
+                {darkMode ? <FaSun /> : <FaMoon />}
+                <span>{darkMode ? 'Light Mode' : 'Dark Mode'}</span>
+              </motion.li>
             </ul>
           </motion.div>
         )}
