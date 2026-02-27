@@ -437,8 +437,8 @@ function App() {
           <div className="hero-container">
             {/* Left side: Content */}
             <div className="hero-left" data-aos="fade-up" data-aos-delay="100">
-              <h2 style={{ fontSize: '3.5rem', marginBottom: '20px', fontWeight: '800', color: '#333' }}>Aspiring Full Stack Developer</h2>
-              <p style={{ fontSize: '1.4rem', color: '#555', marginBottom: '30px', fontStyle: 'italic' }}>
+              <h2 className="hero-title">Aspiring Full Stack Developer</h2>
+              <p className="hero-subtitle">
                 Extreme passion for building and designing web applications
               </p>
             </div>
@@ -449,7 +449,7 @@ function App() {
                   src={`${process.env.PUBLIC_URL}/ChatGPT Image Feb 1, 2026, 05_43_42 PM.png`} 
                   alt="Full Stack Developer" 
                   data-aos="fade-in"
-                  style={{ maxWidth: '800px', width: '100%', borderRadius: '20px' }}
+                  className="hero-main-image"
                 />
               </div>
             </div>
@@ -520,8 +520,8 @@ function App() {
             <div className="row justify-content-center">
               <div className="col-lg-10 portfolio-item">
                 <div className="portfolio-content h-100">
-                  <a href={project1Image} data-gallery="portfolio-gallery" className="glightbox d-flex justify-content-center align-items-center" style={{ minHeight: '450px' }} data-glightbox="title: BBEK Church Management System; description: <p>BBEK Church Management System is a comprehensive church administration platform designed to manage church records, events, services, and community engagement. Built with role-based access control (admin, pastor, member), it includes modules for member management, event coordination, service records, donations, announcements, and content management. Optimized for church operations with features like bulk operations, reporting, email notifications, and secure data handling.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'><SiMysql /> MySQL</span><span class='glightbox-tech-item'><SiVuedotjs /> Vue.js</span><span class='glightbox-tech-item'><SiExpress /> Express</span><span class='glightbox-tech-item'><SiNodedotjs /> Node.js</span><span class='glightbox-tech-item'><SiVuetify /> Vuetify</span><span class='glightbox-tech-item'>📦 Element Plus</span><span class='glightbox-tech-item'><SiPinia /> Pinia</span><span class='glightbox-tech-item'><SiAxios /> Axios</span><span class='glightbox-tech-item'><SiJsonwebtokens /> JWT</span><span class='glightbox-tech-item'><SiSendgrid /> SendGrid</span><span class='glightbox-tech-item'>📊 ExcelJS</span><span class='glightbox-tech-item'>📄 CSV Parser</span><span class='glightbox-tech-item'><SiVite /> Vite</span><span class='glightbox-tech-item'>🪟 Winser</span></div></div>; descPosition: right;">
-                    <img src={project1Image} className="img-fluid rounded shadow" style={{ maxWidth: '100%', maxHeight: '500px', width: 'auto', height: 'auto', objectFit: 'contain' }} alt="Church Website" />
+                  <a href={project1Image} data-gallery="portfolio-gallery" className="glightbox d-flex justify-content-center align-items-center portfolio-preview" data-glightbox="title: BBEK Church Management System; description: <p>BBEK Church Management System is a comprehensive church administration platform designed to manage church records, events, services, and community engagement. Built with role-based access control (admin, pastor, member), it includes modules for member management, event coordination, service records, donations, announcements, and content management. Optimized for church operations with features like bulk operations, reporting, email notifications, and secure data handling.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'><SiMysql /> MySQL</span><span class='glightbox-tech-item'><SiVuedotjs /> Vue.js</span><span class='glightbox-tech-item'><SiExpress /> Express</span><span class='glightbox-tech-item'><SiNodedotjs /> Node.js</span><span class='glightbox-tech-item'><SiVuetify /> Vuetify</span><span class='glightbox-tech-item'>📦 Element Plus</span><span class='glightbox-tech-item'><SiPinia /> Pinia</span><span class='glightbox-tech-item'><SiAxios /> Axios</span><span class='glightbox-tech-item'><SiJsonwebtokens /> JWT</span><span class='glightbox-tech-item'><SiSendgrid /> SendGrid</span><span class='glightbox-tech-item'>📊 ExcelJS</span><span class='glightbox-tech-item'>📄 CSV Parser</span><span class='glightbox-tech-item'><SiVite /> Vite</span><span class='glightbox-tech-item'>🪟 Winser</span></div></div>; descPosition: right;">
+                    <img src={project1Image} className="img-fluid rounded shadow portfolio-preview-img" alt="Church Website" />
                   </a>
                   <div className="portfolio-info">
                     <h4>BBEK Church Management System</h4>
@@ -532,13 +532,36 @@ function App() {
               </div>
               <div className="col-lg-10 portfolio-item mt-4">
                 <div className="portfolio-content h-100">
-                  <a href={`${process.env.PUBLIC_URL}/Screenshot 2026-01-31 091212.png`} data-gallery="portfolio-gallery" className="glightbox d-flex justify-content-center align-items-center" style={{ minHeight: '450px' }} data-glightbox="title: Baby Bliss Booking; description: <p>Baby Bliss Booking is an online appointment scheduling system for a baby spa and wellness center. It allows customers to book appointments for baby massage, spa treatments, and wellness services. Features include service selection, time slot availability, booking confirmation, and admin management for appointments.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'><FaReact /> React</span><span class='glightbox-tech-item'><SiTailwindcss /> Tailwind CSS</span><span class='glightbox-tech-item'><SiVercel /> Vercel</span></div></div>; descPosition: right;">
-                    <img src={`${process.env.PUBLIC_URL}/Screenshot 2026-01-31 091212.png`} className="img-fluid rounded shadow" style={{ maxWidth: '100%', maxHeight: '500px', width: 'auto', height: 'auto', objectFit: 'contain' }} alt="Baby Bliss Booking" />
+                  <a href={`${process.env.PUBLIC_URL}/Screenshot 2026-01-31 091212.png`} data-gallery="portfolio-gallery" className="glightbox d-flex justify-content-center align-items-center portfolio-preview" data-glightbox="title: Baby Bliss Booking; description: <p>Baby Bliss Booking is an online appointment scheduling system for a baby spa and wellness center. It allows customers to book appointments for baby massage, spa treatments, and wellness services. Features include service selection, time slot availability, booking confirmation, and admin management for appointments.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'><FaReact /> React</span><span class='glightbox-tech-item'><SiTailwindcss /> Tailwind CSS</span><span class='glightbox-tech-item'><SiVercel /> Vercel</span></div></div>; descPosition: right;">
+                    <img src={`${process.env.PUBLIC_URL}/Screenshot 2026-01-31 091212.png`} className="img-fluid rounded shadow portfolio-preview-img" alt="Baby Bliss Booking" />
                   </a>
                   <div className="portfolio-info">
                     <h4>Baby Bliss Booking</h4>
                     <p>An online appointment scheduling system for a baby spa and wellness center.</p>
                     <a href="https://babyblissbooking.vercel.app/" target="_blank" rel="noopener noreferrer" className="visit-site-btn btn-lg px-4 py-2 rounded-pill shadow-sm">View Project <i className="bi bi-arrow-right ms-2"></i></a>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-10 portfolio-item mt-4">
+                <div className="portfolio-content h-100">
+                  <a
+                    href={`${process.env.PUBLIC_URL}/Screenshot 2026-02-27 090848.png`}
+                    data-gallery="portfolio-gallery"
+                    className="glightbox d-flex justify-content-center align-items-center portfolio-preview"
+                    data-glightbox="title: StartupLab Event Registration; description: <p>A modern landing page and registration flow for StartupLab events, connecting entrepreneurs with workshops, networking sessions, and mentors.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'>Next.js</span><span class='glightbox-tech-item'>Tailwind CSS</span><span class='glightbox-tech-item'>Vercel</span></div></div>; descPosition: right;"
+                  >
+                    <img
+                      src={`${process.env.PUBLIC_URL}/Screenshot 2026-02-27 090848.png`}
+                      className="img-fluid rounded shadow portfolio-preview-img"
+                      alt="StartupLab Event Registration"
+                    />
+                  </a>
+                  <div className="portfolio-info">
+                    <h4>StartupLab Event Registration</h4>
+                    <p>Event registration experience for StartupLab with clear CTAs and responsive hero imagery.</p>
+                    <a href="https://startuplab-event-registration.vercel.app/" target="_blank" rel="noopener noreferrer" className="visit-site-btn btn-lg px-4 py-2 rounded-pill shadow-sm">
+                      View Project <i className="bi bi-arrow-right ms-2"></i>
+                    </a>
                   </div>
                 </div>
               </div>
