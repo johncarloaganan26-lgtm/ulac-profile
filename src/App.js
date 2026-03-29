@@ -419,46 +419,72 @@ function App() {
         </nav>
       </motion.header>
 
-      {/* Mobile Menu Dropdown */}
+      {/* Mobile Menu Side Drawer with Backdrop */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div 
-            className="mobile-menu-overlay"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className="mobile-menu-header">
-              <img src={logoImage} alt="Logo" className="mobile-menu-logo" />
-              <button className="close-menu" onClick={() => setMobileMenuOpen(false)}>
-                <FaTimes />
-              </button>
-            </div>
-            <ul className="mobile-menu">
-              <motion.li onClick={() => { scrollToSection('hero'); setMobileMenuOpen(false); }}>
-                <FaHome /> <span>Home</span>
-              </motion.li>
-              <motion.li onClick={() => { scrollToSection('about'); setMobileMenuOpen(false); }}>
-                <FaUser /> <span>About</span>
-              </motion.li>
-              <motion.li onClick={() => { scrollToSection('skills'); setMobileMenuOpen(false); }}>
-                <FaCode /> <span>Skills</span>
-              </motion.li>
-              <motion.li onClick={() => { scrollToSection('projects'); setMobileMenuOpen(false); }}>
-                <FaBriefcase /> <span>Projects</span>
-              </motion.li>
-              <motion.li onClick={() => { scrollToSection('contact'); setMobileMenuOpen(false); }}>
-                <FaEnvelope /> <span>Contact</span>
-              </motion.li>
-              
-              {/* Dark Mode Toggle in Mobile Menu */}
-              <motion.li className="mobile-dark-mode-toggle" onClick={() => setDarkMode(!darkMode)}>
-                {darkMode ? <FaSun /> : <FaMoon />}
-                <span>{darkMode ? 'Light Mode' : 'Dark Mode'}</span>
-              </motion.li>
-            </ul>
-          </motion.div>
+          <>
+            {/* Darkened Backdrop Overlay */}
+            <motion.div
+              className="mobile-menu-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileMenuOpen(false)}
+            />
+            
+            {/* Slide-in Drawer Panel */}
+            <motion.div 
+              className="mobile-menu-drawer"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            >
+              <div className="mobile-menu-header">
+                <img src={logoImage} alt="Logo" className="mobile-menu-logo" />
+                <button className="close-menu" onClick={() => setMobileMenuOpen(false)}>
+                  <FaTimes />
+                </button>
+              </div>
+              <ul className="mobile-menu">
+                <motion.li onClick={() => { scrollToSection('hero'); setMobileMenuOpen(false); }}>
+                  <FaHome /> <span>Home</span>
+                </motion.li>
+                <motion.li onClick={() => { scrollToSection('about'); setMobileMenuOpen(false); }}>
+                  <FaUser /> <span>About</span>
+                </motion.li>
+                <motion.li onClick={() => { scrollToSection('skills'); setMobileMenuOpen(false); }}>
+                  <FaCode /> <span>Skills</span>
+                </motion.li>
+                <motion.li onClick={() => { scrollToSection('projects'); setMobileMenuOpen(false); }}>
+                  <FaBriefcase /> <span>Projects</span>
+                </motion.li>
+                <motion.li onClick={() => { scrollToSection('contact'); setMobileMenuOpen(false); }}>
+                  <FaEnvelope /> <span>Contact</span>
+                </motion.li>
+                
+                {/* Same Dark Mode Toggle Switch as Desktop */}
+                <li className="mobile-dark-mode-toggle-container">
+                  <div className="dark-mode-label">
+                    {darkMode ? <FaSun /> : <FaMoon />}
+                    <span>{darkMode ? 'Light Mode' : 'Dark Mode'}</span>
+                  </div>
+                  <div className="dark-mode-toggle">
+                    <input 
+                      type="checkbox" 
+                      checked={darkMode} 
+                      onChange={() => setDarkMode(!darkMode)} 
+                      id="mobile-dark-mode-switch"
+                    />
+                    <label className="switch-slider" htmlFor="mobile-dark-mode-switch">
+                      <span className="switch-icon sun"><FaSun /></span>
+                      <span className="switch-icon moon"><FaMoon /></span>
+                    </label>
+                  </div>
+                </li>
+              </ul>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
 
