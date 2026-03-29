@@ -8,6 +8,11 @@ import 'aos/dist/aos.css';
 import 'glightbox/dist/css/glightbox.css';
 import GLightbox from 'glightbox';
 import project1Image from './Screenshot 2026-01-28 035743.png';
+import project2Image from './Screenshot 2026-01-31 091212.png';
+import project3Image from './Screenshot 2026-02-27 090848.png';
+import project4Image from './startuplab-event-creation.png';
+import logoImage from './logo.png';
+
 
 // For build folder images, we'll reference them via PUBLIC_URL in the component
 
@@ -164,7 +169,42 @@ function App() {
   const [toast, setToast] = useState({ show: false, name: '', percentage: '', x: 0, y: 0 });
   const [activeSection, setActiveSection] = useState('hero');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [formStatus, setFormStatus] = useState({ loading: false, success: false, error: false, message: '' });
   const typedRef = useRef(null);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormStatus({ loading: true, success: false, error: false, message: '' });
+
+    console.log(`Submitting form data to backend:`, formData);
+    try {
+      const response = await fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setFormStatus({ loading: false, success: true, error: false, message: 'Message sent! Check your inbox for confirmation.' });
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      } else {
+        setFormStatus({ loading: false, success: false, error: true, message: data.message || 'Error sending message.' });
+      }
+    } catch (error) {
+      console.error('Submit error:', error);
+      setFormStatus({ loading: false, success: false, error: true, message: 'Something went wrong. Please try again.' });
+    }
+  };
 
   useEffect(() => {
     // Initialize AOS animations
@@ -281,7 +321,7 @@ function App() {
       {!preloaderRemoved && (
         <div id="preloader">
           <div className="logo-container">
-            <img src={`${process.env.PUBLIC_URL}/ChatGPT Image Feb 1, 2026, 05_43_42 PM.png`} alt="Logo" />
+            <img src={logoImage} alt="Logo" />
           </div>
         </div>
       )}
@@ -320,7 +360,7 @@ function App() {
         <nav className="nav-container">
           {/* Logo - Left side */}
           <div className="nav-logo">
-            <img src={`${process.env.PUBLIC_URL}/ChatGPT Image Feb 1, 2026, 05_43_42 PM.png`} alt="Logo" className="nav-logo-img" />
+            <img src={logoImage} alt="Logo" className="nav-logo-img" />
           </div>
           
           {/* Burger Menu Button - Mobile */}
@@ -390,7 +430,7 @@ function App() {
             transition={{ duration: 0.2 }}
           >
             <div className="mobile-menu-header">
-              <img src={`${process.env.PUBLIC_URL}/ChatGPT Image Feb 1, 2026, 05_43_42 PM.png`} alt="Logo" className="mobile-menu-logo" />
+              <img src={logoImage} alt="Logo" className="mobile-menu-logo" />
               <button className="close-menu" onClick={() => setMobileMenuOpen(false)}>
                 <FaTimes />
               </button>
@@ -446,7 +486,7 @@ function App() {
             <div className="hero-right" style={{ display: 'flex', justifyContent: 'center' }}>
               <div className="hero-image">
                 <img 
-                  src={`${process.env.PUBLIC_URL}/ChatGPT Image Feb 1, 2026, 05_43_42 PM.png`} 
+                  src={logoImage} 
                   alt="Full Stack Developer" 
                   data-aos="fade-in"
                   className="hero-main-image"
@@ -532,8 +572,8 @@ function App() {
               </div>
               <div className="col-lg-10 portfolio-item mt-4">
                 <div className="portfolio-content h-100">
-                  <a href={`${process.env.PUBLIC_URL}/Screenshot 2026-01-31 091212.png`} data-gallery="portfolio-gallery" className="glightbox d-flex justify-content-center align-items-center portfolio-preview" data-glightbox="title: Baby Bliss Booking; description: <p>Baby Bliss Booking is an online appointment scheduling system for a baby spa and wellness center. It allows customers to book appointments for baby massage, spa treatments, and wellness services. Features include service selection, time slot availability, booking confirmation, and admin management for appointments.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'><FaReact /> React</span><span class='glightbox-tech-item'><SiTailwindcss /> Tailwind CSS</span><span class='glightbox-tech-item'><SiVercel /> Vercel</span></div></div>; descPosition: right;">
-                    <img src={`${process.env.PUBLIC_URL}/Screenshot 2026-01-31 091212.png`} className="img-fluid rounded shadow portfolio-preview-img" alt="Baby Bliss Booking" />
+                  <a href={project2Image} data-gallery="portfolio-gallery" className="glightbox d-flex justify-content-center align-items-center portfolio-preview" data-glightbox="title: Baby Bliss Booking; description: <p>Baby Bliss Booking is an online appointment scheduling system for a baby spa and wellness center. It allows customers to book appointments for baby massage, spa treatments, and wellness services. Features include service selection, time slot availability, booking confirmation, and admin management for appointments.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'><FaReact /> React</span><span class='glightbox-tech-item'><SiTailwindcss /> Tailwind CSS</span><span class='glightbox-tech-item'><SiVercel /> Vercel</span></div></div>; descPosition: right;">
+                    <img src={project2Image} className="img-fluid rounded shadow portfolio-preview-img" alt="Baby Bliss Booking" />
                   </a>
                   <div className="portfolio-info">
                     <h4>Baby Bliss Booking</h4>
@@ -545,13 +585,13 @@ function App() {
               <div className="col-lg-10 portfolio-item mt-4">
                 <div className="portfolio-content h-100">
                   <a
-                    href={`${process.env.PUBLIC_URL}/Screenshot 2026-02-27 090848.png`}
+                    href={project3Image}
                     data-gallery="portfolio-gallery"
                     className="glightbox d-flex justify-content-center align-items-center portfolio-preview"
                     data-glightbox="title: StartupLab Event Registration; description: <p>A modern landing page and registration flow for StartupLab events, connecting entrepreneurs with workshops, networking sessions, and mentors.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'>Next.js</span><span class='glightbox-tech-item'>Tailwind CSS</span><span class='glightbox-tech-item'>Vercel</span></div></div>; descPosition: right;"
                   >
                     <img
-                      src={`${process.env.PUBLIC_URL}/Screenshot 2026-02-27 090848.png`}
+                      src={project3Image}
                       className="img-fluid rounded shadow portfolio-preview-img"
                       alt="StartupLab Event Registration"
                     />
@@ -560,6 +600,29 @@ function App() {
                     <h4>StartupLab Event Registration</h4>
                     <p>Event registration experience for StartupLab with clear CTAs and responsive hero imagery.</p>
                     <a href="https://startuplab-event-registration.vercel.app/" target="_blank" rel="noopener noreferrer" className="visit-site-btn btn-lg px-4 py-2 rounded-pill shadow-sm">
+                      View Project <i className="bi bi-arrow-right ms-2"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-10 portfolio-item mt-4">
+                <div className="portfolio-content h-100">
+                  <a
+                    href={project4Image}
+                    data-gallery="portfolio-gallery"
+                    className="glightbox d-flex justify-content-center align-items-center portfolio-preview"
+                    data-glightbox="title: StartupLab Event Creation; description: <p>An advanced event management and ticketing platform for Philippine organizers with QR ticketing and smart analytics.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'>Next.js</span><span class='glightbox-tech-item'>Tailwind CSS</span><span class='glightbox-tech-item'>Vercel</span><span class='glightbox-tech-item'>QR Ticketing</span></div></div>; descPosition: right;"
+                  >
+                    <img
+                      src={project4Image}
+                      className="img-fluid rounded shadow portfolio-preview-img"
+                      alt="StartupLab Event Creation"
+                    />
+                  </a>
+                  <div className="portfolio-info">
+                    <h4>StartupLab Event Creation</h4>
+                    <p>Smart event management with advanced QR ticketing and real-time performance analytics.</p>
+                    <a href="https://startuplab-event-creation.vercel.app/" target="_blank" rel="noopener noreferrer" className="visit-site-btn btn-lg px-4 py-2 rounded-pill shadow-sm">
                       View Project <i className="bi bi-arrow-right ms-2"></i>
                     </a>
                   </div>
@@ -576,83 +639,130 @@ function App() {
             <p>Get in touch with me for any inquiries or collaboration opportunities.</p>
           </div>
           <div className="container" data-aos="fade-up" data-aos-delay="100">
-            <div className="contact-cards">
+            <div className="contact-main-wrapper">
+              {/* Form on Left */}
               <motion.div
-                className="contact-card"
-                whileHover={{ scale: 1.02, y: -5 }}
-                data-aos="fade-up"
-                data-aos-delay="200"
+                className="contact-form-card"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5 }}
               >
-                <div className="contact-icon">
-                  <FaMapMarkerAlt />
-                </div>
-                <h3>Location</h3>
-                <p>Naic Cavite Philippines</p>
+                <form className="php-email-form" onSubmit={handleSubmit}>
+                  <div className="row gy-4">
+                    <div className="col-md-6">
+                      <label htmlFor="name-field" className="pb-2">Name</label>
+                      <input 
+                        type="text" 
+                        name="name" 
+                        id="name-field" 
+                        className="form-control" 
+                        required 
+                        placeholder="Your Name" 
+                        value={formData.name}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label htmlFor="email-field" className="pb-2">Email</label>
+                      <input 
+                        type="email" 
+                        className="form-control" 
+                        name="email" 
+                        id="email-field" 
+                        required 
+                        placeholder="your@email.com" 
+                        value={formData.email}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="col-md-12">
+                      <label htmlFor="subject-field" className="pb-2">Subject</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        name="subject" 
+                        id="subject-field" 
+                        required 
+                        placeholder="What's this about?" 
+                        value={formData.subject}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="col-md-12">
+                      <label htmlFor="message-field" className="pb-2">Message</label>
+                      <textarea 
+                        className="form-control" 
+                        name="message" 
+                        rows="8" 
+                        id="message-field" 
+                        required 
+                        placeholder="Your message..."
+                        value={formData.message}
+                        onChange={handleInputChange}
+                      ></textarea>
+                    </div>
+                    
+                    <div className="col-md-12 text-center">
+                      {formStatus.loading && <div className="loading" style={{ marginBottom: '10px' }}>Sending...</div>}
+                      {formStatus.error && <div className="error-message" style={{ color: '#d9534f', marginBottom: '10px' }}>{formStatus.message}</div>}
+                      {formStatus.success && <div className="sent-message" style={{ color: '#28a745', marginBottom: '10px' }}>{formStatus.message}</div>}
+                      
+                      <motion.button
+                        type="submit"
+                        disabled={formStatus.loading}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        style={{ opacity: formStatus.loading ? 0.7 : 1 }}
+                      >
+                        {formStatus.loading ? 'Sending...' : 'Send Message'}
+                      </motion.button>
+                    </div>
+                  </div>
+                </form>
               </motion.div>
 
-              <motion.div
-                className="contact-card"
-                whileHover={{ scale: 1.02, y: -5 }}
-                data-aos="fade-up"
-                data-aos-delay="300"
-              >
-                <div className="contact-icon">
-                  <FaEnvelope />
-                </div>
-                <h3>Email</h3>
-                <p>johncarloaganan26@gmail.com</p>
-              </motion.div>
+              {/* Info on Right */}
+              <div className="contact-info-wrapper">
+                <motion.div
+                  className="contact-card"
+                  whileHover={{ scale: 1.02, y: -5 }}
+                  data-aos="fade-up"
+                  data-aos-delay="200"
+                >
+                  <div className="contact-icon">
+                    <FaMapMarkerAlt />
+                  </div>
+                  <h3>Location</h3>
+                  <p>Naic Cavite Philippines</p>
+                </motion.div>
 
-              <motion.div
-                className="contact-card"
-                whileHover={{ scale: 1.02, y: -5 }}
-                data-aos="fade-up"
-                data-aos-delay="400"
-              >
-                <div className="contact-icon">
-                  <FaPhone />
-                </div>
-                <h3>Phone</h3>
-                <p>09543300228</p>
-              </motion.div>
+                <motion.div
+                  className="contact-card"
+                  whileHover={{ scale: 1.02, y: -5 }}
+                  data-aos="fade-up"
+                  data-aos-delay="300"
+                >
+                  <div className="contact-icon">
+                    <FaEnvelope />
+                  </div>
+                  <h3>Email</h3>
+                  <p>johncarloaganan26@gmail.com</p>
+                </motion.div>
+
+                <motion.div
+                  className="contact-card"
+                  whileHover={{ scale: 1.02, y: -5 }}
+                  data-aos="fade-up"
+                  data-aos-delay="400"
+                >
+                  <div className="contact-icon">
+                    <FaPhone />
+                  </div>
+                  <h3>Phone</h3>
+                  <p>09543300228</p>
+                </motion.div>
+              </div>
             </div>
-
-            <motion.div
-              className="contact-form-card"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <form className="php-email-form">
-                <div className="row gy-4">
-                  <div className="col-md-6">
-                    <label htmlFor="name-field" className="pb-2">Name</label>
-                    <input type="text" name="name" id="name-field" className="form-control" required placeholder="Your Name" />
-                  </div>
-                  <div className="col-md-6">
-                    <label htmlFor="email-field" className="pb-2">Email</label>
-                    <input type="email" className="form-control" name="email" id="email-field" required placeholder="your@email.com" />
-                  </div>
-                  <div className="col-md-12">
-                    <label htmlFor="subject-field" className="pb-2">Subject</label>
-                    <input type="text" className="form-control" name="subject" id="subject-field" required placeholder="What's this about?" />
-                  </div>
-                  <div className="col-md-12">
-                    <label htmlFor="message-field" className="pb-2">Message</label>
-                    <textarea className="form-control" name="message" rows="8" id="message-field" required placeholder="Your message..."></textarea>
-                  </div>
-                  <div className="col-md-12 text-center">
-                    <motion.button
-                      type="submit"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      Send Message
-                    </motion.button>
-                  </div>
-                </div>
-              </form>
-            </motion.div>
           </div>
         </section>
       </main>
