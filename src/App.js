@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaHome, FaUser, FaEnvelope, FaMapMarkerAlt, FaPhone, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaTwitter, FaFacebook, FaInstagram, FaLinkedin, FaBriefcase, FaBars, FaTimes } from 'react-icons/fa';
+import { FaEnvelope, FaMapMarkerAlt, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaLinkedin, FaBars, FaTimes, FaFacebook, FaInstagram, FaTwitter, FaCommentDots } from 'react-icons/fa';
+import { MdVerified } from 'react-icons/md';
 import { SiTailwindcss, SiExpress, SiAxios, SiMysql, SiVercel } from 'react-icons/si';
+
+// Original icons and imports ... (keep existing)
+
 import Typed from 'typed.js';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -13,60 +17,28 @@ import project3Image from './Screenshot 2026-02-27 090848.png';
 import project4Image from './startuplab-event-creation.png';
 import logoImage from './logo.png';
 
-
-// For build folder images, we'll reference them via PUBLIC_URL in the component
-
 // Unique Animation Skill Icon Component
 const AnimatedSkillIcon = ({ icon: Icon, delay, color, percentage, name, animationType = 'rotate', size = '2.5rem', setToast }) => {
-  // Define different animation configurations based on animationType
   const getAnimationConfig = (type) => {
     switch (type) {
       case 'bounce':
-        return {
-          y: [0, -10, 0],
-          transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut", delay }
-        };
+        return { y: [0, -10, 0], transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut", delay } };
       case 'pulse':
-        return {
-          scale: [1, 1.15, 1],
-          transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut", delay }
-        };
+        return { scale: [1, 1.15, 1], transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut", delay } };
       case 'rotate':
-        return {
-          rotate: [0, 10, -10, 0],
-          transition: { duration: 3, repeat: Infinity, ease: "easeInOut", delay }
-        };
+        return { rotate: [0, 10, -10, 0], transition: { duration: 3, repeat: Infinity, ease: "easeInOut", delay } };
       case 'spin':
-        return {
-          rotate: [0, 360],
-          transition: { duration: 8, repeat: Infinity, ease: "linear", delay }
-        };
+        return { rotate: [0, 360], transition: { duration: 8, repeat: Infinity, ease: "linear", delay } };
       case 'wobble':
-        return {
-          rotate: [0, -15, 15, 0],
-          transition: { duration: 2.5, repeat: Infinity, ease: "easeInOut", delay }
-        };
+        return { rotate: [0, -15, 15, 0], transition: { duration: 2.5, repeat: Infinity, ease: "easeInOut", delay } };
       case 'float':
-        return {
-          y: [0, -8, 0],
-          rotate: [0, 3, -3, 0],
-          transition: { duration: 2, repeat: Infinity, ease: "easeInOut", delay }
-        };
+        return { y: [0, -8, 0], rotate: [0, 3, -3, 0], transition: { duration: 2, repeat: Infinity, ease: "easeInOut", delay } };
       case 'swing':
-        return {
-          rotate: [0, 20, -20, 0],
-          transition: { duration: 3, repeat: Infinity, ease: "easeInOut", delay }
-        };
+        return { rotate: [0, 20, -20, 0], transition: { duration: 3, repeat: Infinity, ease: "easeInOut", delay } };
       case 'tilt':
-        return {
-          rotate: [0, -10, 10, 0, -5, 5, 0],
-          transition: { duration: 2, repeat: Infinity, ease: "easeInOut", delay }
-        };
+        return { rotate: [0, -10, 10, 0, -5, 5, 0], transition: { duration: 2, repeat: Infinity, ease: "easeInOut", delay } };
       default:
-        return {
-          rotate: [0, 360],
-          transition: { duration: 8, repeat: Infinity, ease: "linear", delay }
-        };
+        return { rotate: [0, 360], transition: { duration: 8, repeat: Infinity, ease: "linear", delay } };
     }
   };
 
@@ -75,90 +47,93 @@ const AnimatedSkillIcon = ({ icon: Icon, delay, color, percentage, name, animati
   const handleMouseEnter = (e) => {
     if (setToast) {
       const rect = e.currentTarget.getBoundingClientRect();
-      setToast({ 
-        show: true, 
-        name, 
-        percentage,
-        x: rect.left + rect.width / 2,
-        y: rect.top - 15 // Position above the logo
-      });
+      setToast({ show: true, name, percentage, x: rect.left + rect.width / 2, y: rect.top - 15 });
     }
   };
 
   const handleMouseLeave = () => {
-    if (setToast) {
-      setToast({ show: false, name: '', percentage: '', x: 0, y: 0 });
-    }
+    if (setToast) setToast({ show: false, name: '', percentage: '', x: 0, y: 0 });
   };
 
   return (
     <motion.div
       className="skill-card"
-      style={{
-        position: 'relative',
-        display: 'inline-flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        margin: '0',
-        cursor: 'pointer'
-      }}
-      initial={{ rotate: 0 }}
+      style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
       animate={animationConfig}
       whileHover={{ scale: 1.2 }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Icon style={{
-        fontSize: size,
-        color: color
-      }} />
+      <Icon style={{ fontSize: size, color: color }} />
     </motion.div>
   );
 };
 
-// Skills Animation Container Component
 const SkillsAnimation = ({ setToast }) => {
   const skills = [
-    { icon: FaHtml5, color: '#e34f26', percentage: 60, name: 'HTML5', animationType: 'bounce' },
-    { icon: FaCss3, color: '#1572b6', percentage: 55, name: 'CSS3', animationType: 'pulse' },
-    { icon: FaJs, color: '#f7df1e', percentage: 50, name: 'JavaScript', animationType: 'rotate' },
-    { icon: FaReact, color: '#61dafb', percentage: 45, name: 'React', animationType: 'spin' },
-    { icon: FaVuejs, color: '#42b883', percentage: 40, name: 'Vue.js', animationType: 'wobble' },
-    { icon: SiTailwindcss, color: '#06b6d4', percentage: 45, name: 'Tailwind CSS', animationType: 'float' },
-    { icon: FaNodeJs, color: '#68a063', percentage: 40, name: 'Node.js', animationType: 'swing' },
-    { icon: SiExpress, color: '#000000', percentage: 35, name: 'Express.js', animationType: 'tilt' },
-    { icon: SiMysql, color: '#4479a1', percentage: 45, name: 'MySQL', animationType: 'pulse' },
-    { icon: FaPhp, color: '#777bb4', percentage: 30, name: 'PHP', animationType: 'bounce' },
-    { icon: FaPlug, color: '#6c5ce7', percentage: 40, name: 'REST APIs', animationType: 'rotate' },
-    { icon: FaGit, color: '#f05032', percentage: 50, name: 'Git', animationType: 'spin' },
-    { icon: FaGithub, color: '#181717', percentage: 55, name: 'GitHub', animationType: 'float' },
-    { icon: SiVercel, color: '#000000', percentage: 50, name: 'Vercel', animationType: 'wobble' },
-    { icon: FaCode, color: '#007acc', percentage: 65, name: 'VS Code', animationType: 'swing' },
-    { icon: FaNpm, color: '#cb3837', percentage: 45, name: 'npm', animationType: 'pulse' },
-    { icon: SiAxios, color: '#5a29ee', percentage: 40, name: 'Axios', animationType: 'tilt' },
+    { icon: FaHtml5, color: 'currentColor', percentage: 60, name: 'HTML5', animationType: 'bounce' },
+    { icon: FaCss3, color: 'currentColor', percentage: 55, name: 'CSS3', animationType: 'pulse' },
+    { icon: FaJs, color: 'currentColor', percentage: 50, name: 'JavaScript', animationType: 'rotate' },
+    { icon: FaReact, color: 'currentColor', percentage: 45, name: 'React', animationType: 'spin' },
+    { icon: FaVuejs, color: 'currentColor', percentage: 40, name: 'Vue.js', animationType: 'wobble' },
+    { icon: SiTailwindcss, color: 'currentColor', percentage: 45, name: 'Tailwind CSS', animationType: 'float' },
+    { icon: FaNodeJs, color: 'currentColor', percentage: 40, name: 'Node.js', animationType: 'swing' },
+    { icon: SiExpress, color: 'currentColor', percentage: 35, name: 'Express.js', animationType: 'tilt' },
+    { icon: SiMysql, color: 'currentColor', percentage: 45, name: 'MySQL', animationType: 'pulse' },
+    { icon: FaPhp, color: 'currentColor', percentage: 30, name: 'PHP', animationType: 'bounce' },
+    { icon: FaPlug, color: 'currentColor', percentage: 40, name: 'REST APIs', animationType: 'rotate' },
+    { icon: FaGit, color: 'currentColor', percentage: 50, name: 'Git', animationType: 'spin' },
+    { icon: FaGithub, color: 'currentColor', percentage: 55, name: 'GitHub', animationType: 'float' },
+    { icon: SiVercel, color: 'currentColor', percentage: 50, name: 'Vercel', animationType: 'wobble' },
+    { icon: FaCode, color: 'currentColor', percentage: 65, name: 'VS Code', animationType: 'swing' },
+    { icon: FaNpm, color: 'currentColor', percentage: 45, name: 'npm', animationType: 'pulse' },
+    { icon: SiAxios, color: 'currentColor', percentage: 40, name: 'Axios', animationType: 'tilt' },
   ];
 
-  // Duplicate skills list 3 times to ensure smooth infinite scrolling for all screen sizes
   const duplicatedSkills = [...skills, ...skills, ...skills];
 
   return (
     <div className="skills-scroller">
       <div className="scroller-track scroller-skill-cards">
         {duplicatedSkills.map((skill, index) => (
-          <AnimatedSkillIcon
-            key={`${skill.name}-${index}`}
-            icon={skill.icon}
-            delay={0}
-            color={skill.color}
-            percentage={skill.percentage}
-            name={skill.name}
-            animationType={skill.animationType}
-            setToast={setToast}
-          />
+          <AnimatedSkillIcon key={`${skill.name}-${index}`} icon={skill.icon} delay={0} color={skill.color} percentage={skill.percentage} name={skill.name} animationType={skill.animationType} setToast={setToast} />
         ))}
       </div>
     </div>
+  );
+};
+
+const BentoCard = ({ children, className = '', delay = 0, style = {} }) => {
+  const cardRef = useRef(null);
+  
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      cardRef.current.style.setProperty('--x', `${x}px`);
+      cardRef.current.style.setProperty('--y', `${y}px`);
+    };
+
+    const card = cardRef.current;
+    if (card) card.addEventListener('mousemove', handleMouseMove);
+    return () => { if (card) card.removeEventListener('mousemove', handleMouseMove); };
+  }, []);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      className={`bento-card ${className}`}
+      style={style}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay }}
+    >
+      <div className="glow-effect" />
+      {children}
+    </motion.div>
   );
 };
 
@@ -168,7 +143,8 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [toast, setToast] = useState({ show: false, name: '', percentage: '', x: 0, y: 0 });
   const [activeSection, setActiveSection] = useState('hero');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showAllSkills, setShowAllSkills] = useState(false);
+  const [showAllProjects, setShowAllProjects] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [formStatus, setFormStatus] = useState({ loading: false, success: false, error: false, message: '' });
   const typedRef = useRef(null);
@@ -181,626 +157,439 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormStatus({ loading: true, success: false, error: false, message: '' });
-
-    console.log(`Submitting form data to backend:`, formData);
     try {
       const response = await fetch('http://localhost:5000/api/contact', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-
       const data = await response.json();
-
       if (response.ok) {
-        setFormStatus({ loading: false, success: true, error: false, message: 'Message sent! Check your inbox for confirmation.' });
+        setFormStatus({ loading: false, success: true, error: false, message: 'Message sent! Check your inbox.' });
         setFormData({ name: '', email: '', subject: '', message: '' });
       } else {
         setFormStatus({ loading: false, success: false, error: true, message: data.message || 'Error sending message.' });
       }
     } catch (error) {
-      console.error('Submit error:', error);
-      setFormStatus({ loading: false, success: false, error: true, message: 'Something went wrong. Please try again.' });
+      setFormStatus({ loading: false, success: false, error: true, message: 'Something went wrong.' });
     }
   };
 
   useEffect(() => {
-    // Initialize AOS animations
-    AOS.init({
-      duration: 600,
-      easing: 'ease-in-out',
-      once: true,
-      mirror: false
-    });
-
-    // Initialize GLightbox for image zoom
-    const lightbox = GLightbox({
-      touchNavigation: true,
-      loop: true,
-      autoplayVideosOnScroll: true
-    });
-
-    // Initialize Typed.js for text animation
+    if (typeof AOS !== 'undefined') AOS.init({ duration: 600, easing: 'ease-in-out', once: true });
+    const lightbox = GLightbox({ touchNavigation: true, loop: true });
+    
     let typedInstance = null;
     if (typedRef.current) {
       typedInstance = new Typed(typedRef.current, {
         strings: ['Student', 'Aspiring Full Stack Developer'],
-        typeSpeed: 80,
-        backSpeed: 50,
-        loop: true,
-        backDelay: 2000,
-        showCursor: true,
-        cursorChar: '|'
+        typeSpeed: 80, backSpeed: 50, loop: true, backDelay: 2000, showCursor: true, cursorChar: '|'
       });
     }
 
-    // Remove preloader after page loads
-    const timer = setTimeout(() => {
-      setPreloaderRemoved(true);
-    }, 1000);
-
-    // Scroll top button logic
-    const handleScroll = () => {
-      if (window.scrollY > 100) {
-        setScrollTopActive(true);
-      } else {
-        setScrollTopActive(false);
-      }
-    };
-
-    // Active section tracking with IntersectionObserver
-    const sections = ['hero', 'about', 'skills', 'projects', 'contact'];
-    const observerOptions = {
-      root: null,
-      rootMargin: '-20% 0px -70% 0px',
-      threshold: 0
-    };
+    const timer = setTimeout(() => setPreloaderRemoved(true), 1000);
+    const handleScroll = () => setScrollTopActive(window.scrollY > 100);
 
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    }, observerOptions);
+      entries.forEach((entry) => { if (entry.isIntersecting) setActiveSection(entry.target.id); });
+    }, { rootMargin: '-20% 0px -70% 0px' });
 
-    sections.forEach((sectionId) => {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        observer.observe(element);
-      }
+    ['hero', 'about', 'skills', 'projects', 'contact'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
     });
 
     window.addEventListener('scroll', handleScroll);
-
     return () => {
       clearTimeout(timer);
       window.removeEventListener('scroll', handleScroll);
       observer.disconnect();
       lightbox.destroy();
-      if (typedInstance) {
-        typedInstance.destroy();
-      }
+      if (typedInstance) typedInstance.destroy();
     };
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  };
-
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
     }
+  }, [darkMode]);
+
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
-      {/* Background Effects */}
-      <div className="particles">
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-      </div>
-      <div className="geometric-bg"></div>
-
-      {/* Preloader */}
+    <div className={`App ${darkMode ? 'dark-mode' : ''}`} style={{ paddingTop: '0px' }}>
       {!preloaderRemoved && (
         <div id="preloader">
-          <div className="logo-container">
-            <img src={logoImage} alt="Logo" />
-          </div>
+          <div className="logo-container"><img src={logoImage} alt="Logo" /></div>
         </div>
       )}
 
-      {/* Scroll Top Button */}
-      {scrollTopActive && (
-        <button className="scroll-top active" onClick={scrollToTop}>
-          <i className="bi bi-arrow-up-short"></i>
-        </button>
-      )}
 
-      {/* Toast Notification */}
       <AnimatePresence>
         {toast.show && (
-          <motion.div
-            className="skill-toast-container"
-            style={{ left: toast.x, top: toast.y }}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.2 }}
-          >
+          <motion.div className="skill-toast-container" style={{ left: toast.x, top: toast.y }} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }}>
             <div className="skill-toast-percentage">{toast.percentage}%</div>
             <div className="skill-toast-name">{toast.name}</div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Top Navigation Header */}
-      <motion.header
-        className={`nav-header ${darkMode ? 'dark-background' : ''}`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <nav className="nav-container">
-          {/* Logo - Left side */}
-          <div className="nav-logo">
-            <img src={logoImage} alt="Logo" className="nav-logo-img" />
+      <main className="main" style={{ padding: '30px 4rem 0px', maxWidth: '1200px', margin: '0 auto' }}>
+        <header style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start', marginBottom: '4rem', flexWrap: 'wrap', paddingRight: '2rem' }}>
+          <img src={`${process.env.PUBLIC_URL}/dsa.jpg`} alt="Profile" style={{ width: '180px', height: '180px', objectFit: 'cover', border: '1px solid var(--border-primary)' }} />
+          <div style={{ flex: '1 1 0%' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-primary)' }}>John Carlo Aganan</h1>
+              <MdVerified style={{ color: '#0ea5e9', fontSize: '1.5rem' }} title="Verified Full Stack Developer" />
+            </div>
+            <p style={{ color: 'var(--text-primary)', fontSize: '1.1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '500' }}>
+              <FaMapMarkerAlt /> Naic, Cavite, Philippines
+            </p>
+            <div style={{ fontSize: '1.2rem', marginBottom: '1.5rem', color: 'var(--text-primary)', fontWeight: '500' }}>
+              Student striving to become a Software Engineer
+            </div>
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+              <button 
+                onClick={() => scrollToSection('contact')}
+                style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)', border: 'none', padding: '0.8rem 1.5rem', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+              >
+                Schedule a Call →
+              </button>
+              <button style={{ background: 'transparent', border: '1.5px solid var(--text-primary)', padding: '0.8rem 1.5rem', fontWeight: '700', color: 'var(--text-primary)' }}>Send Email</button>
+              <button style={{ background: 'transparent', border: '1.5px solid var(--text-primary)', padding: '0.8rem 1.5rem', fontWeight: '700', color: 'var(--text-primary)' }}>Read my blog</button>
+            </div>
           </div>
-          
-          {/* Burger Menu Button - Mobile */}
-          <button className="burger-menu" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <FaTimes /> : <FaBars />}
-          </button>
-          
-          {/* Center Menu - Desktop */}
-          <ul className="nav-menu-center">
-            <motion.li>
-              <a href="#hero" className={activeSection === 'hero' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('hero'); }}>
-                <FaHome style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                Home
-              </a>
-            </motion.li>
-            <motion.li>
-              <a href="#about" className={activeSection === 'about' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>
-                <FaUser style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                About
-              </a>
-            </motion.li>
-            <motion.li>
-              <a href="#skills" className={activeSection === 'skills' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('skills'); }}>
-                <FaCode style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                Skills
-              </a>
-            </motion.li>
-            <motion.li>
-              <a href="#projects" className={activeSection === 'projects' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}>
-                <FaBriefcase style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                Projects
-              </a>
-            </motion.li>
-            <motion.li>
-              <a href="#contact" className={activeSection === 'contact' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>
-                <FaEnvelope style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                Contact
-              </a>
-            </motion.li>
-          </ul>
-          
-          {/* Right Side: Dark Mode Toggle Switch */}
-          <div className="nav-right">
-            <label className="dark-mode-toggle">
-              <input 
-                type="checkbox" 
-                checked={darkMode}
-                onChange={() => setDarkMode(!darkMode)}
-              />
-              <span className="switch-slider">
-                <span className="switch-icon moon"><FaMoon /></span>
-                <span className="switch-icon sun"><FaSun /></span>
-              </span>
-            </label>
+          <div style={{ display: 'flex' }}>
+            <div style={{ padding: '0px' }}>
+              <div 
+                onClick={() => setDarkMode(!darkMode)} 
+                style={{ 
+                  cursor: 'pointer', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  background: '#e5e7eb', 
+                  width: '60px',
+                  height: '30px',
+                  position: 'relative'
+                }}
+              >
+                <motion.div
+                   animate={{ x: darkMode ? 30 : 0 }}
+                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                   style={{
+                     width: '30px',
+                     height: '30px',
+                     background: '#fff',
+                     display: 'flex',
+                     alignItems: 'center',
+                     justifyContent: 'center',
+                     color: '#6b7280',
+                     zIndex: 2,
+                     boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                   }}
+                >
+                   {darkMode ? <FaMoon size={14} /> : <FaSun size={14} />}
+                </motion.div>
+              </div>
+            </div>
           </div>
-        </nav>
-      </motion.header>
+        </header>
 
-      {/* Mobile Menu Side Drawer with Backdrop */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <>
-            {/* Darkened Backdrop Overlay */}
-            <motion.div
-              className="mobile-menu-backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMobileMenuOpen(false)}
-            />
-            
-            {/* Slide-in Drawer Panel */}
-            <motion.div 
-              className="mobile-menu-drawer"
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            >
-              <div className="mobile-menu-header">
-                <img src={logoImage} alt="Logo" className="mobile-menu-logo" />
-                <button className="close-menu" onClick={() => setMobileMenuOpen(false)}>
-                  <FaTimes />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '4rem' }}>
+          <div style={{ gridColumn: 'span 2' }}>
+            <section id="about" style={{ marginBottom: '2rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>About</h2>
+              <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-primary)', fontWeight: '500' }}>
+                I'm a full-stack software engineer specializing in developing solutions with JavaScript, React, and Node.js. 
+                I work on projects including building modern web applications, management systems, and academic platforms.
+              </p>
+              <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-primary)', marginTop: '1.5rem', fontWeight: '500' }}>
+                I'm a 4th year BSIT student at Cavite State University, focusing on creating efficient and impactful digital solutions. 
+                My work includes developing complex systems that solve real-world problems.
+              </p>
+            </section>
+
+            <section id="skills" style={{ marginBottom: '2rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginWeight: '2rem', marginBottom: '1.5rem' }}>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-primary)' }}>Tech Stack</h2>
+                <button onClick={() => setShowAllSkills(!showAllSkills)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontWeight: '800', color: 'var(--text-primary)' }}>
+                  {showAllSkills ? '← Show Less' : 'View All →'}
                 </button>
               </div>
-              <ul className="mobile-menu">
-                <motion.li onClick={() => { scrollToSection('hero'); setMobileMenuOpen(false); }}>
-                  <FaHome /> <span>Home</span>
-                </motion.li>
-                <motion.li onClick={() => { scrollToSection('about'); setMobileMenuOpen(false); }}>
-                  <FaUser /> <span>About</span>
-                </motion.li>
-                <motion.li onClick={() => { scrollToSection('skills'); setMobileMenuOpen(false); }}>
-                  <FaCode /> <span>Skills</span>
-                </motion.li>
-                <motion.li onClick={() => { scrollToSection('projects'); setMobileMenuOpen(false); }}>
-                  <FaBriefcase /> <span>Projects</span>
-                </motion.li>
-                <motion.li onClick={() => { scrollToSection('contact'); setMobileMenuOpen(false); }}>
-                  <FaEnvelope /> <span>Contact</span>
-                </motion.li>
-                
-                {/* Same Dark Mode Toggle Switch as Desktop */}
-                <li className="mobile-dark-mode-toggle-container">
-                  <div className="dark-mode-label">
-                    {darkMode ? <FaSun /> : <FaMoon />}
-                    <span>{darkMode ? 'Light Mode' : 'Dark Mode'}</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+                <div>
+                  <h4 style={{ fontSize: '0.9rem', fontWeight: '900', marginBottom: '0.8rem', color: 'var(--text-primary)', opacity: 0.8 }}>Frontend</h4>
+                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                    {['JavaScript', 'HTML5', 'CSS3', 'React', 'Vue.js', 'Tailwind CSS'].map(s => (
+                      <span key={s} style={{ background: 'var(--bg-secondary)', border: '1.5px solid var(--text-primary)', padding: '0.4rem 1rem', fontSize: '0.9rem', fontWeight: '800', color: 'var(--text-primary)' }}>{s}</span>
+                    ))}
                   </div>
-                  <div className="dark-mode-toggle">
-                    <input 
-                      type="checkbox" 
-                      checked={darkMode} 
-                      onChange={() => setDarkMode(!darkMode)} 
-                      id="mobile-dark-mode-switch"
-                    />
-                    <label className="switch-slider" htmlFor="mobile-dark-mode-switch">
-                      <span className="switch-icon sun"><FaSun /></span>
-                      <span className="switch-icon moon"><FaMoon /></span>
-                    </label>
-                  </div>
-                </li>
-              </ul>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-
-      {/* Social Icons - Right Side of Page */}
-      <div className="page-social">
-        <motion.a href="https://twitter.com" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.95 }}><FaTwitter /></motion.a>
-        <motion.a href="https://facebook.com" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.95 }}><FaFacebook /></motion.a>
-        <motion.a href="https://instagram.com" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.95 }}><FaInstagram /></motion.a>
-        <motion.a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.95 }}><FaLinkedin /></motion.a>
-      </div>
-
-      {/* Main Content */}
-      <main className="main">
-        {/* Hero Section */}
-        <section id="hero" className="hero section">
-          <div className="hero-container">
-            {/* Left side: Content */}
-            <div className="hero-left" data-aos="fade-up" data-aos-delay="100">
-              <h2 className="hero-title">Aspiring Full Stack Developer</h2>
-              <p className="hero-subtitle">
-                Extreme passion for building and designing web applications
-              </p>
-            </div>
-            {/* Right side: Image */}
-            <div className="hero-right" style={{ display: 'flex', justifyContent: 'center' }}>
-              <div className="hero-image">
-                <img 
-                  src={logoImage} 
-                  alt="Full Stack Developer" 
-                  data-aos="fade-in"
-                  className="hero-main-image"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* About Section */}
-        <section id="about" className="about section">
-          <div className="container" data-aos="fade-up" data-aos-delay="100">
-            <h2 style={{ fontSize: '2rem', marginBottom: '30px', fontWeight: '600', textAlign: 'center' }}>About Me</h2>
-            <div className="about-container" style={{ display: 'flex', gap: '40px', alignItems: 'flex-start', justifyContent: 'center', flexWrap: 'wrap' }}>
-              {/* Left side: Image */}
-              <div className="about-image" style={{ flex: '0 0 350px', maxWidth: '350px' }} data-aos="fade-right">
-                <img 
-                  src={`${process.env.PUBLIC_URL}/dsa.jpg`} 
-                  alt="About Me" 
-                  style={{ width: '100%', borderRadius: '16px', boxShadow: '0 8px 30px rgba(0, 0, 0, 0.12)' }}
-                />
-              </div>
-              {/* Right side: Content */}
-              <div className="about-content" style={{ flex: '1', maxWidth: '600px', minWidth: '300px' }} data-aos="fade-left">
-                <p className="py-3" style={{ color: '#555', lineHeight: '1.8', fontSize: '1.05rem' }}>
-                  I'm a <strong>4th year BSIT student</strong> at Cavite State University with a passion for building modern, scalable web applications. I specialize in creating responsive, user-centered experiences using technologies like React, Vue, and Node.js.
-                </p>
-                <p className="py-2" style={{ color: '#555', lineHeight: '1.8', fontSize: '1.05rem' }}>
-                  Currently seeking <strong>junior developer roles or internships</strong> where I can contribute my skills, collaborate with experienced developers, and continue expanding my expertise in full-stack development.
-                </p>
-                <div className="about-details" style={{ marginTop: '30px' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                    <div>
-                      <ul style={{ listStyle: 'none', padding: 0 }}>
-                        <li style={{ marginBottom: '12px' }}><span className="about-label">Education:</span> <span style={{ marginLeft: '10px', color: '#555' }}>Cavite State University - BSIT 4th yr (Cavite City Campus)</span></li>
-                        <li style={{ marginBottom: '12px' }}><span className="about-label">Email:</span> <span style={{ marginLeft: '10px', color: '#555' }}>johncarloaganan26@gmail.com</span></li>
-                        <li style={{ marginBottom: '12px' }}><span className="about-label">Country:</span> <span style={{ marginLeft: '10px', color: '#555' }}>Philippines</span></li>
-                      </ul>
-                    </div>
-                    <div>
-                      <ul style={{ listStyle: 'none', padding: 0 }}>
-                        <li style={{ marginBottom: '12px' }}><span className="about-label">Focus:</span> <span style={{ marginLeft: '10px', color: '#555' }}>Full-Stack Development</span></li>
-                        <li style={{ marginBottom: '12px' }}><span className="about-label">Status:</span> <span style={{ marginLeft: '10px', color: '#28a745', fontWeight: '500' }}>Available for hire</span></li>
-                      </ul>
-                    </div>
+                </div>
+                <div>
+                  <h4 style={{ fontSize: '0.9rem', fontWeight: '900', marginBottom: '0.8rem', color: 'var(--text-primary)', opacity: 0.8 }}>Backend</h4>
+                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                    {['Node.js', 'Express.js', 'PHP', 'MySQL'].map(s => (
+                      <span key={s} style={{ background: 'var(--bg-secondary)', border: '1.5px solid var(--text-primary)', padding: '0.4rem 1rem', fontSize: '0.9rem', fontWeight: '800', color: 'var(--text-primary)' }}>{s}</span>
+                    ))}
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
 
-        {/* Skills Section */}
-        <section id="skills" className="skills section">
-          <div className="container section-title text-center" data-aos="fade-up">
-            <h2>Skills & Technologies</h2>
-            <p>A comprehensive set of technologies and tools I work with to build modern web applications</p>
-          </div>
-
-          {/* Skills Animation - Unique Animations for Each Icon */}
-          <SkillsAnimation setToast={setToast} />
-        </section>
-
-        {/* Projects Section */}
-        <section id="projects" className="projects section">
-          <div className="container section-title text-center" data-aos="fade-up">
-            <h2>Projects</h2>
-            <p>Here are some of the projects I've worked on</p>
-          </div>
-          <div className="container" data-aos="fade-up" data-aos-delay="100">
-            <div className="row justify-content-center">
-              <div className="col-lg-10 portfolio-item">
-                <div className="portfolio-content h-100">
-                  <a href={project1Image} data-gallery="portfolio-gallery" className="glightbox d-flex justify-content-center align-items-center portfolio-preview" data-glightbox="title: BBEK Church Management System; description: <p>BBEK Church Management System is a comprehensive church administration platform designed to manage church records, events, services, and community engagement. Built with role-based access control (admin, pastor, member), it includes modules for member management, event coordination, service records, donations, announcements, and content management. Optimized for church operations with features like bulk operations, reporting, email notifications, and secure data handling.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'><SiMysql /> MySQL</span><span class='glightbox-tech-item'><SiVuedotjs /> Vue.js</span><span class='glightbox-tech-item'><SiExpress /> Express</span><span class='glightbox-tech-item'><SiNodedotjs /> Node.js</span><span class='glightbox-tech-item'><SiVuetify /> Vuetify</span><span class='glightbox-tech-item'>📦 Element Plus</span><span class='glightbox-tech-item'><SiPinia /> Pinia</span><span class='glightbox-tech-item'><SiAxios /> Axios</span><span class='glightbox-tech-item'><SiJsonwebtokens /> JWT</span><span class='glightbox-tech-item'><SiSendgrid /> SendGrid</span><span class='glightbox-tech-item'>📊 ExcelJS</span><span class='glightbox-tech-item'>📄 CSV Parser</span><span class='glightbox-tech-item'><SiVite /> Vite</span><span class='glightbox-tech-item'>🪟 Winser</span></div></div>; descPosition: right;">
-                    <img src={project1Image} className="img-fluid rounded shadow portfolio-preview-img" alt="Church Website" />
-                  </a>
-                  <div className="portfolio-info">
-                    <h4>BBEK Church Management System</h4>
-                    <p>A comprehensive church administration platform with role-based access control and various modules.</p>
-                    <a href="https://biblebaptistekklesiaofkawit.xyz/" target="_blank" rel="noopener noreferrer" className="visit-site-btn btn-lg px-4 py-2 rounded-pill shadow-sm">View Project <i className="bi bi-arrow-right ms-2"></i></a>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-10 portfolio-item mt-4">
-                <div className="portfolio-content h-100">
-                  <a href={project2Image} data-gallery="portfolio-gallery" className="glightbox d-flex justify-content-center align-items-center portfolio-preview" data-glightbox="title: Baby Bliss Booking; description: <p>Baby Bliss Booking is an online appointment scheduling system for a baby spa and wellness center. It allows customers to book appointments for baby massage, spa treatments, and wellness services. Features include service selection, time slot availability, booking confirmation, and admin management for appointments.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'><FaReact /> React</span><span class='glightbox-tech-item'><SiTailwindcss /> Tailwind CSS</span><span class='glightbox-tech-item'><SiVercel /> Vercel</span></div></div>; descPosition: right;">
-                    <img src={project2Image} className="img-fluid rounded shadow portfolio-preview-img" alt="Baby Bliss Booking" />
-                  </a>
-                  <div className="portfolio-info">
-                    <h4>Baby Bliss Booking</h4>
-                    <p>An online appointment scheduling system for a baby spa and wellness center.</p>
-                    <a href="https://babyblissbooking.vercel.app/" target="_blank" rel="noopener noreferrer" className="visit-site-btn btn-lg px-4 py-2 rounded-pill shadow-sm">View Project <i className="bi bi-arrow-right ms-2"></i></a>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-10 portfolio-item mt-4">
-                <div className="portfolio-content h-100">
-                  <a
-                    href={project3Image}
-                    data-gallery="portfolio-gallery"
-                    className="glightbox d-flex justify-content-center align-items-center portfolio-preview"
-                    data-glightbox="title: StartupLab Event Registration; description: <p>A modern landing page and registration flow for StartupLab events, connecting entrepreneurs with workshops, networking sessions, and mentors.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'>Next.js</span><span class='glightbox-tech-item'>Tailwind CSS</span><span class='glightbox-tech-item'>Vercel</span></div></div>; descPosition: right;"
+              <AnimatePresence>
+                {showAllSkills && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }} 
+                    animate={{ opacity: 1, height: 'auto' }} 
+                    exit={{ opacity: 0, height: 0 }} 
+                    style={{ overflow: 'hidden', marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.2rem' }}
                   >
-                    <img
-                      src={project3Image}
-                      className="img-fluid rounded shadow portfolio-preview-img"
-                      alt="StartupLab Event Registration"
-                    />
-                  </a>
-                  <div className="portfolio-info">
-                    <h4>StartupLab Event Registration</h4>
-                    <p>Event registration experience for StartupLab with clear CTAs and responsive hero imagery.</p>
-                    <a href="https://startuplab-event-registration.vercel.app/" target="_blank" rel="noopener noreferrer" className="visit-site-btn btn-lg px-4 py-2 rounded-pill shadow-sm">
-                      View Project <i className="bi bi-arrow-right ms-2"></i>
-                    </a>
-                  </div>
-                </div>
+                    <div>
+                      <h4 style={{ fontSize: '0.9rem', fontWeight: '900', marginBottom: '0.8rem', color: 'var(--text-primary)', opacity: 0.8 }}>Tools</h4>
+                      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                        {['Supabase', 'REST APIs', 'Git', 'GitHub', 'Vercel', 'VS Code', 'npm', 'Axios'].map(s => (
+                          <span key={s} style={{ background: 'var(--bg-secondary)', border: '1.5px solid var(--text-primary)', padding: '0.4rem 1rem', fontSize: '0.9rem', fontWeight: '800', color: 'var(--text-primary)' }}>{s}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </section>
+
+            <section id="projects" style={{ marginBottom: '2rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-primary)' }}>Recent Projects</h2>
+                <button 
+                  onClick={() => setShowAllProjects(!showAllProjects)} 
+                  style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontWeight: '800', color: 'var(--text-primary)' }}
+                >
+                  {showAllProjects ? '← Show Less' : 'View All →'}
+                </button>
               </div>
-              <div className="col-lg-10 portfolio-item mt-4">
-                <div className="portfolio-content h-100">
-                  <a
-                    href={project4Image}
-                    data-gallery="portfolio-gallery"
-                    className="glightbox d-flex justify-content-center align-items-center portfolio-preview"
-                    data-glightbox="title: StartupLab Event Creation; description: <p>An advanced event management and ticketing platform for Philippine organizers with QR ticketing and smart analytics.</p><div class='glightbox-tech'><h4>Technologies</h4><div class='glightbox-tech-icons'><span class='glightbox-tech-item'>Next.js</span><span class='glightbox-tech-item'>Tailwind CSS</span><span class='glightbox-tech-item'>Vercel</span><span class='glightbox-tech-item'>QR Ticketing</span></div></div>; descPosition: right;"
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
+                {[ 
+                  { title: 'StartupLab Ticketing System', img: project4Image, url: 'https://startuplab-event-creation.vercel.app/', desc: 'Previous System: End-to-end event ticketing and management platform.', tags: ['React', 'Node.js', 'PostgreSQL'] },
+                  { title: 'BBEK Administration System', img: project1Image, url: 'https://biblebaptistekklesiaofkawit.xyz/', desc: 'Previous System: Comprehensive administration platform for church operations.', tags: ['Vue.js', 'Node.js', 'MySQL'] },
+                  { title: 'Baby Bliss Booking', img: project2Image, url: 'https://babyblissbooking.vercel.app/', desc: 'Advanced appointment system for wellness and spa centers.', tags: ['React', 'Tailwind', 'Vercel'] },
+                  { title: 'Event Registration System', img: project3Image, url: 'https://startuplab-event-registration.vercel.app/', desc: 'Streamlined registration platform for university and academic events.', tags: ['Laravel', 'PHP', 'MySQL'] }
+                ].slice(0, showAllProjects ? 4 : 2).map((p, i) => (
+                  <motion.div 
+                    key={i} 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: i * 0.1 }}
+                    style={{ border: '1.5px solid var(--border-primary)', display: 'flex', overflow: 'hidden' }}
                   >
-                    <img
-                      src={project4Image}
-                      className="img-fluid rounded shadow portfolio-preview-img"
-                      alt="StartupLab Event Creation"
-                    />
-                  </a>
-                  <div className="portfolio-info">
-                    <h4>StartupLab Event Creation</h4>
-                    <p>Smart event management with advanced QR ticketing and real-time performance analytics.</p>
-                    <a href="https://startuplab-event-creation.vercel.app/" target="_blank" rel="noopener noreferrer" className="visit-site-btn btn-lg px-4 py-2 rounded-pill shadow-sm">
-                      View Project <i className="bi bi-arrow-right ms-2"></i>
+                    <a 
+                      href={p.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      style={{ cursor: 'pointer', flexShrink: 0, display: 'block', width: '250px', height: '150px' }}
+                    >
+                      <img src={p.img} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={p.title} />
                     </a>
-                  </div>
-                </div>
+                    <div style={{ padding: '1.5rem', flex: '1 1 0%' }}>
+                      <h4 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--text-primary)' }}>{p.title}</h4>
+                      <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)', marginTop: '0.5rem', fontWeight: '500' }}>{p.desc}</p>
+                      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+                        {p.tags.map(t => <span key={t} style={{ fontSize: '0.7rem', fontWeight: '800', background: 'var(--bg-tertiary)', padding: '0.2rem 0.6rem', color: 'var(--text-primary)' }}>{t}</span>)}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <div style={{ background: 'rgb(26, 26, 26)', padding: '2rem', color: 'white', position: 'relative', overflow: 'hidden', minHeight: '400px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div style={{ fontSize: '3rem', opacity: 0.8 }}><FaCode /></div>
+              <div>
+                <div style={{ textTransform: 'uppercase', fontSize: '1.2rem', fontWeight: '900', letterSpacing: '4px' }}>JOHN CARLO</div>
+                <div style={{ fontSize: '0.7rem', marginTop: '0.5rem', opacity: 0.6 }}>SOFTWARE ENGINEER</div>
+              </div>
+              <div style={{ position: 'absolute', bottom: '2rem', right: '2rem', opacity: 0.3, fontHeight: '4rem', fontSize: '4rem' }}>
+                <FaReact />
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* Contact Section */}
-        <section id="contact" className="contact section">
-          <div className="container section-title text-center" data-aos="fade-up">
-            <h2>Contact</h2>
-            <p>Get in touch with me for any inquiries or collaboration opportunities.</p>
-          </div>
-          <div className="container" data-aos="fade-up" data-aos-delay="100">
-            <div className="contact-main-wrapper">
-              {/* Form on Left */}
-              <motion.div
-                className="contact-form-card"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 }}
-              >
-                <form className="php-email-form" onSubmit={handleSubmit}>
-                  <div className="row gy-4">
-                    <div className="col-md-6">
-                      <label htmlFor="name-field" className="pb-2">Name</label>
-                      <input 
-                        type="text" 
-                        name="name" 
-                        id="name-field" 
-                        className="form-control" 
-                        required 
-                        placeholder="Your Name" 
-                        value={formData.name}
-                        onChange={handleInputChange}
-                      />
+            <section id="experience">
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '2rem', color: 'var(--text-primary)' }}>Experience</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                {[
+                  { role: 'Full Stack Engineer', company: 'BBEK Projects', year: '2025' },
+                  { role: 'Software Developer', company: 'Academic Clients', year: '2024' },
+                  { role: 'Student Developer', company: 'CvSU Main', year: '2023 - Present' }
+                ].map((exp, i) => (
+                  <div key={i} style={{ display: 'flex', gap: '1rem' }}>
+                    <div style={{ width: '12px', height: '12px', background: 'var(--text-primary)', marginTop: '6px' }}></div>
+                    <div style={{ flex: '1 1 0%' }}>
+                      <h4 style={{ fontWeight: '800', fontSize: '1rem', color: 'var(--text-primary)' }}>{exp.role}</h4>
+                      <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: '500' }}>{exp.company}</p>
                     </div>
-                    <div className="col-md-6">
-                      <label htmlFor="email-field" className="pb-2">Email</label>
-                      <input 
-                        type="email" 
-                        className="form-control" 
-                        name="email" 
-                        id="email-field" 
-                        required 
-                        placeholder="your@email.com" 
-                        value={formData.email}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                    <div className="col-md-12">
-                      <label htmlFor="subject-field" className="pb-2">Subject</label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        name="subject" 
-                        id="subject-field" 
-                        required 
-                        placeholder="What's this about?" 
-                        value={formData.subject}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                    <div className="col-md-12">
-                      <label htmlFor="message-field" className="pb-2">Message</label>
-                      <textarea 
-                        className="form-control" 
-                        name="message" 
-                        rows="8" 
-                        id="message-field" 
-                        required 
-                        placeholder="Your message..."
-                        value={formData.message}
-                        onChange={handleInputChange}
-                      ></textarea>
-                    </div>
-                    
-                    <div className="col-md-12 text-center">
-                      {formStatus.loading && <div className="loading" style={{ marginBottom: '10px' }}>Sending...</div>}
-                      {formStatus.error && <div className="error-message" style={{ color: '#d9534f', marginBottom: '10px' }}>{formStatus.message}</div>}
-                      {formStatus.success && <div className="sent-message" style={{ color: '#28a745', marginBottom: '10px' }}>{formStatus.message}</div>}
-                      
-                      <motion.button
-                        type="submit"
-                        disabled={formStatus.loading}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        style={{ opacity: formStatus.loading ? 0.7 : 1 }}
-                      >
-                        {formStatus.loading ? 'Sending...' : 'Send Message'}
-                      </motion.button>
-                    </div>
+                    <div style={{ fontHeight: '0.8rem', fontWeight: '800', color: 'var(--text-primary)', fontSize: '0.8rem' }}>{exp.year}</div>
                   </div>
-                </form>
-              </motion.div>
-
-              {/* Info on Right */}
-              <div className="contact-info-wrapper">
-                <motion.div
-                  className="contact-card"
-                  whileHover={{ scale: 1.02, y: -5 }}
-                  data-aos="fade-up"
-                  data-aos-delay="200"
-                >
-                  <div className="contact-icon">
-                    <FaMapMarkerAlt />
-                  </div>
-                  <h3>Location</h3>
-                  <p>Naic Cavite Philippines</p>
-                </motion.div>
-
-                <motion.div
-                  className="contact-card"
-                  whileHover={{ scale: 1.02, y: -5 }}
-                  data-aos="fade-up"
-                  data-aos-delay="300"
-                >
-                  <div className="contact-icon">
-                    <FaEnvelope />
-                  </div>
-                  <h3>Email</h3>
-                  <p>johncarloaganan26@gmail.com</p>
-                </motion.div>
-
-                <motion.div
-                  className="contact-card"
-                  whileHover={{ scale: 1.02, y: -5 }}
-                  data-aos="fade-up"
-                  data-aos-delay="400"
-                >
-                  <div className="contact-icon">
-                    <FaPhone />
-                  </div>
-                  <h3>Phone</h3>
-                  <p>09543300228</p>
-                </motion.div>
+                ))}
               </div>
-            </div>
+            </section>
           </div>
-        </section>
-      </main>
-
-      {/* Minimalist Footer */}
-      <footer className="footer">
-        <div className="container">
-          <p>© {new Date().getFullYear()} John Carlo Aganan. All Rights Reserved.</p>
         </div>
-      </footer>
+
+        <section id="contact" style={{ marginTop: '4rem', padding: '4rem 0', borderTop: '2px solid var(--border-primary)' }}>
+          <div style={{ maxWidth: '600px' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Let's work together</h2>
+            <p style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '3rem', fontWeight: '500' }}>
+              I'm always looking for new opportunities and collaborations. 
+              Feel free to reach out if you have a project in mind or just want to say hi.
+            </p>
+            <form style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <input type="text" placeholder="Name" style={{ background: 'transparent', border: 'none', borderBottom: '2px solid var(--border-primary)', padding: '1rem 0', fontSize: '1rem', color: 'var(--text-primary)', outline: 'none' }} />
+              <input type="email" placeholder="Email" style={{ background: 'transparent', border: 'none', borderBottom: '2px solid var(--border-primary)', padding: '1rem 0', fontSize: '1rem', color: 'var(--text-primary)', outline: 'none' }} />
+              <textarea placeholder="Message" rows="4" style={{ background: 'transparent', border: 'none', borderBottom: '2px solid var(--border-primary)', padding: '1rem 0', fontSize: '1rem', color: 'var(--text-primary)', outline: 'none', resize: 'none' }}></textarea>
+              <button style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)', border: 'none', padding: '1rem 2rem', fontWeight: '800', marginTop: '1rem', width: 'fit-content', cursor: 'pointer' }}>Send Message</button>
+            </form>
+          </div>
+        </section>
+
+        <footer style={{ padding: '4rem 0', borderTop: '1px solid var(--border-secondary)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ color: 'var(--text-primary)', fontWeight: '800' }}>© 2026 John Carlo Aganan</div>
+          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+            <a href="#" style={{ color: 'var(--text-primary)' }}><FaLinkedin size={22} /></a>
+            <a href="#" style={{ color: 'var(--text-primary)' }}><FaGithub size={22} /></a>
+            <a href="#" style={{ color: 'var(--text-primary)' }}><FaTwitter size={22} /></a>
+            <a href="#" style={{ color: 'var(--text-primary)' }}><FaFacebook size={22} /></a>
+            <a href="#" style={{ color: 'var(--text-primary)' }}><FaInstagram size={22} /></a>
+          </div>
+        </footer>
+
+        {/* Chatbot System */}
+        <ChatBot />
+
+        <AnimatePresence>
+          {toast.show && (
+            <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} style={{ position: 'fixed', bottom: '2rem', left: '2rem', background: 'white', color: 'black', padding: '1rem 1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.2)', zIndex: 10001, display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900' }}>{toast.percentage}%</div>
+              <div>
+                <div style={{ fontWeight: '800', fontSize: '0.9rem' }}>{toast.name} Mastery</div>
+                <div style={{ fontSize: '0.8rem', color: '#666' }}>Performance Benchmark reached</div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </main>
     </div>
   );
 }
 
+// Compact ChatBot Component
+const ChatBot = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 10003, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '1rem' }}>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            style={{ 
+              width: '420px', 
+              minHeight: '550px',
+              background: 'var(--bg-primary)', 
+              border: '1.5px solid var(--text-primary)', 
+              boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.8rem', borderBottom: '1px solid var(--border-primary)' }}>
+              <div>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: '900', color: 'var(--text-primary)', margin: 0 }}>Chat with John</h3>
+                <div style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', opacity: 0.6, color: 'var(--text-primary)', marginTop: '4px' }}>AI Assistant v1.0</div>
+              </div>
+              <button onClick={() => setIsOpen(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '1.8rem', fontWeight: '900', color: 'var(--text-primary)' }}>×</button>
+            </div>
+            
+            <div style={{ flex: '1 1 0%', padding: '1.8rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1.8rem' }}>
+              <div style={{ background: 'var(--bg-tertiary)', padding: '1.5rem', border: '1px solid var(--border-primary)' }}>
+                <p style={{ fontSize: '1rem', color: 'var(--text-primary)', fontWeight: '500', lineHeight: '1.7', margin: 0 }}>
+                  👋 Hi there! I'm John's digital assistant. 
+                  <br /><br />
+                  I'm currently <strong>Under Development</strong> as I'm being trained on John's specific projects and tech stack. 
+                  <br /><br />
+                  Soon, you'll be able to ask me about his work on <strong>BBEK</strong>, <strong>StartupLab</strong>, or his expertise in <strong>React & Node.js</strong>.
+                </p>
+              </div>
+              
+              <div style={{ padding: '1rem', border: '1px dashed var(--border-primary)', textAlign: 'center' }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', opacity: 0.6, color: 'var(--text-primary)' }}>
+                  Coming soon - 2026
+                </div>
+              </div>
+            </div>
+
+            <div style={{ padding: '1.8rem', borderTop: '1px solid var(--border-primary)', display: 'flex', gap: '0.8rem' }}>
+              <input 
+                disabled 
+                placeholder="Coming soon..." 
+                style={{ flex: '1 1 0%', background: 'transparent', border: '1px solid var(--border-primary)', padding: '1rem', fontSize: '1rem', color: 'var(--text-primary)', outline: 'none' }} 
+              />
+              <button disabled style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)', border: 'none', padding: '1rem 1.5rem', fontWeight: '800', opacity: 0.5 }}>Send</button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {!isOpen && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsOpen(true)}
+            style={{
+              background: 'var(--text-primary)',
+              color: 'var(--bg-primary)',
+              border: 'none',
+              padding: '0.8rem 1.5rem',
+              height: '45px',
+              fontWeight: '800',
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.8rem',
+              boxShadow: '0 10px 20px rgba(0,0,0,0.2)'
+            }}
+          >
+            <style>{`
+              .chat-icon-svg {
+                width: 1.2rem;
+                height: 1.2rem;
+                fill: currentColor;
+              }
+            `}</style>
+            <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" className="chat-icon-svg" xmlns="http://www.w3.org/2000/svg">
+              <path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32zM128 272c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"></path>
+            </svg> 
+            Chat with John
+          </motion.button>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 export default App;
+
