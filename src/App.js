@@ -15,6 +15,7 @@ import project1Image from './Screenshot 2026-01-28 035743.png';
 import project2Image from './Screenshot 2026-01-31 091212.png';
 import project3Image from './Screenshot 2026-02-27 090848.png';
 import project4Image from './startuplab-event-creation.png';
+import bigbrewPOSImage from './bigbrew-pos.png';
 import logoImage from './logo.png';
 
 // Unique Animation Skill Icon Component
@@ -328,7 +329,7 @@ function App() {
                   <h4 style={{ fontSize: '0.9rem', fontWeight: '900', marginBottom: '0.8rem', color: 'var(--text-primary)', opacity: 0.8 }}>Frontend</h4>
                   <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                     {['JavaScript', 'HTML5', 'CSS3', 'React', 'Vue.js', 'Tailwind CSS'].map(s => (
-                      <span key={s} style={{ background: 'var(--bg-secondary)', border: '1.5px solid var(--text-primary)', padding: '0.4rem 1rem', fontSize: '0.9rem', fontWeight: '800', color: 'var(--text-primary)' }}>{s}</span>
+                      <span key={s} style={{ background: 'transparent', border: '1.5px solid var(--text-primary)', padding: '0.4rem 1rem', fontSize: '0.9rem', fontWeight: '800', color: 'var(--text-primary)' }}>{s}</span>
                     ))}
                   </div>
                 </div>
@@ -336,7 +337,7 @@ function App() {
                   <h4 style={{ fontSize: '0.9rem', fontWeight: '900', marginBottom: '0.8rem', color: 'var(--text-primary)', opacity: 0.8 }}>Backend</h4>
                   <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                     {['Node.js', 'Express.js', 'PHP', 'MySQL'].map(s => (
-                      <span key={s} style={{ background: 'var(--bg-secondary)', border: '1.5px solid var(--text-primary)', padding: '0.4rem 1rem', fontSize: '0.9rem', fontWeight: '800', color: 'var(--text-primary)' }}>{s}</span>
+                      <span key={s} style={{ background: 'transparent', border: '1.5px solid var(--text-primary)', padding: '0.4rem 1rem', fontSize: '0.9rem', fontWeight: '800', color: 'var(--text-primary)' }}>{s}</span>
                     ))}
                   </div>
                 </div>
@@ -354,7 +355,7 @@ function App() {
                       <h4 style={{ fontSize: '0.9rem', fontWeight: '900', marginBottom: '0.8rem', color: 'var(--text-primary)', opacity: 0.8 }}>Tools</h4>
                       <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                         {['Supabase', 'REST APIs', 'Git', 'GitHub', 'Vercel', 'VS Code', 'npm', 'Axios'].map(s => (
-                          <span key={s} style={{ background: 'var(--bg-secondary)', border: '1.5px solid var(--text-primary)', padding: '0.4rem 1rem', fontSize: '0.9rem', fontWeight: '800', color: 'var(--text-primary)' }}>{s}</span>
+                          <span key={s} style={{ background: 'transparent', border: '1.5px solid var(--text-primary)', padding: '0.4rem 1rem', fontSize: '0.9rem', fontWeight: '800', color: 'var(--text-primary)' }}>{s}</span>
                         ))}
                       </div>
                     </div>
@@ -375,11 +376,12 @@ function App() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
                 {[ 
+                  { title: 'BigBrew POS System', img: bigbrewPOSImage, url: 'https://brew-sxrs.vercel.app/', desc: 'Coffee Shop Point of Sale System with Real-Time Analytics Dashboard.', tags: ['React', 'Vite', 'Tailwind', 'Node.js'] },
                   { title: 'StartupLab Ticketing System', img: project4Image, url: 'https://startuplab-event-creation.vercel.app/', desc: 'Previous System: End-to-end event ticketing and management platform.', tags: ['React', 'Node.js', 'PostgreSQL'] },
                   { title: 'BBEK Administration System', img: project1Image, url: 'https://biblebaptistekklesiaofkawit.xyz/', desc: 'Previous System: Comprehensive administration platform for church operations.', tags: ['Vue.js', 'Node.js', 'MySQL'] },
                   { title: 'Baby Bliss Booking', img: project2Image, url: 'https://babyblissbooking.vercel.app/', desc: 'Advanced appointment system for wellness and spa centers.', tags: ['React', 'Tailwind', 'Vercel'] },
                   { title: 'Event Registration System', img: project3Image, url: 'https://startuplab-event-registration.vercel.app/', desc: 'Streamlined registration platform for university and academic events.', tags: ['Laravel', 'PHP', 'MySQL'] }
-                ].slice(0, showAllProjects ? 4 : 2).map((p, i) => (
+                ].slice(0, showAllProjects ? 5 : 2).map((p, i) => (
                   <motion.div 
                     key={i} 
                     initial={{ opacity: 0, y: 20 }}
@@ -399,7 +401,7 @@ function App() {
                       <h4 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--text-primary)' }}>{p.title}</h4>
                       <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)', marginTop: '0.5rem', fontWeight: '500' }}>{p.desc}</p>
                       <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
-                        {p.tags.map(t => <span key={t} style={{ fontSize: '0.7rem', fontWeight: '800', background: 'var(--bg-tertiary)', padding: '0.2rem 0.6rem', color: 'var(--text-primary)' }}>{t}</span>)}
+                        {p.tags.map(t => <span key={t} style={{ fontSize: '0.7rem', fontWeight: '800', background: 'transparent', border: '1px solid var(--text-primary)', padding: '0.2rem 0.6rem', color: 'var(--text-primary)' }}>{t}</span>)}
                       </div>
                     </div>
                   </motion.div>
