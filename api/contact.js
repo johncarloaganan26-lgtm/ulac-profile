@@ -24,20 +24,39 @@ module.exports = async (req, res) => {
 
   try {
     // Send email to the contact owner (John Carlo)
+    // Send email to the contact owner (John Carlo)
     await transporter.sendMail({
       from: `"${name}" <${email}>`,
       to: process.env.SMTP_USER,
       replyTo: email,
-      subject: `New Contact Form Submission: ${subject}`,
-      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+      subject: `Portfolio Inquiry: ${subject}`,
       html: `
-        <h3>New Contact Form Submission</h3>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Subject:</strong> ${subject}</p>
-        <br />
-        <p><strong>Message:</strong></p>
-        <p>${message}</p>
+        <div style="background-color: #f3f4f6; padding: 40px 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="background: linear-gradient(135deg, #111827 0%, #1f2937 100%); padding: 30px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: 1px;">NEW SYSTEM INQUIRY</h1>
+            </div>
+            <div style="padding: 40px;">
+              <div style="margin-bottom: 30px; border-bottom: 2px solid #f3f4f6; padding-bottom: 20px;">
+                <p style="margin: 0; color: #6b7280; font-size: 14px; text-transform: uppercase; font-weight: 700;">From</p>
+                <p style="margin: 5px 0 0; color: #111827; font-size: 18px; font-weight: 600;">${name} &lt;${email}&gt;</p>
+              </div>
+              <div style="margin-bottom: 30px; border-bottom: 2px solid #f3f4f6; padding-bottom: 20px;">
+                <p style="margin: 0; color: #6b7280; font-size: 14px; text-transform: uppercase; font-weight: 700;">Subject</p>
+                <p style="margin: 5px 0 0; color: #111827; font-size: 18px; font-weight: 600;">${subject}</p>
+              </div>
+              <div>
+                <p style="margin: 0; color: #6b7280; font-size: 14px; text-transform: uppercase; font-weight: 700;">Message Content</p>
+                <div style="margin-top: 15px; background-color: #f9fafb; border-radius: 6px; padding: 25px; border-left: 4px solid #111827;">
+                  <p style="margin: 0; color: #374151; font-size: 16px; line-height: 1.6; white-space: pre-wrap;">${message}</p>
+                </div>
+              </div>
+            </div>
+            <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #f3f4f6;">
+              <p style="margin: 0; color: #9ca3af; font-size: 12px; font-weight: 600;">PORTFOLIO AUTOMATION SYSTEM v2.0</p>
+            </div>
+          </div>
+        </div>
       `,
     });
 
@@ -46,12 +65,31 @@ module.exports = async (req, res) => {
       from: `"John Carlo Aganan" <${process.env.SMTP_USER}>`,
       to: email,
       subject: "Thank you for reaching out!",
-      text: `Hi ${name},\n\nI've received your message and will get back to you as soon as possible.\n\nBest regards,\nJohn Carlo Aganan`,
       html: `
-        <h3>Hi ${name},</h3>
-        <p>Thank you for reaching out! I've received your message regarding "<strong>${subject}</strong>" and I will get back to you as soon as possible.</p>
-        <br />
-        <p>Best regards,<br />John Carlo Aganan</p>
+        <div style="background-color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #111827; max-width: 600px; margin: 0 auto; padding: 60px 20px;">
+          <div style="border-left: 8px solid #000; padding: 40px; background-color: #fafaf9;">
+            <p style="font-size: 14px; font-weight: 800; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 40px; color: #444;">JC. PORTFOLIO</p>
+            
+            <h1 style="font-size: 42px; font-weight: 900; line-height: 1; margin: 0 0 20px 0; letter-spacing: -2px;">Hello, ${name.split(' ')[0]}.</h1>
+            
+            <p style="font-size: 18px; line-height: 1.6; color: #374151; margin-bottom: 40px;">
+              I have received your inquiry regarding <strong>"${subject}"</strong>. Your message has been prioritized, and I will be reviewing your requirements shortly.
+            </p>
+            
+            <div style="margin-bottom: 50px;">
+              <a href="https://biblebaptistekklesiaofkawit.xyz/" style="display: inline-block; background-color: #000; color: #fff; text-decoration: none; padding: 18px 30px; font-weight: 800; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;">View Latest Project</a>
+            </div>
+            
+            <div style="border-top: 1px solid #ddd; padding-top: 30px;">
+              <p style="font-size: 16px; font-weight: 700; margin: 0;">John Carlo Aganan</p>
+              <p style="font-size: 14px; color: #6b7280; margin: 5px 0 0;">Full-Stack Software Engineer</p>
+            </div>
+          </div>
+          
+          <div style="margin-top: 40px; text-align: center;">
+            <p style="font-size: 12px; color: #9ca3af;">&copy; 2026 Crafted with precision in Cavite, Philippines.</p>
+          </div>
+        </div>
       `
     });
 
