@@ -1,4 +1,6 @@
 const express = require('express');
+const path = require('path');
+const fs = require('fs');
 const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -12,13 +14,29 @@ app.use(bodyParser.json());
 
 // Reuse the contact logic
 const contactHandler = require('./api/contact');
-
 app.post('/api/contact', contactHandler);
 
-// Serve static files from the React app (if built)
-const path = require('path');
-const fs = require('fs');
+// View Counter Persistence
+const VIEWS_FILE = path.join(__dirname, 'views.txt');
 
+app.get('/api/views', (req, res) => {
+  let count = 0;
+  try {
+    if (fs.existsSync(VIEWS_FILE)) {
+      count = parseInt(fs.readFileSync(VIEWS_FILE, 'utf8')) || 0;
+    }
+  } catch (e) { console.error('Error reading views:', e); }
+
+  count++;
+  
+  try {
+    fs.writeFileSync(VIEWS_FILE, count.toString());
+  } catch (e) { console.error('Error saving views:', e); }
+
+  res.json({ views: count });
+});
+
+// Serve static files from the React app (if built)
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('*', (req, res) => {
@@ -26,8 +44,6 @@ app.get('*', (req, res) => {
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
-    // During local development, the 'build' folder might not exist yet
-    // Respond with a simple message or 404
     res.status(404).json({ message: 'Static build files not found. Use npm start for frontend development.' });
   }
 });

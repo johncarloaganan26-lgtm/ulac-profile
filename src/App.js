@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaEnvelope, FaMapMarkerAlt, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaLinkedin, FaBars, FaTimes, FaFacebook, FaInstagram, FaTwitter, FaCommentDots, FaPython } from 'react-icons/fa';
+import { FaEnvelope, FaMapMarkerAlt, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaLinkedin, FaBars, FaTimes, FaFacebook, FaInstagram, FaTwitter, FaCommentDots, FaPython, FaCalendarAlt, FaChevronRight, FaChevronDown, FaEye } from 'react-icons/fa';
 import { MdVerified } from 'react-icons/md';
 import { SiTailwindcss, SiExpress, SiAxios, SiMysql, SiVercel, SiSupabase, SiPostgresql, SiVite, SiLaravel, SiPython } from 'react-icons/si';
 
@@ -204,6 +204,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const [formStatus, setFormStatus] = useState({ loading: false, success: false, error: false, message: '' });
+  const [totalViews, setTotalViews] = useState(0);
   const typedRef = useRef(null);
 
   useEffect(() => {
@@ -275,6 +276,15 @@ function App() {
 
     const timer = setTimeout(() => setPreloaderRemoved(true), 1000);
     const handleScroll = () => setScrollTopActive(window.scrollY > 100);
+
+    const fetchViews = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/views');
+        const data = await response.json();
+        setTotalViews(data.views);
+      } catch (error) { console.error('Error fetching views:', error); }
+    };
+    fetchViews();
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => { if (entry.isIntersecting) setActiveSection(entry.target.id); });
@@ -376,7 +386,7 @@ function App() {
                 {[
                   { label: 'Total Inquiries', value: '12' },
                   { label: 'Active Projects', value: '4' },
-                  { label: 'Client Satisfaction', value: '100%' }
+                  { label: 'Total Views', value: totalViews }
                 ].map((stat, i) => (
                   <div key={i} style={{ padding: '1.5rem', border: '1px solid #222' }}>
                     <p style={{ fontSize: '0.7rem', fontWeight: '800', opacity: 0.5, textTransform: 'uppercase' }}>{stat.label}</p>
@@ -461,71 +471,141 @@ function App() {
         )}
       </AnimatePresence>
 
-      <main className="main" style={{ padding: isMobile ? '2rem 1rem' : '4rem 4rem 0px', maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
-        <header style={{ position: 'relative', display: 'flex', gap: '2rem', alignItems: 'flex-start', marginBottom: '4rem', flexWrap: 'wrap', paddingRight: '2.5rem' }}>
-          <div style={{ padding: '0px' }}>
+      <main className="main" style={{ padding: isMobile ? '1.5rem 1rem' : '2rem 4rem 0px', maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
+        <header style={{ 
+          position: 'relative', 
+          display: 'flex', 
+          gap: isMobile ? '1.5rem' : '2.5rem', 
+          alignItems: 'flex-start', 
+          marginBottom: '2rem', 
+          flexDirection: isMobile ? 'row' : 'row',
+          flexWrap: 'nowrap',
+          paddingRight: '0'
+        }}>
+          {/* Theme Toggle Wrapper */}
+          <div style={{ position: 'absolute', top: 0, right: 0, zIndex: 10 }}>
             <div 
               onClick={() => setDarkMode(!darkMode)} 
               style={{ 
                 cursor: 'pointer', 
                 display: 'flex', 
                 alignItems: 'center', 
-                background: '#e5e7eb', 
-                width: '60px', 
-                height: '30px', 
+                background: darkMode ? '#333' : '#e5e7eb', 
+                width: '64px', 
+                borderRadius: '0px',
                 padding: '2px',
-                position: 'absolute', 
-                top: 0, 
-                right: 0,
-                zIndex: 10
+                border: '1px solid var(--border-primary)'
               }}
             >
-              <motion.div
-                animate={{ x: darkMode ? 30 : 0 }}
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                style={{
-                  width: '26px',
-                  height: '26px',
-                  background: '#fff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#6b7280',
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.1)'
-                }}
-              >
+              <div style={{
+                width: '30px',
+                height: '30px',
+                background: darkMode ? '#1a1a1a' : '#fff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: darkMode ? '#fff' : '#6b7280',
+                order: darkMode ? 2 : 1
+              }}>
                 {darkMode ? <FaMoon size={14} /> : <FaSun size={14} />}
-              </motion.div>
+              </div>
+              <div style={{ flex: 1, order: darkMode ? 1 : 2 }} />
             </div>
           </div>
 
-          <img src={`${process.env.PUBLIC_URL}/dsa.jpg`} alt="Profile" style={{ width: isMobile ? '100%' : '180px', height: isMobile ? 'auto' : '180px', objectFit: 'cover', border: '1px solid var(--border-primary)' }} />
-          <div style={{ flex: '1 1 0%' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-primary)' }}>John Carlo Aganan</h1>
-              <MdVerified style={{ color: '#0ea5e9', fontSize: '1.5rem' }} title="Verified Full Stack Developer" />
+          <img 
+            src={`${process.env.PUBLIC_URL}/dsa.jpg`} 
+            alt="Profile" 
+            style={{ 
+              width: isMobile ? '120px' : '220px', 
+              height: isMobile ? '120px' : '220px', 
+              objectFit: 'cover', 
+              borderRadius: '4px',
+              flexShrink: 0
+            }} 
+          />
+          
+          <div style={{ flex: 1, minWidth: 0, paddingTop: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
+              <h1 style={{ fontSize: isMobile ? '1.8rem' : '3rem', fontWeight: '900', color: 'var(--text-primary)', margin: 0, lineHeight: 1.1 }}>
+                John Carlo Aganan
+              </h1>
+              <MdVerified style={{ color: '#0ea5e9', fontSize: isMobile ? '1.2rem' : '1.8rem' }} />
             </div>
-            <p style={{ color: 'var(--text-primary)', fontSize: '1.1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '500' }}>
-              <FaMapMarkerAlt /> Naic, Cavite, Philippines
-            </p>
-            <div style={{ fontSize: '1.2rem', marginBottom: '1.5rem', color: 'var(--text-primary)', fontWeight: '500' }}>
-              Full Stack Software Engineer
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', marginBottom: '0.8rem', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-primary)', fontSize: isMobile ? '0.9rem' : '1.1rem', opacity: 0.9 }}>
+                <FaMapMarkerAlt size={14} />
+                <span style={{ fontWeight: '600' }}>Naic, Cavite, Philippines</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-primary)', fontSize: '0.8rem', opacity: 0.5, borderLeft: '1.5px solid var(--border-primary)', paddingLeft: '1.2rem' }}>
+                <FaEye size={12} />
+                <span style={{ fontWeight: '800' }}>{totalViews}</span>
+                <span style={{ textTransform: 'uppercase', letterSpacing: '1px' }}>Views</span>
+              </div>
             </div>
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+
+            <div style={{ 
+              fontSize: isMobile ? '0.9rem' : '1.1rem', 
+              marginBottom: '1.5rem', 
+              color: 'var(--text-primary)', 
+              fontWeight: '600',
+              opacity: 0.8,
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '0.5rem'
+            }}>
+              <span>Junior Software Engineer</span> 
+              <span style={{ opacity: 0.3 }}>\</span>
+              <span>Aspiring Full Stack Developer</span>
+              <span style={{ opacity: 0.3 }}>\</span>
+              <span>Inquisitive Learner</span>
+            </div>
+
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+              {/* Schedule Button */}
               <button 
                 onClick={() => scrollToSection('contact')}
-                style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)', border: 'none', padding: '0.8rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '800', transition: 'all 0.3s ease', cursor: 'pointer' }}
+                style={{ 
+                  background: '#000', 
+                  color: '#fff', 
+                  border: 'none', 
+                  padding: '0.8rem 1.4rem', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '0.8rem', 
+                  fontWeight: '700', 
+                  fontSize: '0.95rem',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s'
+                }}
               >
-                Let's talk →
+                <FaCalendarAlt />
+                <span>Schedule a Call</span>
+                <FaChevronRight size={12} style={{ opacity: 0.6 }} />
               </button>
+
+              <a 
+                href="#blog" 
+                style={{ 
+                  color: 'var(--text-primary)', 
+                  fontWeight: '700', 
+                  textDecoration: 'none', 
+                  fontSize: '0.95rem',
+                  marginLeft: '0.5rem'
+                }}
+              >
+                My blog
+              </a>
             </div>
           </div>
         </header>
         
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(12, 1fr)', gap: isMobile ? '2rem' : '4rem' }}>
           <div style={{ gridColumn: isMobile ? 'span 1' : 'span 8' }}>
-            <section id="about" style={{ marginBottom: '2rem' }}>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>About</h2>
+            <section id="about" style={{ marginBottom: '1.5rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1rem', color: 'var(--text-primary)' }}>About</h2>
               <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-primary)', fontWeight: '500' }}>
                 I'm a Full-Stack Engineer with a strong focus on building scalable systems and impact-driven digital solutions. 
                 My expertise lies in developing complex architectures using React, Node.js, and Modern Databases.
@@ -536,8 +616,8 @@ function App() {
               </p>
             </section>
 
-            <section id="skills" style={{ marginBottom: '2rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginWeight: '2rem', marginBottom: '1.5rem' }}>
+            <section id="skills" style={{ marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginWeight: '2rem', marginBottom: '1rem' }}>
                 <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-primary)' }}>Tech Stack</h2>
                 <button onClick={() => setShowAllSkills(!showAllSkills)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontWeight: '800', color: 'var(--text-primary)' }}>
                   {showAllSkills ? '← Show Less' : 'View All →'}
@@ -583,8 +663,8 @@ function App() {
               </AnimatePresence>
             </section>
 
-            <section id="projects" style={{ marginBottom: '2rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <section id="projects" style={{ marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                 <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-primary)' }}>Recent Projects</h2>
                 <button 
                   onClick={() => setShowAllProjects(!showAllProjects)} 
@@ -643,29 +723,16 @@ function App() {
 
             <section id="experience">
               <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '2rem', color: 'var(--text-primary)' }}>Experience</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                {[
-                  { role: 'Full Stack Engineer', company: 'BBEK Administration System', year: '2025' },
-                  { role: 'Freelance Software Developer', company: 'Custom Client Solutions', year: '2024' },
-                  { role: 'Web Developer (Internship/Project)', company: 'CvSU Main Systems', year: '' }
-                ].map((exp, i) => (
-                  <div key={i} style={{ display: 'flex', gap: '1rem' }}>
-                    <div style={{ width: '12px', height: '12px', background: 'var(--text-primary)', marginTop: '6px' }}></div>
-                    <div style={{ flex: '1 1 0%' }}>
-                      <h4 style={{ fontWeight: '800', fontSize: '1rem', color: 'var(--text-primary)' }}>{exp.role}</h4>
-                      <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: '500' }}>{exp.company}</p>
-                    </div>
-                    <div style={{ fontHeight: '0.8rem', fontWeight: '800', color: 'var(--text-primary)', fontSize: '0.8rem' }}>{exp.year}</div>
-                  </div>
-                ))}
+              <div style={{ padding: '2rem', border: '1.5px dashed var(--border-primary)', textAlign: 'center', opacity: 0.6 }}>
+                <p style={{ fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>N/A FOR NOW</p>
               </div>
             </section>
           </div>
         </div>
 
         {/* Services Section */}
-        <section id="services" style={{ marginTop: '4rem', marginBottom: '2rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '2rem', color: 'var(--text-primary)' }}>Expertise & Services</h2>
+        <section id="services" style={{ marginTop: '2rem', marginBottom: '1.5rem' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Expertise & Services</h2>
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: '1.5rem' }}>
             {[
               { 
@@ -750,8 +817,8 @@ function App() {
           </div>
         </section>
 
-        <section id="contact" style={{ marginTop: '6rem', padding: isMobile ? '4rem 1rem' : '6rem 0', borderTop: '1.5px solid var(--border-primary)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(12, 1fr)', gap: isMobile ? '3rem' : '4rem', alignItems: 'flex-start' }}>
+        <section id="contact" style={{ marginTop: '3rem', padding: isMobile ? '2.5rem 1rem' : '4rem 0', borderTop: '1.5px solid var(--border-primary)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(12, 1fr)', gap: isMobile ? '2.5rem' : '4rem', alignItems: 'flex-start' }}>
             <div style={{ gridColumn: isMobile ? 'span 1' : 'span 5' }}>
               <h2 style={{ fontSize: isMobile ? '2rem' : '2.5rem', fontWeight: '900', color: 'var(--text-primary)', marginBottom: '1.5rem', letterSpacing: '-1px' }}>Let's work together</h2>
               <p style={{ fontSize: '1.1rem', color: 'var(--text-primary)', opacity: 0.8, lineHeight: '1.8', marginBottom: '2.5rem', fontWeight: '500' }}>
