@@ -279,15 +279,10 @@ function App() {
 
     const fetchViews = async () => {
       try {
-        // Use relative URL for better production/dev compatibility
-        const response = await fetch('/api/views');
-        if (!response.ok) throw new Error('Network response was not ok');
+        const response = await fetch('http://localhost:5000/api/views');
         const data = await response.json();
         setTotalViews(data.views);
-      } catch (error) { 
-        // Silently fail or use a placeholder if the server is down
-        console.warn('View counter server not reachable:', error.message); 
-      }
+      } catch (error) { console.error('Error fetching views:', error); }
     };
     fetchViews();
 
