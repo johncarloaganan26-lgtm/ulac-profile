@@ -245,7 +245,7 @@ function App() {
       subject: formData.subject || `New message from ${formData.name}`
     };
     try {
-      const response = await fetch('http://localhost:5000/api/contact', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(submissionData),
@@ -279,7 +279,7 @@ function App() {
 
     const fetchViews = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/views');
+        const response = await fetch('/api/views');
         const data = await response.json();
         setTotalViews(data.views);
       } catch (error) { console.error('Error fetching views:', error); }
