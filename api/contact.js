@@ -24,10 +24,9 @@ module.exports = async (req, res) => {
 
   try {
     // Send email to the contact owner (John Carlo)
-    // Send email to the contact owner (John Carlo)
     await transporter.sendMail({
       from: `"${name}" <${email}>`,
-      to: process.env.SMTP_USER,
+      to: process.env.SMTP_TO || process.env.SMTP_USER,
       replyTo: email,
       subject: `Portfolio Inquiry: ${subject}`,
       html: `
@@ -93,7 +92,7 @@ module.exports = async (req, res) => {
       `
     });
 
-    console.log(`Success: Inquiry from ${name} (<${email}>) sent to ${process.env.SMTP_USER}.`);
+    console.log(`Success: Inquiry from ${name} (<${email}>) sent to ${process.env.SMTP_TO || process.env.SMTP_USER}.`);
     console.log(`Success: Thank-you email sent to ${email}.`);
 
     return res.status(200).json({ message: 'Email sent successfully!' });
