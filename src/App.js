@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaEnvelope, FaMapMarkerAlt, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaLinkedin, FaBars, FaTimes, FaFacebook, FaInstagram, FaTwitter, FaCommentDots, FaPython, FaCalendarAlt, FaChevronRight, FaChevronDown, FaEye } from 'react-icons/fa';
 import { MdVerified } from 'react-icons/md';
-import { SiTailwindcss, SiExpress, SiAxios, SiMysql, SiVercel, SiSupabase, SiPostgresql, SiVite, SiLaravel, SiPython } from 'react-icons/si';
+import { SiTailwindcss, SiExpress, SiAxios, SiMysql, SiVercel, SiSupabase, SiPostgresql, SiVite, SiLaravel, SiPython, SiNextdotjs, SiFramer } from 'react-icons/si';
 
 // Original icons and imports ... (keep existing)
 
@@ -16,6 +16,7 @@ import project2Image from './Screenshot 2026-01-31 091212.png';
 import project3Image from './Screenshot 2026-02-27 090848.png';
 import project4Image from './startuplab-event-creation.png';
 import bigbrewPOSImage from './bigbrew-pos.png';
+import artisanoImage from './artisano-pizzeria.png';
 import logoImage from './logo.png';
 
 // Unique Animation Skill Icon Component
@@ -166,6 +167,8 @@ const SkillTag = ({ name, size = 'large' }) => {
     'VS Code': { icon: FaCode, color: '#007ACC' },
     'npm': { icon: FaNpm, color: '#CB3837' },
     'Axios': { icon: SiAxios, color: '#5A29E4' },
+    'Next.js': { icon: SiNextdotjs, color: 'var(--text-primary)' },
+    'Framer Motion': { icon: SiFramer, color: '#0055FF' },
   };
   const skill = iconMap[name];
   if (!skill) return <span style={{ fontSize: '0.7rem', fontWeight: '800', border: '1px solid var(--border-primary)', padding: '0.2rem 0.6rem', color: 'var(--text-primary)', opacity: 0.6 }}>{name}</span>;
@@ -675,12 +678,13 @@ function App() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
                 {[ 
+                  { title: 'Artisano & Co. Pizzeria', img: artisanoImage, url: 'https://pizza-theta-inky.vercel.app/', desc: 'A premium digital presence for an artisanal pizzeria, featuring a cinematic design and Next.js performance.', tags: ['Next.js', 'Tailwind', 'Framer Motion'] },
                   { title: 'BigBrew POS System', img: bigbrewPOSImage, url: 'https://brew-sxrs.vercel.app/', desc: 'Coffee Shop Point of Sale System with Real-Time Analytics Dashboard.', tags: ['React', 'Vite', 'Tailwind', 'Node.js'] },
                   { title: 'StartupLab Ticketing System', img: project4Image, url: 'https://startuplab-event-creation.vercel.app/', desc: 'Previous System: End-to-end event ticketing and management platform.', tags: ['React', 'Node.js', 'PostgreSQL'] },
                   { title: 'BBEK Administration System', img: project1Image, url: 'https://biblebaptistekklesiaofkawit.xyz/', desc: 'Previous System: Comprehensive administration platform for church operations.', tags: ['Vue.js', 'Node.js', 'MySQL'] },
                   { title: 'Baby Bliss Booking', img: project2Image, url: 'https://babyblissbooking.vercel.app/', desc: 'Advanced appointment system for wellness and spa centers.', tags: ['React', 'Tailwind', 'Vercel'] },
                   { title: 'Event Registration System', img: project3Image, url: 'https://startuplab-event-registration.vercel.app/', desc: 'Streamlined registration platform for university and academic events.', tags: ['Laravel', 'PHP', 'MySQL'] }
-                ].slice(0, showAllProjects ? 5 : 2).map((p, i) => (
+                ].slice(0, showAllProjects ? 6 : 3).map((p, i) => (
                   <motion.div 
                     key={i} 
                     initial={{ opacity: 0, y: 20 }}
