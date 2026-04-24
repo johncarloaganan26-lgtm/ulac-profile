@@ -7,33 +7,31 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
 app.use(cors());
 app.use(bodyParser.json());
 
 // Reuse the contact logic
 const contactHandler = require('./api/contact');
+const testimonialHandler = require('./api/testimonial-thanks');
+const approvalHandler = require('./api/testimonial-approved');
 app.post('/api/contact', contactHandler);
+app.post('/api/testimonial-thanks', testimonialHandler);
+app.post('/api/testimonial-approved', approvalHandler);
 
 // View Counter Persistence
 const VIEWS_FILE = path.join(__dirname, 'views.txt');
 
-app.get('/api/views', (req, res) => {
-  let count = 0;
+app.get('/api/views', async (req, res) => {
   try {
-    if (fs.existsSync(VIEWS_FILE)) {
-      count = parseInt(fs.readFileSync(VIEWS_FILE, 'utf8')) || 0;
-    }
-  } catch (e) { console.error('Error reading views:', e); }
-
-  count++;
-  
-  try {
-    fs.writeFileSync(VIEWS_FILE, count.toString());
-  } catch (e) { console.error('Error saving views:', e); }
-
-  res.json({ views: count });
+    const response = await fetch('https://api.counterapi.dev/v1/johncarlo-portfolio/views/up');
+    const data = await response.json();
+    res.json({ views: data.count || 0 });
+  } catch (e) {
+    console.error('Error with global views:', e);
+    res.json({ views: 0 });
+  }
 });
 
 // Serve static files from the React app (if built)
@@ -49,6 +47,7 @@ app.get('*', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-  console.log(`Contact API is available at http://localhost:${port}/api/contact`);
+  console.log(`🚀 BACKEND ALIVE: Server is running on port ${port}`);
+  console.log(`📧 Contact API: http://localhost:${port}/api/contact`);
+  console.log(`📧 Testimonial API: http://localhost:${port}/api/testimonial-thanks`);
 });

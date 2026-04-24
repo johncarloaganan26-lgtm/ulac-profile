@@ -10,8 +10,11 @@ module.exports = async (req, res) => {
   console.log(`Email Inquiry received from ${name} (${email}). Preparing to send...`);
 
   if (!name || !email || !subject || !message) {
+    console.warn(`⚠️  Rejected inquiry: Missing fields from ${name || 'unknown'}`);
     return res.status(400).json({ message: 'Missing fields' });
   }
+
+  console.log(`📨 Attempting to send Inquiry email to ${email}...`);
 
   // Configure transporter using SMTP credentials from .env
   const transporter = nodemailer.createTransport({
@@ -59,42 +62,9 @@ module.exports = async (req, res) => {
       `,
     });
 
-    // Send a confirmation email to the sender
-    await transporter.sendMail({
-      from: `"John Carlo Aganan" <${process.env.SMTP_USER}>`,
-      to: email,
-      subject: "Thank you for reaching out!",
-      html: `
-        <div style="background-color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #111827; max-width: 600px; margin: 0 auto; padding: 60px 20px;">
-          <div style="border-left: 8px solid #000; padding: 40px; background-color: #fafaf9;">
-            <p style="font-size: 14px; font-weight: 800; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 40px; color: #444;">JC. PORTFOLIO</p>
-            
-            <h1 style="font-size: 42px; font-weight: 900; line-height: 1; margin: 0 0 20px 0; letter-spacing: -2px;">Hello, ${name.split(' ')[0]}.</h1>
-            
-            <p style="font-size: 18px; line-height: 1.6; color: #374151; margin-bottom: 40px;">
-              I have received your inquiry regarding <strong>"${subject}"</strong>. Your message has been prioritized, and I will be reviewing your requirements shortly.
-            </p>
-            
-            <div style="margin-bottom: 50px;">
-              <a href="https://biblebaptistekklesiaofkawit.xyz/" style="display: inline-block; background-color: #000; color: #fff; text-decoration: none; padding: 18px 30px; font-weight: 800; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;">View Latest Project</a>
-            </div>
-            
-            <div style="border-top: 1px solid #ddd; padding-top: 30px;">
-              <p style="font-size: 16px; font-weight: 700; margin: 0;">John Carlo Aganan</p>
-              <p style="font-size: 14px; color: #6b7280; margin: 5px 0 0;">Full-Stack Software Engineer</p>
-            </div>
-          </div>
-          
-          <div style="margin-top: 40px; text-align: center;">
-            <p style="font-size: 12px; color: #9ca3af;">&copy; 2026 Crafted with precision in Cavite, Philippines.</p>
-          </div>
-        </div>
-      `
-    });
-
     console.log(`Success: Inquiry from ${name} (<${email}>) sent to ${process.env.SMTP_TO || process.env.SMTP_USER}.`);
-    console.log(`Success: Thank-you email sent to ${email}.`);
 
+    console.log(`✅ SUCCESS: Inquiry emails sent for ${name}`);
     return res.status(200).json({ message: 'Email sent successfully!' });
   } catch (error) {
     console.error('Error sending email:', error);

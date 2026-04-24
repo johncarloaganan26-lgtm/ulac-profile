@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaEnvelope, FaMapMarkerAlt, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaLinkedin, FaBars, FaTimes, FaFacebook, FaInstagram, FaTwitter, FaCommentDots, FaPython, FaCalendarAlt, FaChevronRight, FaChevronDown, FaEye } from 'react-icons/fa';
+import { supabase } from './supabaseClient';
+import { FaEnvelope, FaMapMarkerAlt, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaLinkedin, FaBars, FaTimes, FaFacebook, FaInstagram, FaTwitter, FaCommentDots, FaPython, FaCalendarAlt, FaChevronRight, FaChevronDown, FaEye, FaStar } from 'react-icons/fa';
 import { MdVerified } from 'react-icons/md';
 import { SiTailwindcss, SiExpress, SiAxios, SiMysql, SiVercel, SiSupabase, SiPostgresql, SiVite, SiLaravel, SiPython, SiNextdotjs, SiFramer } from 'react-icons/si';
 
@@ -17,6 +18,8 @@ import project3Image from './Screenshot 2026-02-27 090848.png';
 import project4Image from './startuplab-event-creation.png';
 import bigbrewPOSImage from './bigbrew-pos.png';
 import artisanoImage from './artisano-pizzeria.png';
+import nagcoImage from './nagco-management.png';
+import nagcoDashboardImage from './nagco-dashboard.png';
 import logoImage from './logo.png';
 
 // Unique Animation Skill Icon Component
@@ -204,10 +207,18 @@ function App() {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [view, setView] = useState('portfolio'); // 'portfolio' or 'mis'
   const [misView, setMisView] = useState('dashboard');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(null); 
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const [formStatus, setFormStatus] = useState({ loading: false, success: false, error: false, message: '' });
   const [totalViews, setTotalViews] = useState(0);
+  const [user, setUser] = useState(null);
+  const [inquiries, setInquiries] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
+  const [feedbackData, setFeedbackData] = useState({ name: '', email: '', role: '', content: '', rating: 5 });
+  const [feedbackStatus, setFeedbackStatus] = useState({ loading: false, success: false });
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
+  const [loginError, setLoginError] = useState('');
   const typedRef = useRef(null);
 
   useEffect(() => {
@@ -217,17 +228,86 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const handleHash = () => {
-      if (window.location.hash === '#login') {
+    const handleLocation = () => {
+      const path = window.location.pathname;
+      const hash = window.location.hash;
+      if (path === '/ulac' || hash === '#login') {
         setView('mis');
       } else {
         setView('portfolio');
       }
     };
-    window.addEventListener('hashchange', handleHash);
-    handleHash();
-    return () => window.removeEventListener('hashchange', handleHash);
+
+    // 1. Check for Master Key session first (Highest Priority)
+    const masterSession = localStorage.getItem('ulac_session');
+    if (masterSession) {
+      const parsedUser = JSON.parse(masterSession);
+      setUser(parsedUser);
+      setIsLoggedIn(true);
+    }
+
+    // 2. Check Supabase session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        setUser(session.user);
+        setIsLoggedIn(true);
+      } else if (!masterSession) {
+        setIsLoggedIn(false);
+      }
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        setUser(session.user);
+        setIsLoggedIn(true);
+      } else if (!localStorage.getItem('ulac_session')) {
+        setIsLoggedIn(false);
+        setUser(null);
+      }
+    });
+
+    window.addEventListener('hashchange', handleLocation);
+    window.addEventListener('popstate', handleLocation);
+    handleLocation();
+
+    return () => {
+      window.removeEventListener('hashchange', handleLocation);
+      window.removeEventListener('popstate', handleLocation);
+      subscription.unsubscribe();
+    };
   }, []);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoginError('');
+
+    // Master Key Bypass
+    if (loginForm.email === 'ulac' && loginForm.password === 'ulac') {
+      const masterUser = { email: 'ulac', id: 'master-admin' };
+      setIsLoggedIn(true);
+      setUser(masterUser);
+      localStorage.setItem('ulac_session', JSON.stringify(masterUser));
+      return;
+    }
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email: loginForm.email,
+      password: loginForm.password,
+    });
+    if (error) setLoginError(error.message);
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    localStorage.removeItem('ulac_session'); // Clear master session
+    setIsLoggedIn(false);
+    setUser(null);
+    setView('portfolio');
+    window.location.hash = '';
+    if (window.location.pathname === '/ulac') {
+      window.history.pushState({}, '', '/');
+    }
+  };
 
   const handleInquiryClick = (service) => {
     setCurrentService(service);
@@ -242,26 +322,148 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormStatus({ loading: true, success: false, error: false, message: '' });
-    const submissionData = {
-      ...formData,
-      subject: formData.subject || `New message from ${formData.name}`
-    };
+    setFormStatus({ ...formStatus, loading: true });
+
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(submissionData),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setFormStatus({ loading: false, success: true, error: false, message: 'Message sent! Check your inbox.' });
-        setFormData({ name: '', email: '', subject: '', message: '' });
-      } else {
-        setFormStatus({ loading: false, success: false, error: true, message: data.message || 'Error sending message.' });
+      const { error } = await supabase.from('inquiries').insert([
+        { 
+          name: formData.name, 
+          email: formData.email, 
+          subject: currentService?.title || 'General Inquiry', 
+          message: formData.message,
+          status: 'Pending'
+        }
+      ]);
+
+      if (error) throw error;
+
+      // Trigger Email Notification via local server
+      try {
+        console.log("📨 Sending Inquiry Email to server...");
+        const emailRes = await fetch('http://localhost:5001/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            subject: currentService?.title || 'General Inquiry',
+            message: formData.message
+          })
+        });
+        const emailData = await emailRes.json();
+        console.log("📩 Server response:", emailData);
+      } catch (emailErr) {
+        console.error("❌ Email notification failed:", emailErr);
       }
-    } catch (error) {
-      setFormStatus({ loading: false, success: false, error: true, message: 'Something went wrong.' });
+
+      setFormStatus({ loading: false, success: true, error: false, message: 'Your message has been sent. Thank you!' });
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      
+      // Auto-refresh MIS if user is logged in
+      if (isLoggedIn) fetchInquiries();
+
+      setTimeout(() => setFormStatus({ ...formStatus, success: false }), 5000);
+    } catch (err) {
+      setFormStatus({ loading: false, success: false, error: true, message: err.message || 'Something went wrong. Please try again later.' });
+    }
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchInquiries();
+      fetchTestimonials();
+    }
+  }, [isLoggedIn]);
+
+  const fetchInquiries = async () => {
+    const { data, error } = await supabase.from('inquiries').select('*').order('created_at', { ascending: false });
+    if (!error) setInquiries(data);
+  };
+
+  const fetchTestimonials = async () => {
+    const { data, error } = await supabase.from('testimonials').select('*').order('created_at', { ascending: false });
+    if (!error) setTestimonials(data);
+  };
+
+  const toggleTestimonialApproval = async (id, currentStatus) => {
+    const { error } = await supabase.from('testimonials').update({ is_approved: !currentStatus }).eq('id', id);
+    if (!error) {
+      // If we just approved it (status was false, now true)
+      if (!currentStatus) {
+        const testimonial = testimonials.find(t => t.id === id);
+        if (testimonial && testimonial.email) {
+          try {
+            console.log(`📨 Sending Approval Notification to ${testimonial.email}...`);
+            const emailRes = await fetch('http://localhost:5001/api/testimonial-approved', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name: testimonial.name, email: testimonial.email })
+            });
+            const emailData = await emailRes.json();
+            console.log("📩 Server response:", emailData);
+          } catch (e) { console.error("❌ Failed to send approval email:", e); }
+        }
+      }
+      fetchTestimonials();
+    }
+  };
+
+  const deleteInquiry = async (id) => {
+    const { error } = await supabase.from('inquiries').delete().eq('id', id);
+    if (!error) fetchInquiries();
+  };
+
+  const deleteTestimonial = async (id) => {
+    const { error } = await supabase.from('testimonials').delete().eq('id', id);
+    if (!error) fetchTestimonials();
+  };
+
+  const handleFeedbackSubmit = async (e) => {
+    e.preventDefault();
+    setFeedbackStatus({ loading: true, success: false });
+
+    try {
+      const { error } = await supabase.from('testimonials').insert([
+        { 
+          name: feedbackData.name, 
+          email: feedbackData.email,
+          role: feedbackData.role, 
+          content: feedbackData.content,
+          rating: feedbackData.rating,
+          is_approved: false 
+        }
+      ]);
+
+      if (error) throw error;
+
+      // Send Thank You Email via local server
+      try {
+        console.log("📨 Sending Testimonial Thank You Email to server...");
+        const emailRes = await fetch('http://localhost:5001/api/testimonial-thanks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: feedbackData.name,
+            email: feedbackData.email,
+            rating: feedbackData.rating,
+            content: feedbackData.content
+          })
+        });
+        const emailData = await emailRes.json();
+        console.log("📩 Server response:", emailData);
+      } catch (emailErr) {
+        console.error("❌ Email notification failed:", emailErr);
+      }
+
+      setFeedbackStatus({ loading: false, success: true });
+      setFeedbackData({ name: '', email: '', role: '', content: '', rating: 5 });
+      setTimeout(() => {
+        setIsFeedbackModalOpen(false);
+        setFeedbackStatus({ loading: false, success: false });
+      }, 3000);
+    } catch (err) {
+      alert("Error submitting feedback: " + err.message);
+      setFeedbackStatus({ loading: false, success: false });
     }
   };
 
@@ -282,10 +484,16 @@ function App() {
 
     const fetchViews = async () => {
       try {
-        const response = await fetch('/api/views');
-        const data = await response.json();
-        setTotalViews(data.views);
-      } catch (error) { console.error('Error fetching views:', error); }
+        // 1. Fetch current views
+        const { data, error } = await supabase.from('site_stats').select('views_count').eq('id', 1).single();
+        if (data && !error) {
+          const newCount = data.views_count + 1;
+          setTotalViews(newCount);
+          
+          // 2. Increment views (simple update)
+          await supabase.from('site_stats').update({ views_count: newCount }).eq('id', 1);
+        }
+      } catch (error) { console.error('Error with views:', error); }
     };
     fetchViews();
 
@@ -322,26 +530,152 @@ function App() {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // 0. Loading state while checking auth
+  if (isLoggedIn === null) {
+    return (
+      <div style={{ height: '100vh', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: '40px', height: '4px', background: '#000', borderRadius: '2px' }} />
+      </div>
+    );
+  }
+
   if (view === 'mis') {
     if (!isLoggedIn) {
       return (
-        <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', color: '#fff' }}>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ width: '100%', maxWidth: '400px', padding: '3rem', border: '1.5px solid #333' }}>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: '900', marginBottom: '2rem', letterSpacing: '4px' }}>MIS LOGIN</h1>
-            <input type="password" placeholder="Access Key" onKeyDown={(e) => e.key === 'Enter' && setIsLoggedIn(true)} style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: '2px solid #fff', padding: '1rem 0', color: '#fff', fontSize: '1.2rem', outline: 'none' }} />
-            <p style={{ marginTop: '1rem', fontSize: '0.8rem', opacity: 0.5 }}>Press Enter to access management console</p>
-          </motion.div>
+        <div style={{ 
+          height: '100vh', 
+          display: 'flex', 
+          flexDirection: 'column',
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          background: '#ffffff', 
+          color: '#000',
+          fontFamily: 'var(--default-font)'
+        }}>
+          <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+            <h1 style={{ 
+              fontSize: '4rem', 
+              fontWeight: '900', 
+              letterSpacing: '-2px', 
+              color: '#000',
+              lineHeight: '1',
+              marginBottom: '1rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.8rem',
+              flexWrap: 'wrap'
+            }}>
+              <span>Welcome Lord God</span>
+              <motion.span
+                onMouseEnter={(e) => {
+                  const x = (Math.random() - 0.5) * 200;
+                  const y = (Math.random() - 0.5) * 200;
+                  e.currentTarget.style.transform = `translate(${x}px, ${y}px)`;
+                }}
+                style={{ 
+                  color: '#0866ff', 
+                  cursor: 'pointer',
+                  display: 'inline-block',
+                  transition: 'transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                }}
+              >
+                Ulac
+              </motion.span>
+            </h1>
+            <p style={{ fontSize: '1.2rem', fontWeight: '500', opacity: 0.4 }}>Access your management console</p>
+          </div>
+
+          <div style={{ width: '100%', maxWidth: '400px', padding: '0 2rem' }}>
+            <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <input 
+                  type="text" 
+                  placeholder="Username or Email" 
+                  value={loginForm.email}
+                  onChange={(e) => setLoginForm({...loginForm, email: e.target.value})}
+                  style={{ 
+                    width: '100%', 
+                    background: '#f8f9fa', 
+                    border: 'none', 
+                    padding: '1.2rem 1.5rem', 
+                    borderRadius: '12px',
+                    fontSize: '1.1rem', 
+                    outline: 'none',
+                    fontWeight: '500'
+                  }} 
+                  required
+                />
+                <input 
+                  type="password" 
+                  placeholder="Password" 
+                  value={loginForm.password}
+                  onChange={(e) => setLoginForm({...loginForm, password: e.target.value})}
+                  style={{ 
+                    width: '100%', 
+                    background: '#f8f9fa', 
+                    border: 'none', 
+                    padding: '1.2rem 1.5rem', 
+                    borderRadius: '12px',
+                    fontSize: '1.1rem', 
+                    outline: 'none',
+                    fontWeight: '500'
+                  }} 
+                  required
+                />
+              </div>
+              
+              {loginError && <p style={{ color: '#ff4b4b', fontSize: '0.9rem', fontWeight: '700', textAlign: 'center' }}>{loginError}</p>}
+              
+              <button 
+                type="submit"
+                style={{ 
+                  background: '#000', 
+                  color: '#fff', 
+                  border: 'none', 
+                  padding: '1.2rem', 
+                  fontWeight: '700', 
+                  fontSize: '1.1rem', 
+                  borderRadius: '12px',
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s'
+                }}
+              >
+                Log in
+              </button>
+
+              <button 
+                type="button"
+                onClick={() => {
+                  setView('portfolio');
+                  window.location.hash = '';
+                  if (window.location.pathname === '/ulac') window.history.pushState({}, '', '/');
+                }}
+                style={{ 
+                  background: 'transparent', 
+                  color: '#000', 
+                  border: 'none', 
+                  fontWeight: '600', 
+                  fontSize: '0.9rem', 
+                  cursor: 'pointer',
+                  opacity: 0.3
+                }}
+              >
+                Return to portfolio
+              </button>
+            </form>
+          </div>
         </div>
       );
     }
 
     return (
-      <div style={{ minHeight: '100vh', background: '#050505', color: '#fff', display: 'flex', flexDirection: isMobile ? 'column' : 'row' }}>
+      <div style={{ minHeight: '100vh', background: '#ffffff', color: '#000', display: 'flex', flexDirection: isMobile ? 'column' : 'row', fontFamily: 'var(--default-font)' }}>
         {/* Sidebar */}
         <div style={{ 
           width: isMobile ? '100%' : '280px', 
-          borderRight: isMobile ? 'none' : '1px solid #222', 
-          borderBottom: isMobile ? '1px solid #222' : 'none',
+          borderRight: isMobile ? 'none' : '1.5px solid #eee', 
+          borderBottom: isMobile ? '1.5px solid #eee' : 'none',
           padding: isMobile ? '1.5rem' : '3rem 2rem', 
           display: 'flex', 
           flexDirection: isMobile ? 'row' : 'column', 
@@ -349,80 +683,163 @@ function App() {
           alignItems: isMobile ? 'center' : 'stretch',
           gap: '2rem' 
         }}>
-          <h2 style={{ fontSize: '1.2rem', fontWeight: '900', letterSpacing: '2px', margin: 0 }}>JC. MIS</h2>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
+              <h2 style={{ fontSize: '1.4rem', fontWeight: '900', letterSpacing: '-1px', margin: 0 }}>JC. MIS</h2>
+              <MdVerified style={{ color: '#0ea5e9', fontSize: '1.2rem' }} />
+            </div>
+            <p style={{ fontSize: '0.7rem', fontWeight: '800', opacity: 0.4, textTransform: 'uppercase', letterSpacing: '2px' }}>Admin Console</p>
+          </div>
+
           {isMobile ? (
             <div style={{ display: 'flex', gap: '1rem' }}>
                <select 
                  value={misView} 
                  onChange={(e) => setMisView(e.target.value)} 
-                 style={{ background: '#111', color: '#fff', border: '1px solid #333', padding: '0.4rem', borderRadius: '4px' }}
+                 style={{ background: '#f5f5f5', color: '#000', border: '1px solid #ddd', padding: '0.4rem', borderRadius: '4px', fontWeight: '700' }}
                >
-                 {['dashboard', 'inquiries', 'projects', 'settings'].map(m => <option key={m} value={m}>{m.toUpperCase()}</option>)}
+                 {['dashboard', 'inquiries', 'testimonials', 'projects', 'settings'].map(m => <option key={m} value={m}>{m.toUpperCase()}</option>)}
                </select>
-               <button onClick={() => window.location.hash = ''} style={{ background: 'transparent', border: '1px solid #ed4245', color: '#ed4245', padding: '0.4rem 0.8rem', fontWeight: '800', fontSize: '0.7rem', cursor: 'pointer' }}>EXIT</button>
+               <button onClick={handleLogout} style={{ background: 'transparent', border: '1px solid #ff4b4b', color: '#ff4b4b', padding: '0.4rem 0.8rem', fontWeight: '800', fontSize: '0.7rem', cursor: 'pointer' }}>EXIT</button>
             </div>
           ) : (
             <>
-              <nav style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {['dashboard', 'inquiries', 'projects', 'settings'].map(m => (
+              <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                {['dashboard', 'inquiries', 'testimonials'].map(m => (
                   <button 
                     key={m} 
                     onClick={() => setMisView(m)}
-                    style={{ background: 'transparent', border: 'none', color: misView === m ? '#fff' : '#555', textAlign: 'left', fontSize: '0.9rem', fontWeight: '800', textTransform: 'uppercase', cursor: 'pointer', padding: '0.5rem 0' }}
+                    style={{ 
+                      background: misView === m ? '#000' : 'transparent', 
+                      border: 'none', 
+                      color: misView === m ? '#fff' : '#000', 
+                      textAlign: 'left', 
+                      fontSize: '0.85rem', 
+                      fontWeight: '700', 
+                      textTransform: 'uppercase', 
+                      cursor: 'pointer', 
+                      padding: '0.8rem 1rem',
+                      borderRadius: '8px',
+                      transition: 'all 0.2s'
+                    }}
                   >
                     {m}
                   </button>
                 ))}
               </nav>
-              <button onClick={() => window.location.hash = ''} style={{ marginTop: 'auto', background: 'transparent', border: '1px solid #333', color: '#fff', padding: '0.8rem', fontWeight: '800', fontSize: '0.8rem', cursor: 'pointer' }}>EXIT MIS</button>
+              <button onClick={handleLogout} style={{ marginTop: 'auto', background: 'transparent', border: '1.5px solid #000', color: '#000', padding: '1rem', fontWeight: '800', fontSize: '0.8rem', cursor: 'pointer', borderRadius: '8px' }}>SIGN OUT</button>
             </>
           )}
         </div>
 
         {/* Main Content */}
-        <div style={{ flex: 1, padding: isMobile ? '2rem 1rem' : '4rem' }}>
-          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-            <h1 style={{ fontSize: isMobile ? '1.8rem' : '2.5rem', fontWeight: '900', marginBottom: isMobile ? '1.5rem' : '3rem', textTransform: 'uppercase' }}>{misView}</h1>
+        <div style={{ flex: 1, padding: isMobile ? '2rem 1.5rem' : '4rem' }}>
+          <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+            <div style={{ marginBottom: '3rem' }}>
+              <h1 style={{ fontSize: isMobile ? '2rem' : '2.8rem', fontWeight: '900', textTransform: 'capitalize', letterSpacing: '-1.5px' }}>{misView}</h1>
+              <div style={{ width: '40px', height: '4px', background: '#000', marginTop: '0.5rem' }} />
+            </div>
             
             {misView === 'dashboard' && (
               <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: isMobile ? '1rem' : '2rem' }}>
                 {[
-                  { label: 'Total Inquiries', value: '12' },
-                  { label: 'Active Projects', value: '4' },
+                  { label: 'Total Inquiries', value: inquiries.length },
+                  { label: 'Active Testimonials', value: testimonials.filter(t => t.is_approved).length },
                   { label: 'Total Views', value: totalViews }
                 ].map((stat, i) => (
-                  <div key={i} style={{ padding: '1.5rem', border: '1px solid #222' }}>
-                    <p style={{ fontSize: '0.7rem', fontWeight: '800', opacity: 0.5, textTransform: 'uppercase' }}>{stat.label}</p>
-                    <p style={{ fontSize: isMobile ? '2rem' : '3rem', fontWeight: '900', marginTop: '0.5rem' }}>{stat.value}</p>
+                  <div key={i} style={{ padding: '2rem', border: '1.5px solid #eee', borderRadius: '12px', background: '#fcfcfc' }}>
+                    <p style={{ fontSize: '0.75rem', fontWeight: '800', opacity: 0.4, textTransform: 'uppercase', letterSpacing: '1px' }}>{stat.label}</p>
+                    <p style={{ fontSize: isMobile ? '2.5rem' : '3.5rem', fontWeight: '900', marginTop: '0.5rem', letterSpacing: '-2px' }}>{stat.value}</p>
                   </div>
                 ))}
               </div>
             )}
 
             {misView === 'inquiries' && (
-              <div style={{ border: '1px solid #222', overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '500px' }}>
+              <div style={{ border: '1.5px solid #eee', borderRadius: '12px', overflow: 'hidden' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '600px' }}>
                   <thead>
-                    <tr style={{ background: '#111' }}>
-                      <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.8rem', fontWeight: '800' }}>SENDER</th>
-                      <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.8rem', fontWeight: '800' }}>SERVICE</th>
-                      <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.8rem', fontWeight: '800' }}>STATUS</th>
-                      <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.8rem', fontWeight: '800' }}>ACTION</th>
+                    <tr style={{ background: '#fafafa', borderBottom: '1.5px solid #eee' }}>
+                      <th style={{ padding: '1.2rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: '800', opacity: 0.5 }}>SENDER</th>
+                      <th style={{ padding: '1.2rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: '800', opacity: 0.5 }}>SUBJECT</th>
+                      <th style={{ padding: '1.2rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: '800', opacity: 0.5 }}>STATUS</th>
+                      <th style={{ padding: '1.2rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: '800', opacity: 0.5 }}>ACTION</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {[
-                      { name: 'Alice Tan', service: 'Full-Stack System', status: 'Pending' },
-                      { name: 'Mark Wilson', service: 'E-commerce', status: 'In Review' },
-                      { name: 'Sarah Lee', service: 'API Development', status: 'Completed' }
-                    ].map((row, i) => (
-                      <tr key={i} style={{ borderTop: '1px solid #222' }}>
-                        <td style={{ padding: '1.2rem', fontSize: '0.9rem' }}>{row.name}</td>
-                        <td style={{ padding: '1.2rem', fontSize: '0.9rem' }}>{row.service}</td>
-                        <td style={{ padding: '1.2rem', fontSize: '0.9rem' }}><span style={{ background: '#222', padding: '0.2rem 0.5rem', fontSize: '0.7rem' }}>{row.status}</span></td>
-                        <td style={{ padding: '1.2rem', fontSize: '0.9rem' }}><button style={{ background: 'transparent', border: 'none', color: '#fff', textDecoration: 'underline', cursor: 'pointer' }}>View Details</button></td>
+                    {inquiries.length > 0 ? inquiries.map((row, i) => (
+                      <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
+                        <td style={{ padding: '1.5rem 1.2rem' }}>
+                          <div style={{ fontWeight: '800', fontSize: '1rem' }}>{row.name}</div>
+                          <div style={{ fontSize: '0.8rem', opacity: 0.5, fontWeight: '500' }}>{row.email}</div>
+                        </td>
+                        <td style={{ padding: '1.5rem 1.2rem', fontSize: '0.95rem', fontWeight: '500' }}>{row.subject}</td>
+                        <td style={{ padding: '1.5rem 1.2rem' }}>
+                          <span style={{ background: '#f0f0f0', padding: '0.4rem 0.8rem', fontSize: '0.7rem', fontWeight: '800', borderRadius: '4px' }}>{row.status}</span>
+                        </td>
+                        <td style={{ padding: '1.5rem 1.2rem' }}>
+                          <button onClick={() => deleteInquiry(row.id)} style={{ background: 'transparent', border: 'none', color: '#ff4b4b', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '700' }}>Delete</button>
+                        </td>
                       </tr>
-                    ))}
+                    )) : (
+                      <tr><td colSpan="4" style={{ padding: '4rem', textAlign: 'center', opacity: 0.5, fontWeight: '700' }}>No inquiries yet</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {misView === 'testimonials' && (
+              <div style={{ border: '1.5px solid #eee', borderRadius: '12px', overflow: 'hidden' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '600px' }}>
+                  <thead>
+                    <tr style={{ background: '#fafafa', borderBottom: '1.5px solid #eee' }}>
+                      <th style={{ padding: '1.2rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: '800', opacity: 0.5 }}>CLIENT</th>
+                      <th style={{ padding: '1.2rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: '800', opacity: 0.5 }}>CONTENT</th>
+                      <th style={{ padding: '1.2rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: '800', opacity: 0.5 }}>STATUS</th>
+                      <th style={{ padding: '1.2rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: '800', opacity: 0.5 }}>ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {testimonials.length > 0 ? testimonials.map((row, i) => (
+                      <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
+                        <td style={{ padding: '1.5rem 1.2rem' }}>
+                          <div style={{ fontWeight: '800', fontSize: '1rem' }}>{row.name}</div>
+                          <div style={{ fontSize: '0.8rem', opacity: 0.5, fontWeight: '500' }}>{row.role}</div>
+                        </td>
+                        <td style={{ padding: '1.5rem 1.2rem', fontSize: '0.9rem', fontWeight: '500', maxWidth: '300px', lineHeight: '1.4' }}>{row.content}</td>
+                        <td style={{ padding: '1.5rem 1.2rem' }}>
+                          <span style={{ 
+                            background: row.is_approved ? '#42b72a' : '#f0f0f0', 
+                            padding: '0.4rem 0.8rem', 
+                            fontSize: '0.7rem',
+                            fontWeight: '800',
+                            borderRadius: '4px',
+                            color: row.is_approved ? '#fff' : '#000'
+                          }}>
+                            {row.is_approved ? 'APPROVED' : 'PENDING'}
+                          </span>
+                        </td>
+                        <td style={{ padding: '1.5rem 1.2rem' }}>
+                          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                            <button 
+                              onClick={() => toggleTestimonialApproval(row.id, row.is_approved)} 
+                              style={{ background: 'transparent', border: 'none', color: '#0866ff', textDecoration: 'underline', cursor: 'pointer', fontWeight: '700', fontSize: '0.85rem' }}
+                            >
+                              {row.is_approved ? 'Reject' : 'Approve'}
+                            </button>
+                            <button 
+                              onClick={() => deleteTestimonial(row.id)} 
+                              style={{ background: 'transparent', border: 'none', color: '#ff4b4b', textDecoration: 'underline', cursor: 'pointer', fontWeight: '700', fontSize: '0.85rem' }}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    )) : (
+                      <tr><td colSpan="4" style={{ padding: '4rem', textAlign: 'center', opacity: 0.5, fontWeight: '700' }}>No feedback yet</td></tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -517,14 +934,15 @@ function App() {
           </div>
 
           <img 
-            src={`${process.env.PUBLIC_URL}/dsa.jpg`} 
+            src={darkMode ? `${process.env.PUBLIC_URL}/dsa-dark.png` : `${process.env.PUBLIC_URL}/dsa.jpg`} 
             alt="Profile" 
             style={{ 
               width: isMobile ? '120px' : '220px', 
               height: isMobile ? '120px' : '220px', 
               objectFit: 'cover', 
               borderRadius: '4px',
-              flexShrink: 0
+              flexShrink: 0,
+              transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
             }} 
           />
           
@@ -545,6 +963,10 @@ function App() {
                 <FaEye size={12} />
                 <span style={{ fontWeight: '800' }}>{totalViews}</span>
                 <span style={{ textTransform: 'uppercase', letterSpacing: '1px' }}>Views</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-primary)', fontSize: '0.8rem', opacity: 0.5, borderLeft: '1.5px solid var(--border-primary)', paddingLeft: '1.2rem' }}>
+                <FaCalendarAlt size={12} />
+                <span style={{ textTransform: 'uppercase', letterSpacing: '1px' }}>Updated: April 24, 2026</span>
               </div>
             </div>
 
@@ -678,13 +1100,14 @@ function App() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
                 {[ 
+                  { title: 'NAgCO Loan Management System', img: nagcoDashboardImage, url: 'https://nagcoloanmanagementsystem.vercel.app/', desc: 'A comprehensive loan management platform for the Napilihan Agriculture Cooperative, featuring automated workflows and real-time tracking.', tags: ['Next.js', 'Tailwind', 'Supabase'] },
                   { title: 'Artisano & Co. Pizzeria', img: artisanoImage, url: 'https://pizza-theta-inky.vercel.app/', desc: 'A premium digital presence for an artisanal pizzeria, featuring a cinematic design and Next.js performance.', tags: ['Next.js', 'Tailwind', 'Framer Motion'] },
                   { title: 'BigBrew POS System', img: bigbrewPOSImage, url: 'https://brew-sxrs.vercel.app/', desc: 'Coffee Shop Point of Sale System with Real-Time Analytics Dashboard.', tags: ['React', 'Vite', 'Tailwind', 'Node.js'] },
                   { title: 'StartupLab Ticketing System', img: project4Image, url: 'https://startuplab-event-creation.vercel.app/', desc: 'Previous System: End-to-end event ticketing and management platform.', tags: ['React', 'Node.js', 'PostgreSQL'] },
                   { title: 'BBEK Administration System', img: project1Image, url: 'https://biblebaptistekklesiaofkawit.xyz/', desc: 'Previous System: Comprehensive administration platform for church operations.', tags: ['Vue.js', 'Node.js', 'MySQL'] },
                   { title: 'Baby Bliss Booking', img: project2Image, url: 'https://babyblissbooking.vercel.app/', desc: 'Advanced appointment system for wellness and spa centers.', tags: ['React', 'Tailwind', 'Vercel'] },
                   { title: 'Event Registration System', img: project3Image, url: 'https://startuplab-event-registration.vercel.app/', desc: 'Streamlined registration platform for university and academic events.', tags: ['Laravel', 'PHP', 'MySQL'] }
-                ].slice(0, showAllProjects ? 6 : 3).map((p, i) => (
+                ].slice(0, showAllProjects ? 9 : 3).map((p, i) => (
                   <motion.div 
                     key={i} 
                     initial={{ opacity: 0, y: 20 }}
@@ -727,8 +1150,15 @@ function App() {
 
             <section id="experience">
               <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '2rem', color: 'var(--text-primary)' }}>Experience</h2>
-              <div style={{ padding: '2rem', border: '1.5px dashed var(--border-primary)', textAlign: 'center', opacity: 0.6 }}>
-                <p style={{ fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>N/A FOR NOW</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                <div style={{ position: 'relative', paddingLeft: '1.5rem', borderLeft: '2.5px solid var(--border-primary)' }}>
+                  <div style={{ position: 'absolute', left: '-9.5px', top: '0', width: '16px', height: '16px', borderRadius: '50%', background: 'var(--text-primary)', border: '4px solid var(--bg-primary)' }} />
+                  <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--text-primary)' }}>Freelance Software Engineer</h3>
+                  <p style={{ fontSize: '0.9rem', fontWeight: '800', color: 'var(--text-primary)', opacity: 0.6, textTransform: 'uppercase', marginBottom: '0.8rem' }}>Freelance | April 23, 2026 - Present</p>
+                  <p style={{ fontSize: '1rem', color: 'var(--text-primary)', fontWeight: '500', lineHeight: '1.6' }}>
+                    Collaborating with a client to design and develop a comprehensive loan management system. Responsible for building user-centric features and ensuring robust system architecture.
+                  </p>
+                </div>
               </div>
             </section>
           </div>
@@ -818,6 +1248,106 @@ function App() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </section>
+
+        {/* What My Clients Say Section */}
+        <section id="testimonials" style={{ marginTop: '4rem', padding: '2rem 0' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+            <div>
+              <h2 style={{ fontSize: isMobile ? '2rem' : '2.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-1.5px', margin: 0 }}>What My Clients Say</h2>
+              <div style={{ width: '60px', height: '4px', background: 'var(--text-primary)', marginTop: '0.8rem' }} />
+            </div>
+            <button 
+              onClick={() => setIsFeedbackModalOpen(true)}
+              style={{ 
+                background: 'transparent', 
+                border: '1.5px solid var(--border-primary)', 
+                padding: '0.8rem 1.2rem', 
+                fontWeight: '800', 
+                fontSize: '0.8rem', 
+                color: 'var(--text-primary)', 
+                cursor: 'pointer',
+                textTransform: 'uppercase',
+                letterSpacing: '1px'
+              }}
+            >
+              Write a Review
+            </button>
+          </div>
+
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(320px, 1fr))', 
+            gap: '2rem' 
+          }}>
+            {testimonials.filter(t => t.is_approved).length > 0 ? (
+              testimonials.filter(t => t.is_approved).map((t, i) => (
+                <motion.div 
+                  key={t.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  style={{ 
+                    padding: '2rem', 
+                    background: 'var(--bg-card)', 
+                    border: '1.5px solid var(--border-primary)',
+                    borderRadius: '12px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '1.5rem',
+                    textAlign: 'left'
+                  }}
+                >
+                  {/* Stars at Top */}
+                  <div style={{ display: 'flex', gap: '4px' }}>
+                    {[...Array(t.rating || 5)].map((_, index) => (
+                      <FaStar key={index} style={{ color: '#f59e0b', fontSize: '1.1rem' }} />
+                    ))}
+                  </div>
+
+                  {/* Quote in Middle */}
+                  <p style={{ 
+                    fontSize: '1.05rem', 
+                    lineHeight: '1.7', 
+                    color: 'var(--text-primary)', 
+                    fontWeight: '500',
+                    margin: 0,
+                    opacity: 0.9
+                  }}>
+                    "{t.content}"
+                  </p>
+
+                  {/* Profile at Bottom */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: 'auto' }}>
+                    <div style={{ 
+                      width: '44px', 
+                      height: '44px', 
+                      borderRadius: '50%', 
+                      background: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899'][(t.email || t.name).length % 7], 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      color: '#fff',
+                      fontWeight: '700',
+                      fontSize: '0.9rem',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                    }}>
+                      {t.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: '800', fontSize: '0.95rem', color: 'var(--text-primary)' }}>{t.name}</div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: '600', opacity: 0.5 }}>{t.role}</div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div style={{ gridColumn: '1/-1', padding: '4rem', textAlign: 'center', border: '1.5px dashed var(--border-primary)', opacity: 0.5 }}>
+                <p style={{ fontWeight: '800', textTransform: 'uppercase', letterSpacing: '2px' }}>Awaiting first client feedback...</p>
+              </div>
+            )}
           </div>
         </section>
 
@@ -1009,6 +1539,106 @@ function App() {
                 <div style={{ fontSize: '0.8rem', color: '#666' }}>Performance Benchmark reached</div>
               </div>
             </motion.div>
+          )}
+        </AnimatePresence>
+        {/* Feedback Modal */}
+        <AnimatePresence>
+          {isFeedbackModalOpen && (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 10006, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+              <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                exit={{ opacity: 0 }} 
+                onClick={() => setIsFeedbackModalOpen(false)}
+                style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)' }} 
+              />
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                style={{ 
+                  width: '100%', 
+                  maxWidth: '500px', 
+                  background: '#ffffff', 
+                  border: '1.5px solid #000', 
+                  padding: '3rem', 
+                  position: 'relative',
+                  zIndex: 1
+                }}
+              >
+                <button onClick={() => setIsFeedbackModalOpen(false)} style={{ position: 'absolute', top: '1.5rem', right: '1.8rem', background: 'transparent', border: 'none', fontSize: '2rem', cursor: 'pointer', color: '#000' }}>×</button>
+                <h3 style={{ fontSize: '1.8rem', fontWeight: '900', color: '#000', marginBottom: '0.5rem', letterSpacing: '-1px' }}>Share Your Experience</h3>
+                <p style={{ fontSize: '0.9rem', color: '#000', opacity: 0.5, marginBottom: '2.5rem', fontWeight: '600' }}>
+                  Your feedback helps me improve and grow.
+                </p>
+                
+                <form onSubmit={handleFeedbackSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.8rem' }}>
+                  <div style={{ borderBottom: '1.5px solid #eee' }}>
+                    <label style={{ fontSize: '0.7rem', fontWeight: '900', opacity: 0.4, textTransform: 'uppercase' }}>Your Name</label>
+                    <input name="name" value={feedbackData.name} onChange={(e) => setFeedbackData({...feedbackData, name: e.target.value})} required type="text" placeholder="John Doe" style={{ width: '100%', background: 'transparent', border: 'none', padding: '0.8rem 0', fontSize: '1.1rem', color: '#000', outline: 'none', fontWeight: '600' }} />
+                  </div>
+                  <div style={{ borderBottom: '1.5px solid #eee' }}>
+                    <label style={{ fontSize: '0.7rem', fontWeight: '900', opacity: 0.4, textTransform: 'uppercase' }}>Email Address</label>
+                    <input name="email" value={feedbackData.email} onChange={(e) => setFeedbackData({...feedbackData, email: e.target.value})} required type="email" placeholder="john@example.com" style={{ width: '100%', background: 'transparent', border: 'none', padding: '0.8rem 0', fontSize: '1.1rem', color: '#000', outline: 'none', fontWeight: '600' }} />
+                  </div>
+                  <div style={{ borderBottom: '1.5px solid #eee' }}>
+                    <label style={{ fontSize: '0.7rem', fontWeight: '900', opacity: 0.4, textTransform: 'uppercase' }}>Your Role / Company</label>
+                    <input name="role" value={feedbackData.role} onChange={(e) => setFeedbackData({...feedbackData, role: e.target.value})} required type="text" placeholder="CEO at TechCorp" style={{ width: '100%', background: 'transparent', border: 'none', padding: '0.8rem 0', fontSize: '1.1rem', color: '#000', outline: 'none', fontWeight: '600' }} />
+                  </div>
+                  <div style={{ borderBottom: '1.5px solid #eee' }}>
+                    <label style={{ fontSize: '0.7rem', fontWeight: '900', opacity: 0.4, textTransform: 'uppercase' }}>Rating</label>
+                    <div style={{ display: 'flex', gap: '0.8rem', padding: '0.8rem 0' }}>
+                      {[1, 2, 3, 4, 5].map((num) => (
+                        <button 
+                          key={num} 
+                          type="button"
+                          onClick={() => setFeedbackData({ ...feedbackData, rating: num })}
+                          style={{ 
+                            background: 'transparent', 
+                            border: 'none', 
+                            cursor: 'pointer', 
+                            fontSize: '1.5rem',
+                            color: num <= feedbackData.rating ? '#fbbf24' : '#e5e7eb',
+                            transition: 'transform 0.2s'
+                          }}
+                        >
+                          <FaStar />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ borderBottom: '1.5px solid #eee' }}>
+                    <label style={{ fontSize: '0.7rem', fontWeight: '900', opacity: 0.4, textTransform: 'uppercase' }}>Your Feedback</label>
+                    <textarea name="content" value={feedbackData.content} onChange={(e) => setFeedbackData({...feedbackData, content: e.target.value})} required placeholder="What was it like working with me?" rows="4" style={{ width: '100%', background: 'transparent', border: 'none', padding: '0.8rem 0', fontSize: '1.1rem', color: '#000', outline: 'none', resize: 'none', fontWeight: '600' }}></textarea>
+                  </div>
+                  
+                  {feedbackStatus.success && (
+                    <div style={{ padding: '1rem', fontSize: '0.9rem', fontWeight: '800', color: '#10b981', background: 'rgba(16, 185, 129, 0.1)', border: '1.5px solid #10b981', textAlign: 'center' }}>
+                      Thank you! Your review is pending approval.
+                    </div>
+                  )}
+
+                  <button 
+                    type="submit"
+                    disabled={feedbackStatus.loading}
+                    style={{ 
+                      background: '#000', 
+                      color: '#fff', 
+                      border: 'none', 
+                      padding: '1.2rem', 
+                      fontWeight: '800', 
+                      fontSize: '0.9rem', 
+                      cursor: feedbackStatus.loading ? 'not-allowed' : 'pointer', 
+                      opacity: feedbackStatus.loading ? 0.7 : 1,
+                      textTransform: 'uppercase',
+                      letterSpacing: '1px'
+                    }}
+                  >
+                    {feedbackStatus.loading ? 'SUBMITTING...' : 'SUBMIT FEEDBACK'}
+                  </button>
+                </form>
+              </motion.div>
+            </div>
           )}
         </AnimatePresence>
       </main>
