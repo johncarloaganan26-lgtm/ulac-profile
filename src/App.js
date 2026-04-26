@@ -622,11 +622,16 @@ function App() {
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
   useEffect(() => {
+    document.body.classList.add('theme-transitioning');
     if (darkMode) {
       document.body.classList.add('dark-mode');
     } else {
       document.body.classList.remove('dark-mode');
     }
+    const timer = setTimeout(() => {
+      document.body.classList.remove('theme-transitioning');
+    }, 500);
+    return () => clearTimeout(timer);
   }, [darkMode]);
 
   const scrollToSection = (id) => {
@@ -1018,7 +1023,8 @@ function App() {
                 width: '64px', 
                 borderRadius: '0px',
                 padding: '2px',
-                border: '1px solid var(--border-primary)'
+                border: '1px solid var(--border-primary)',
+                transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             >
               <div style={{
@@ -1029,7 +1035,8 @@ function App() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: darkMode ? '#fff' : '#6b7280',
-                order: darkMode ? 2 : 1
+                order: darkMode ? 2 : 1,
+                transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
               }}>
                 {darkMode ? <FaMoon size={14} /> : <FaSun size={14} />}
               </div>
@@ -1037,18 +1044,44 @@ function App() {
             </div>
           </div>
 
-          <img 
-            src={darkMode ? `${process.env.PUBLIC_URL}/jc-sleeping.png` : `${process.env.PUBLIC_URL}/dsa.jpg`} 
-            alt="Profile" 
-            style={{ 
-              width: isMobile ? '120px' : '220px', 
-              height: isMobile ? '120px' : '220px', 
-              objectFit: 'cover', 
-              borderRadius: '4px',
-              flexShrink: 0,
-              transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
-            }} 
-          />
+          {/* Smooth Cross-fading Profile Image */}
+          <div style={{ 
+            width: isMobile ? '120px' : '220px', 
+            height: isMobile ? '120px' : '220px', 
+            position: 'relative', 
+            flexShrink: 0 
+          }}>
+            <img 
+              src={`${process.env.PUBLIC_URL}/dsa.jpg`} 
+              alt="Profile Light" 
+              style={{ 
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover', 
+                borderRadius: '4px',
+                opacity: darkMode ? 0 : 1,
+                transition: 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                zIndex: darkMode ? 0 : 1
+              }} 
+            />
+            <img 
+              src={`${process.env.PUBLIC_URL}/jc-sleeping.png`} 
+              alt="Profile Dark" 
+              style={{ 
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover', 
+                borderRadius: '4px',
+                opacity: darkMode ? 1 : 0,
+                transition: 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                zIndex: darkMode ? 1 : 0
+              }} 
+            />
+          </div>
           
           <div style={{ flex: 1, minWidth: 0, paddingTop: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
@@ -1651,34 +1684,34 @@ function App() {
                 style={{ 
                   width: '100%', 
                   maxWidth: '500px', 
-                  background: '#ffffff', 
-                  border: '1.5px solid #000', 
+                  background: 'var(--bg-primary)', 
+                  border: '1.5px solid var(--text-primary)', 
                   padding: '3rem', 
                   position: 'relative',
                   zIndex: 1
                 }}
               >
-                <button onClick={() => setIsFeedbackModalOpen(false)} style={{ position: 'absolute', top: '1.5rem', right: '1.8rem', background: 'transparent', border: 'none', fontSize: '2rem', cursor: 'pointer', color: '#000' }}>×</button>
-                <h3 style={{ fontSize: '1.8rem', fontWeight: '900', color: '#000', marginBottom: '0.5rem', letterSpacing: '-1px' }}>Share Your Experience</h3>
-                <p style={{ fontSize: '0.9rem', color: '#000', opacity: 0.5, marginBottom: '2.5rem', fontWeight: '600' }}>
+                <button onClick={() => setIsFeedbackModalOpen(false)} style={{ position: 'absolute', top: '1.5rem', right: '1.8rem', background: 'transparent', border: 'none', fontSize: '2rem', cursor: 'pointer', color: 'var(--text-primary)' }}>×</button>
+                <h3 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'var(--text-primary)', marginBottom: '0.5rem', letterSpacing: '-1px' }}>Share Your Experience</h3>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)', opacity: 0.5, marginBottom: '2.5rem', fontWeight: '600' }}>
                   Your feedback helps me improve and grow.
                 </p>
                 
                 <form onSubmit={handleFeedbackSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.8rem' }}>
-                  <div style={{ borderBottom: '1.5px solid #eee' }}>
-                    <label style={{ fontSize: '0.7rem', fontWeight: '900', opacity: 0.4, textTransform: 'uppercase' }}>Your Name</label>
-                    <input name="name" value={feedbackData.name} onChange={(e) => setFeedbackData({...feedbackData, name: e.target.value})} required type="text" placeholder="John Doe" style={{ width: '100%', background: 'transparent', border: 'none', padding: '0.8rem 0', fontSize: '1.1rem', color: '#000', outline: 'none', fontWeight: '600' }} />
+                  <div style={{ borderBottom: '1.5px solid var(--border-primary)' }}>
+                    <label style={{ fontSize: '0.7rem', fontWeight: '900', opacity: 0.4, textTransform: 'uppercase', color: 'var(--text-primary)' }}>Your Name</label>
+                    <input name="name" value={feedbackData.name} onChange={(e) => setFeedbackData({...feedbackData, name: e.target.value})} required type="text" placeholder="John Doe" style={{ width: '100%', background: 'transparent', border: 'none', padding: '0.8rem 0', fontSize: '1.1rem', color: 'var(--text-primary)', outline: 'none', fontWeight: '600' }} />
                   </div>
-                  <div style={{ borderBottom: '1.5px solid #eee' }}>
-                    <label style={{ fontSize: '0.7rem', fontWeight: '900', opacity: 0.4, textTransform: 'uppercase' }}>Email Address</label>
-                    <input name="email" value={feedbackData.email} onChange={(e) => setFeedbackData({...feedbackData, email: e.target.value})} required type="email" placeholder="john@example.com" style={{ width: '100%', background: 'transparent', border: 'none', padding: '0.8rem 0', fontSize: '1.1rem', color: '#000', outline: 'none', fontWeight: '600' }} />
+                  <div style={{ borderBottom: '1.5px solid var(--border-primary)' }}>
+                    <label style={{ fontSize: '0.7rem', fontWeight: '900', opacity: 0.4, textTransform: 'uppercase', color: 'var(--text-primary)' }}>Email Address</label>
+                    <input name="email" value={feedbackData.email} onChange={(e) => setFeedbackData({...feedbackData, email: e.target.value})} required type="email" placeholder="john@example.com" style={{ width: '100%', background: 'transparent', border: 'none', padding: '0.8rem 0', fontSize: '1.1rem', color: 'var(--text-primary)', outline: 'none', fontWeight: '600' }} />
                   </div>
-                  <div style={{ borderBottom: '1.5px solid #eee' }}>
-                    <label style={{ fontSize: '0.7rem', fontWeight: '900', opacity: 0.4, textTransform: 'uppercase' }}>Your Role / Company</label>
-                    <input name="role" value={feedbackData.role} onChange={(e) => setFeedbackData({...feedbackData, role: e.target.value})} required type="text" placeholder="CEO at TechCorp" style={{ width: '100%', background: 'transparent', border: 'none', padding: '0.8rem 0', fontSize: '1.1rem', color: '#000', outline: 'none', fontWeight: '600' }} />
+                  <div style={{ borderBottom: '1.5px solid var(--border-primary)' }}>
+                    <label style={{ fontSize: '0.7rem', fontWeight: '900', opacity: 0.4, textTransform: 'uppercase', color: 'var(--text-primary)' }}>Your Role / Company</label>
+                    <input name="role" value={feedbackData.role} onChange={(e) => setFeedbackData({...feedbackData, role: e.target.value})} required type="text" placeholder="CEO at TechCorp" style={{ width: '100%', background: 'transparent', border: 'none', padding: '0.8rem 0', fontSize: '1.1rem', color: 'var(--text-primary)', outline: 'none', fontWeight: '600' }} />
                   </div>
-                  <div style={{ borderBottom: '1.5px solid #eee' }}>
-                    <label style={{ fontSize: '0.7rem', fontWeight: '900', opacity: 0.4, textTransform: 'uppercase' }}>Rating</label>
+                  <div style={{ borderBottom: '1.5px solid var(--border-primary)' }}>
+                    <label style={{ fontSize: '0.7rem', fontWeight: '900', opacity: 0.4, textTransform: 'uppercase', color: 'var(--text-primary)' }}>Rating</label>
                     <div style={{ display: 'flex', gap: '0.8rem', padding: '0.8rem 0' }}>
                       {[1, 2, 3, 4, 5].map((num) => (
                         <button 
@@ -1699,9 +1732,9 @@ function App() {
                       ))}
                     </div>
                   </div>
-                  <div style={{ borderBottom: '1.5px solid #eee' }}>
-                    <label style={{ fontSize: '0.7rem', fontWeight: '900', opacity: 0.4, textTransform: 'uppercase' }}>Your Feedback</label>
-                    <textarea name="content" value={feedbackData.content} onChange={(e) => setFeedbackData({...feedbackData, content: e.target.value})} required placeholder="What was it like working with me?" rows="4" style={{ width: '100%', background: 'transparent', border: 'none', padding: '0.8rem 0', fontSize: '1.1rem', color: '#000', outline: 'none', resize: 'none', fontWeight: '600' }}></textarea>
+                  <div style={{ borderBottom: '1.5px solid var(--border-primary)' }}>
+                    <label style={{ fontSize: '0.7rem', fontWeight: '900', opacity: 0.4, textTransform: 'uppercase', color: 'var(--text-primary)' }}>Your Feedback</label>
+                    <textarea name="content" value={feedbackData.content} onChange={(e) => setFeedbackData({...feedbackData, content: e.target.value})} required placeholder="What was it like working with me?" rows="4" style={{ width: '100%', background: 'transparent', border: 'none', padding: '0.8rem 0', fontSize: '1.1rem', color: 'var(--text-primary)', outline: 'none', resize: 'none', fontWeight: '600' }}></textarea>
                   </div>
                   
                   {feedbackStatus.success && (
@@ -1714,8 +1747,8 @@ function App() {
                     type="submit"
                     disabled={feedbackStatus.loading}
                     style={{ 
-                      background: '#000', 
-                      color: '#fff', 
+                      background: 'var(--text-primary)', 
+                      color: 'var(--bg-primary)', 
                       border: 'none', 
                       padding: '1.2rem', 
                       fontWeight: '800', 

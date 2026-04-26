@@ -72,9 +72,44 @@ body::before {
   --noise-opacity: 0.08;
 }
 
-/* Smooth transitions for theme switching */
+/* Smooth transitions for theme switching - Premium Feel */
 * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              filter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Targeted smooth transition during theme switch for performance */
+.theme-transitioning,
+.theme-transitioning body,
+.theme-transitioning .App,
+.theme-transitioning .main,
+.theme-transitioning section,
+.theme-transitioning .bento-card,
+.theme-transitioning .skill-card,
+.theme-transitioning .mobile-menu-drawer,
+.theme-transitioning .mobile-menu-header,
+.theme-transitioning h1,
+.theme-transitioning h2,
+.theme-transitioning h3,
+.theme-transitioning h4,
+.theme-transitioning p,
+.theme-transitioning button,
+.theme-transitioning input,
+.theme-transitioning textarea,
+.theme-transitioning label {
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 #root {
