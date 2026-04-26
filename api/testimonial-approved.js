@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
             </p>
 
             <div style="margin-bottom: 50px;">
-              <a href="http://localhost:3000" style="display: inline-block; background-color: #10b981; color: #fff; text-decoration: none; padding: 18px 30px; font-weight: 800; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;">View Your Review</a>
+              <a href="${req.body.frontendUrl || 'http://localhost:3000'}" style="display: inline-block; background-color: #10b981; color: #fff; text-decoration: none; padding: 18px 30px; font-weight: 800; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;">View Your Review</a>
             </div>
             
             <div style="border-top: 1px solid #bbf7d0; padding-top: 30px;">

@@ -194,6 +194,102 @@ const SkillTag = ({ name, size = 'large' }) => {
   );
 };
 
+const TestimonialCard = ({ t, index, isMobile }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const maxLength = 120;
+  const isLong = t.content.length > maxLength;
+  const displayedContent = isExpanded ? t.content : t.content.substring(0, maxLength);
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1 }}
+      style={{ 
+        padding: '3.5rem 2rem 2rem', 
+        background: 'var(--bg-card)', 
+        border: '1.5px solid var(--border-primary)',
+        borderRadius: '16px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        textAlign: 'center',
+        position: 'relative',
+        marginTop: '2.5rem',
+        boxShadow: 'var(--shadow-md)',
+        transition: 'transform 0.3s ease'
+      }}
+      whileHover={{ y: -5 }}
+    >
+      {/* Avatar at Top Center */}
+      <div style={{ 
+        position: 'absolute',
+        top: '-35px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '70px', 
+        height: '70px', 
+        borderRadius: '50%', 
+        background: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899'][(t.email || t.name).length % 7], 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        color: '#fff',
+        fontWeight: '800',
+        fontSize: '1.4rem',
+        boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
+        border: '4px solid var(--bg-card)'
+      }}>
+        {t.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)}
+      </div>
+
+      <div>
+        <div style={{ fontWeight: '900', fontSize: '1.2rem', color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>{t.name}</div>
+        <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', fontWeight: '700', opacity: 0.5, marginTop: '2px' }}>{t.role}</div>
+      </div>
+
+      {/* Stars Centered */}
+      <div style={{ display: 'flex', gap: '4px', justifyContent: 'center' }}>
+        {[...Array(t.rating || 5)].map((_, index) => (
+          <FaStar key={index} style={{ color: '#f59e0b', fontSize: '1.2rem' }} />
+        ))}
+      </div>
+
+      {/* Quote Centered */}
+      <p style={{ 
+        fontSize: '1.05rem', 
+        lineHeight: '1.8', 
+        color: 'var(--text-primary)', 
+        fontWeight: '500',
+        margin: 0,
+        opacity: 0.8
+      }}>
+        "{displayedContent}{!isExpanded && isLong && '...'}"
+      </p>
+
+      {isLong && (
+        <button 
+          onClick={() => setIsExpanded(!isExpanded)}
+          style={{ 
+            background: 'transparent', 
+            border: 'none', 
+            color: '#3b82f6', 
+            fontWeight: '800', 
+            fontSize: '0.95rem', 
+            cursor: 'pointer',
+            padding: '5px',
+            textDecoration: 'underline',
+            marginTop: 'auto'
+          }}
+        >
+          {isExpanded ? 'Read less' : 'Read more'}
+        </button>
+      )}
+    </motion.div>
+  );
+};
+
 function App() {
   const [preloaderRemoved, setPreloaderRemoved] = useState(false);
   const [scrollTopActive, setScrollTopActive] = useState(false);
@@ -202,6 +298,7 @@ function App() {
   const [activeSection, setActiveSection] = useState('hero');
   const [showAllSkills, setShowAllSkills] = useState(false);
   const [showAllProjects, setShowAllProjects] = useState(false);
+  const [showAllTestimonials, setShowAllTestimonials] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentService, setCurrentService] = useState(null);
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
@@ -340,7 +437,8 @@ function App() {
       // Trigger Email Notification via local server
       try {
         console.log("📨 Sending Inquiry Email to server...");
-        const emailRes = await fetch('http://localhost:5001/api/contact', {
+        const API_BASE_URL = window.location.origin.includes(':3000') ? window.location.origin.replace(':3000', ':5001') : window.location.origin;
+        const emailRes = await fetch(`${API_BASE_URL}/api/contact`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -369,9 +467,9 @@ function App() {
   };
 
   useEffect(() => {
+    fetchTestimonials(); // Fetch testimonials for everyone (portfolio view)
     if (isLoggedIn) {
       fetchInquiries();
-      fetchTestimonials();
     }
   }, [isLoggedIn]);
 
@@ -394,10 +492,15 @@ function App() {
         if (testimonial && testimonial.email) {
           try {
             console.log(`📨 Sending Approval Notification to ${testimonial.email}...`);
-            const emailRes = await fetch('http://localhost:5001/api/testimonial-approved', {
+            const API_BASE_URL = window.location.origin.includes(':3000') ? window.location.origin.replace(':3000', ':5001') : window.location.origin;
+            const emailRes = await fetch(`${API_BASE_URL}/api/testimonial-approved`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ name: testimonial.name, email: testimonial.email })
+              body: JSON.stringify({ 
+                name: testimonial.name, 
+                email: testimonial.email,
+                frontendUrl: window.location.origin
+              })
             });
             const emailData = await emailRes.json();
             console.log("📩 Server response:", emailData);
@@ -439,7 +542,8 @@ function App() {
       // Send Thank You Email via local server
       try {
         console.log("📨 Sending Testimonial Thank You Email to server...");
-        const emailRes = await fetch('http://localhost:5001/api/testimonial-thanks', {
+        const API_BASE_URL = window.location.origin.includes(':3000') ? window.location.origin.replace(':3000', ':5001') : window.location.origin;
+        const emailRes = await fetch(`${API_BASE_URL}/api/testimonial-thanks`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -934,7 +1038,7 @@ function App() {
           </div>
 
           <img 
-            src={darkMode ? `${process.env.PUBLIC_URL}/dsa-dark.png` : `${process.env.PUBLIC_URL}/dsa.jpg`} 
+            src={darkMode ? `${process.env.PUBLIC_URL}/jc-sleeping.png` : `${process.env.PUBLIC_URL}/dsa.jpg`} 
             alt="Profile" 
             style={{ 
               width: isMobile ? '120px' : '220px', 
@@ -1087,53 +1191,6 @@ function App() {
                 )}
               </AnimatePresence>
             </section>
-
-            <section id="projects" style={{ marginBottom: '1.5rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-primary)' }}>Recent Projects</h2>
-                <button 
-                  onClick={() => setShowAllProjects(!showAllProjects)} 
-                  style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontWeight: '800', color: 'var(--text-primary)' }}
-                >
-                  {showAllProjects ? '← Show Less' : 'View All →'}
-                </button>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
-                {[ 
-                  { title: 'NAgCO Loan Management System', img: nagcoDashboardImage, url: 'https://nagcoloanmanagementsystem.vercel.app/', desc: 'A comprehensive loan management platform for the Napilihan Agriculture Cooperative, featuring automated workflows and real-time tracking.', tags: ['Next.js', 'Tailwind', 'Supabase'] },
-                  { title: 'Artisano & Co. Pizzeria', img: artisanoImage, url: 'https://pizza-theta-inky.vercel.app/', desc: 'A premium digital presence for an artisanal pizzeria, featuring a cinematic design and Next.js performance.', tags: ['Next.js', 'Tailwind', 'Framer Motion'] },
-                  { title: 'BigBrew POS System', img: bigbrewPOSImage, url: 'https://brew-sxrs.vercel.app/', desc: 'Coffee Shop Point of Sale System with Real-Time Analytics Dashboard.', tags: ['React', 'Vite', 'Tailwind', 'Node.js'] },
-                  { title: 'StartupLab Ticketing System', img: project4Image, url: 'https://startuplab-event-creation.vercel.app/', desc: 'Previous System: End-to-end event ticketing and management platform.', tags: ['React', 'Node.js', 'PostgreSQL'] },
-                  { title: 'BBEK Administration System', img: project1Image, url: 'https://biblebaptistekklesiaofkawit.xyz/', desc: 'Previous System: Comprehensive administration platform for church operations.', tags: ['Vue.js', 'Node.js', 'MySQL'] },
-                  { title: 'Baby Bliss Booking', img: project2Image, url: 'https://babyblissbooking.vercel.app/', desc: 'Advanced appointment system for wellness and spa centers.', tags: ['React', 'Tailwind', 'Vercel'] },
-                  { title: 'Event Registration System', img: project3Image, url: 'https://startuplab-event-registration.vercel.app/', desc: 'Streamlined registration platform for university and academic events.', tags: ['Laravel', 'PHP', 'MySQL'] }
-                ].slice(0, showAllProjects ? 9 : 3).map((p, i) => (
-                  <motion.div 
-                    key={i} 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: i * 0.1 }}
-                    style={{ border: '1.5px solid var(--border-primary)', display: 'flex', overflow: 'hidden' }}
-                  >
-                    <a 
-                      href={p.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      style={{ cursor: 'pointer', flexShrink: 0, display: 'block', width: '250px', height: '150px' }}
-                    >
-                      <img src={p.img} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={p.title} />
-                    </a>
-                    <div style={{ padding: '1.5rem', flex: '1 1 0%' }}>
-                      <h4 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--text-primary)' }}>{p.title}</h4>
-                      <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)', marginTop: '0.5rem', fontWeight: '500' }}>{p.desc}</p>
-                      <div style={{ display: 'flex', gap: '0.8rem', marginTop: '1rem', alignItems: 'center' }}>
-                        {p.tags.map(t => <SkillTag key={t} name={t} size="small" />)}
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </section>
           </div>
 
           <div style={{ gridColumn: isMobile ? 'span 1' : 'span 4', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -1148,17 +1205,87 @@ function App() {
               </div>
             </div>
 
-            <section id="experience">
-              <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '2rem', color: 'var(--text-primary)' }}>Experience</h2>
+            <section id="experience" style={{ marginBottom: '1.5rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Experience</h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                <div style={{ position: 'relative', paddingLeft: '1.5rem', borderLeft: '2.5px solid var(--border-primary)' }}>
-                  <div style={{ position: 'absolute', left: '-9.5px', top: '0', width: '16px', height: '16px', borderRadius: '50%', background: 'var(--text-primary)', border: '4px solid var(--bg-primary)' }} />
-                  <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--text-primary)' }}>Freelance Software Engineer</h3>
-                  <p style={{ fontSize: '0.9rem', fontWeight: '800', color: 'var(--text-primary)', opacity: 0.6, textTransform: 'uppercase', marginBottom: '0.8rem' }}>Freelance | April 23, 2026 - Present</p>
-                  <p style={{ fontSize: '1rem', color: 'var(--text-primary)', fontWeight: '500', lineHeight: '1.6' }}>
-                    Collaborating with a client to design and develop a comprehensive loan management system. Responsible for building user-centric features and ensuring robust system architecture.
-                  </p>
+                <div style={{ position: 'relative', paddingLeft: '2.5rem', borderLeft: '1.5px solid var(--border-primary)', paddingBottom: '2rem' }}>
+                  <div style={{ position: 'absolute', left: '-8px', top: '0px', width: '15px', height: '15px', background: 'var(--text-primary)', borderRadius: '0px' }} />
+                  <h3 style={{ fontSize: '1.2rem', fontWeight: '900', color: 'var(--text-primary)', marginBottom: '0.4rem' }}>Junior Freelance Developer</h3>
+                  <p style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--text-primary)', opacity: 0.6, textTransform: 'uppercase', marginBottom: '1rem' }}>Student Learner | 2024 - Present</p>
+                  <ul style={{ 
+                    fontSize: '0.95rem', 
+                    color: 'var(--text-primary)', 
+                    fontWeight: '500', 
+                    lineHeight: '1.7', 
+                    opacity: 0.85,
+                    margin: 0,
+                    paddingLeft: '1.2rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.6rem'
+                  }}>
+                    <li>Building my very first websites for local clients while I learn the basics of coding.</li>
+                    <li>Spending my time practicing React and exploring how modern databases work.</li>
+                    <li>Always excited to take on simple tasks to improve my skills and build helpful tools.</li>
+                  </ul>
                 </div>
+              </div>
+            </section>
+          </div>
+
+          <div style={{ gridColumn: isMobile ? 'span 1' : 'span 12', marginTop: '2rem' }}>
+            <section id="projects" style={{ marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-primary)' }}>Recent Projects</h2>
+                <button 
+                  onClick={() => setShowAllProjects(!showAllProjects)} 
+                  style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontWeight: '800', color: 'var(--text-primary)' }}
+                >
+                  {showAllProjects ? '← Show Less' : 'View All →'}
+                </button>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: '2rem' }}>
+                {[ 
+                  { title: 'NAgCO Loan Management System', img: nagcoDashboardImage, url: 'https://nagcoloanmanagementsystem.vercel.app/', desc: 'A comprehensive loan management platform for the Napilihan Agriculture Cooperative, featuring automated workflows and real-time tracking.', tags: ['Next.js', 'Tailwind', 'Supabase'] },
+                  { title: 'Artisano & Co. Pizzeria', img: artisanoImage, url: 'https://pizza-theta-inky.vercel.app/', desc: 'A premium digital presence for an artisanal pizzeria, featuring a cinematic design and Next.js performance.', tags: ['Next.js', 'Tailwind', 'Framer Motion'] },
+                  { title: 'BigBrew POS System', img: bigbrewPOSImage, url: 'https://brew-sxrs.vercel.app/', desc: 'Coffee Shop Point of Sale System with Real-Time Analytics Dashboard.', tags: ['React', 'Vite', 'Tailwind', 'Node.js'] },
+                  { title: 'StartupLab Ticketing System', img: project4Image, url: 'https://startuplab-event-creation.vercel.app/', desc: 'Previous System: End-to-end event ticketing and management platform.', tags: ['React', 'Node.js', 'PostgreSQL'] },
+                  { title: 'BBEK Administration System', img: project1Image, url: 'https://biblebaptistekklesiaofkawit.xyz/', desc: 'Previous System: Comprehensive administration platform for church operations.', tags: ['Vue.js', 'Node.js', 'MySQL'] },
+                  { title: 'Baby Bliss Booking', img: project2Image, url: 'https://babyblissbooking.vercel.app/', desc: 'Advanced appointment system for wellness and spa centers.', tags: ['React', 'Tailwind', 'Vercel'] },
+                  { title: 'Event Registration System', img: project3Image, url: 'https://startuplab-event-registration.vercel.app/', desc: 'Streamlined registration platform for university and academic events.', tags: ['Laravel', 'PHP', 'MySQL'] }
+                ].slice(0, showAllProjects ? undefined : 3).map((p, i) => (
+                  <motion.div 
+                    key={i} 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: i * 0.1 }}
+                    style={{ 
+                      border: '1.5px solid var(--border-primary)', 
+                      display: 'flex', 
+                      flexDirection: 'column',
+                      overflow: 'hidden',
+                      background: 'var(--bg-card)',
+                      transition: 'transform 0.3s ease'
+                    }}
+                    whileHover={{ y: -5 }}
+                  >
+                    <a 
+                      href={p.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      style={{ cursor: 'pointer', flexShrink: 0, display: 'block', width: '100%', height: '200px' }}
+                    >
+                      <img src={p.img} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={p.title} />
+                    </a>
+                    <div style={{ padding: '1.5rem', flex: '1 1 0%', display: 'flex', flexDirection: 'column' }}>
+                      <h4 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--text-primary)' }}>{p.title}</h4>
+                      <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)', marginTop: '0.5rem', fontWeight: '500', opacity: 0.7, lineHeight: '1.5' }}>{p.desc}</p>
+                      <div style={{ display: 'flex', gap: '0.8rem', marginTop: 'auto', paddingTop: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                        {p.tags.map(t => <SkillTag key={t} name={t} size="small" />)}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </section>
           </div>
@@ -1253,27 +1380,47 @@ function App() {
 
         {/* What My Clients Say Section */}
         <section id="testimonials" style={{ marginTop: '4rem', padding: '2rem 0' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3.5rem' }}>
             <div>
-              <h2 style={{ fontSize: isMobile ? '2rem' : '2.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-1.5px', margin: 0 }}>What My Clients Say</h2>
-              <div style={{ width: '60px', height: '4px', background: 'var(--text-primary)', marginTop: '0.8rem' }} />
+              <h2 style={{ fontSize: isMobile ? '2.2rem' : '3rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-2px', margin: 0 }}>What My Clients Say</h2>
+              <div style={{ width: '80px', height: '5px', background: 'var(--text-primary)', marginTop: '1rem' }} />
             </div>
-            <button 
-              onClick={() => setIsFeedbackModalOpen(true)}
-              style={{ 
-                background: 'transparent', 
-                border: '1.5px solid var(--border-primary)', 
-                padding: '0.8rem 1.2rem', 
-                fontWeight: '800', 
-                fontSize: '0.8rem', 
-                color: 'var(--text-primary)', 
-                cursor: 'pointer',
-                textTransform: 'uppercase',
-                letterSpacing: '1px'
-              }}
-            >
-              Write a Review
-            </button>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              {!showAllTestimonials && testimonials.filter(t => t.is_approved).length > 3 && (
+                <button 
+                  onClick={() => setShowAllTestimonials(true)}
+                  style={{ 
+                    background: 'transparent', 
+                    border: '1.5px solid var(--border-primary)', 
+                    padding: '0.8rem 1.2rem', 
+                    fontWeight: '800', 
+                    fontSize: '0.8rem', 
+                    color: 'var(--text-primary)', 
+                    cursor: 'pointer',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px'
+                  }}
+                >
+                  View All →
+                </button>
+              )}
+              <button 
+                onClick={() => setIsFeedbackModalOpen(true)}
+                style={{ 
+                  background: 'var(--text-primary)', 
+                  border: 'none', 
+                  padding: '0.8rem 1.2rem', 
+                  fontWeight: '800', 
+                  fontSize: '0.8rem', 
+                  color: 'var(--bg-primary)', 
+                  cursor: 'pointer',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}
+              >
+                Write a Review
+              </button>
+            </div>
           </div>
 
           <div style={{ 
@@ -1282,70 +1429,15 @@ function App() {
             gap: '2rem' 
           }}>
             {testimonials.filter(t => t.is_approved).length > 0 ? (
-              testimonials.filter(t => t.is_approved).map((t, i) => (
-                <motion.div 
-                  key={t.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  style={{ 
-                    padding: '2rem', 
-                    background: 'var(--bg-card)', 
-                    border: '1.5px solid var(--border-primary)',
-                    borderRadius: '12px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '1.5rem',
-                    textAlign: 'left'
-                  }}
-                >
-                  {/* Stars at Top */}
-                  <div style={{ display: 'flex', gap: '4px' }}>
-                    {[...Array(t.rating || 5)].map((_, index) => (
-                      <FaStar key={index} style={{ color: '#f59e0b', fontSize: '1.1rem' }} />
-                    ))}
-                  </div>
-
-                  {/* Quote in Middle */}
-                  <p style={{ 
-                    fontSize: '1.05rem', 
-                    lineHeight: '1.7', 
-                    color: 'var(--text-primary)', 
-                    fontWeight: '500',
-                    margin: 0,
-                    opacity: 0.9
-                  }}>
-                    "{t.content}"
-                  </p>
-
-                  {/* Profile at Bottom */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: 'auto' }}>
-                    <div style={{ 
-                      width: '44px', 
-                      height: '44px', 
-                      borderRadius: '50%', 
-                      background: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899'][(t.email || t.name).length % 7], 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center',
-                      color: '#fff',
-                      fontWeight: '700',
-                      fontSize: '0.9rem',
-                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-                    }}>
-                      {t.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)}
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: '800', fontSize: '0.95rem', color: 'var(--text-primary)' }}>{t.name}</div>
-                      <div style={{ fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: '600', opacity: 0.5 }}>{t.role}</div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))
+              testimonials.filter(t => t.is_approved)
+                .slice(0, showAllTestimonials ? undefined : 3)
+                .map((t, i) => (
+                  <TestimonialCard key={t.id} t={t} index={i} isMobile={isMobile} />
+                ))
             ) : (
-              <div style={{ gridColumn: '1/-1', padding: '4rem', textAlign: 'center', border: '1.5px dashed var(--border-primary)', opacity: 0.5 }}>
-                <p style={{ fontWeight: '800', textTransform: 'uppercase', letterSpacing: '2px' }}>Awaiting first client feedback...</p>
+              <div style={{ gridColumn: '1/-1', padding: '5rem', textAlign: 'center', border: '2px dashed var(--border-primary)', opacity: 0.4 }}>
+                <FaStar style={{ fontSize: '2rem', marginBottom: '1rem', opacity: 0.5 }} />
+                <p style={{ fontWeight: '800', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.9rem' }}>Awaiting first client feedback...</p>
               </div>
             )}
           </div>
