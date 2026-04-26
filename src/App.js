@@ -20,6 +20,8 @@ import bigbrewPOSImage from './bigbrew-pos.png';
 import artisanoImage from './artisano-pizzeria.png';
 import nagcoImage from './nagco-management.png';
 import nagcoDashboardImage from './nagco-dashboard.png';
+import medflowImage from './medflow_new.png';
+import laundrosaasImage from './laundry_new.png';
 import logoImage from './logo.png';
 
 // Unique Animation Skill Icon Component
@@ -1103,7 +1105,7 @@ function App() {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-primary)', fontSize: '0.8rem', opacity: 0.5, borderLeft: '1.5px solid var(--border-primary)', paddingLeft: '1.2rem' }}>
                 <FaCalendarAlt size={12} />
-                <span style={{ textTransform: 'uppercase', letterSpacing: '1px' }}>Updated: April 24, 2026</span>
+                <span style={{ textTransform: 'uppercase', letterSpacing: '1px' }}>Updated: April 26, 2026</span>
               </div>
             </div>
 
@@ -1279,6 +1281,8 @@ function App() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: '2rem' }}>
                 {[ 
+                  { title: 'LaundroSaaS Management', img: laundrosaasImage, url: 'https://laundro-phi.vercel.app/', desc: 'A comprehensive laundry management SaaS platform featuring real-time order tracking, customer management, and automated revenue reporting.', tags: ['React', 'Tailwind', 'Vite'] },
+                  { title: 'MedFlow Healthcare Management', img: medflowImage, url: 'https://medflow-two.vercel.app/', desc: 'A modern healthcare management system for hospitals and clinics, featuring real-time analytics, patient tracking, and appointment scheduling.', tags: ['React', 'Vite', 'Tailwind'] },
                   { title: 'NAgCO Loan Management System', img: nagcoDashboardImage, url: 'https://nagcoloanmanagementsystem.vercel.app/', desc: 'A comprehensive loan management platform for the Napilihan Agriculture Cooperative, featuring automated workflows and real-time tracking.', tags: ['Next.js', 'Tailwind', 'Supabase'] },
                   { title: 'Artisano & Co. Pizzeria', img: artisanoImage, url: 'https://pizza-theta-inky.vercel.app/', desc: 'A premium digital presence for an artisanal pizzeria, featuring a cinematic design and Next.js performance.', tags: ['Next.js', 'Tailwind', 'Framer Motion'] },
                   { title: 'BigBrew POS System', img: bigbrewPOSImage, url: 'https://brew-sxrs.vercel.app/', desc: 'Coffee Shop Point of Sale System with Real-Time Analytics Dashboard.', tags: ['React', 'Vite', 'Tailwind', 'Node.js'] },
@@ -1313,6 +1317,7 @@ function App() {
                     <div style={{ padding: '1.5rem', flex: '1 1 0%', display: 'flex', flexDirection: 'column' }}>
                       <h4 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--text-primary)' }}>{p.title}</h4>
                       <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)', marginTop: '0.5rem', fontWeight: '500', opacity: 0.7, lineHeight: '1.5' }}>{p.desc}</p>
+                      
                       <div style={{ display: 'flex', gap: '0.8rem', marginTop: 'auto', paddingTop: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                         {p.tags.map(t => <SkillTag key={t} name={t} size="small" />)}
                       </div>
@@ -1597,7 +1602,6 @@ function App() {
           </div>
         </footer>
 
-        {/* Chatbot System */}
         <ChatBot />
 
         {/* Inquiry Modal */}
