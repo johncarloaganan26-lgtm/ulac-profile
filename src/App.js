@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from './supabaseClient';
 import { FaEnvelope, FaMapMarkerAlt, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaLinkedin, FaBars, FaTimes, FaFacebook, FaInstagram, FaTwitter, FaCommentDots, FaPython, FaCalendarAlt, FaChevronRight, FaChevronDown, FaEye, FaStar } from 'react-icons/fa';
 import { MdVerified } from 'react-icons/md';
-import { SiTailwindcss, SiExpress, SiAxios, SiMysql, SiVercel, SiSupabase, SiPostgresql, SiVite, SiLaravel, SiPython, SiNextdotjs, SiFramer } from 'react-icons/si';
+import { SiTailwindcss, SiExpress, SiAxios, SiMysql, SiVercel, SiSupabase, SiPostgresql, SiVite, SiLaravel, SiPython, SiNextdotjs, SiFramer, SiTypescript } from 'react-icons/si';
 
 // Original icons and imports ... (keep existing)
 
@@ -23,6 +23,7 @@ import nagcoDashboardImage from './nagco-dashboard.png';
 import medflowImage from './medflow_new.png';
 import laundrosaasImage from './laundry_new.png';
 import logoImage from './logo.png';
+import dsaImage from './dsa.jpg';
 
 // Unique Animation Skill Icon Component
 const AnimatedSkillIcon = ({ icon: Icon, delay, color, percentage, name, animationType = 'rotate', size = '2.5rem', setToast }) => {
@@ -97,6 +98,7 @@ const SkillsAnimation = ({ setToast }) => {
     { icon: SiAxios, color: '#5A29E4', percentage: 88, name: 'Axios', animationType: 'tilt' },
     { icon: SiSupabase, color: '#3ECF8E', percentage: 85, name: 'Supabase', animationType: 'bounce' },
     { icon: SiPostgresql, color: '#4169E1', percentage: 88, name: 'PostgreSQL', animationType: 'pulse' },
+    { icon: SiTypescript, color: '#3178C6', percentage: 85, name: 'TypeScript', animationType: 'rotate' },
   ];
 
   const duplicatedSkills = [...skills, ...skills, ...skills];
@@ -174,6 +176,7 @@ const SkillTag = ({ name, size = 'large' }) => {
     'Axios': { icon: SiAxios, color: '#5A29E4' },
     'Next.js': { icon: SiNextdotjs, color: 'var(--text-primary)' },
     'Framer Motion': { icon: SiFramer, color: '#0055FF' },
+    'TypeScript': { icon: SiTypescript, color: '#3178C6' },
   };
   const skill = iconMap[name];
   if (!skill) return <span style={{ fontSize: '0.7rem', fontWeight: '800', border: '1px solid var(--border-primary)', padding: '0.2rem 0.6rem', color: 'var(--text-primary)', opacity: 0.6 }}>{name}</span>;
@@ -1086,11 +1089,11 @@ function App() {
           </div>
           
           <div style={{ flex: 1, minWidth: 0, paddingTop: '0.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
-              <h1 style={{ fontSize: isMobile ? '1.8rem' : '3rem', fontWeight: '900', color: 'var(--text-primary)', margin: 0, lineHeight: 1.1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem', flexWrap: 'wrap', paddingRight: isMobile ? '4rem' : '0' }}>
+              <h1 style={{ fontSize: isMobile ? '1.5rem' : '3rem', fontWeight: '900', color: 'var(--text-primary)', margin: 0, lineHeight: 1.1, wordBreak: 'break-word' }}>
                 John Carlo Aganan
               </h1>
-              <MdVerified style={{ color: '#0ea5e9', fontSize: isMobile ? '1.2rem' : '1.8rem' }} />
+              <MdVerified style={{ color: '#0ea5e9', fontSize: isMobile ? '1.1rem' : '1.8rem', flexShrink: 0 }} />
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', marginBottom: '0.8rem', flexWrap: 'wrap' }}>
@@ -1105,7 +1108,7 @@ function App() {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-primary)', fontSize: '0.8rem', opacity: 0.5, borderLeft: '1.5px solid var(--border-primary)', paddingLeft: '1.2rem' }}>
                 <FaCalendarAlt size={12} />
-                <span style={{ textTransform: 'uppercase', letterSpacing: '1px' }}>Updated: April 26, 2026</span>
+                <span style={{ textTransform: 'uppercase', letterSpacing: '1px' }}>Updated: May 3, 2026</span>
               </div>
             </div>
 
@@ -1176,7 +1179,7 @@ function App() {
               </p>
               <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-primary)', marginTop: '1.5rem', fontWeight: '500' }}>
                 Currently in my final year of BSIT at Cavite State University, I have spent my academic years leading the development of real-world management systems,
-                including the **BBEK** and **StartupLab** platforms. I specialize in turning complex requirements into efficient, user-centric software.
+                including the BBEK and StartupLab platforms. I specialize in turning complex requirements into efficient, user-centric software.
               </p>
             </section>
 
@@ -1242,28 +1245,46 @@ function App() {
 
             <section id="experience" style={{ marginBottom: '1.5rem' }}>
               <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Experience</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                <div style={{ position: 'relative', paddingLeft: '2.5rem', borderLeft: '1.5px solid var(--border-primary)', paddingBottom: '2rem' }}>
-                  <div style={{ position: 'absolute', left: '-8px', top: '0px', width: '15px', height: '15px', background: 'var(--text-primary)', borderRadius: '0px' }} />
-                  <h3 style={{ fontSize: '1.2rem', fontWeight: '900', color: 'var(--text-primary)', marginBottom: '0.4rem' }}>Junior Freelance Developer</h3>
-                  <p style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--text-primary)', opacity: 0.6, textTransform: 'uppercase', marginBottom: '1rem' }}>Student Learner | 2024 - Present</p>
-                  <ul style={{ 
-                    fontSize: '0.95rem', 
-                    color: 'var(--text-primary)', 
-                    fontWeight: '500', 
-                    lineHeight: '1.7', 
-                    opacity: 0.85,
-                    margin: 0,
-                    paddingLeft: '1.2rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '0.6rem'
-                  }}>
-                    <li>Building my very first websites for local clients while I learn the basics of coding.</li>
-                    <li>Spending my time practicing React and exploring how modern databases work.</li>
-                    <li>Always excited to take on simple tasks to improve my skills and build helpful tools.</li>
-                  </ul>
+              <div style={{ display: 'flex', flexDirection: 'column', position: 'relative', gap: '1.8rem' }}>
+                {/* Continuous Vertical Line */}
+                <div style={{ position: 'absolute', left: '5.5px', top: '8px', bottom: '8px', width: '1.5px', background: 'var(--border-primary)', zIndex: 0, opacity: 0.4 }} />
+
+                <div style={{ position: 'relative', paddingLeft: '2rem', zIndex: 1 }}>
+                  <motion.div 
+                    whileHover={{ scale: 1.2, backgroundColor: 'var(--text-primary)' }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                    style={{ position: 'absolute', left: '0px', top: '5px', width: '13px', height: '13px', background: 'var(--text-primary)', border: '1px solid var(--text-primary)', borderRadius: '0px', cursor: 'pointer' }} 
+                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.3px', display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                      Full-Stack Developer
+                      <span style={{ fontSize: '0.7rem', fontWeight: '700', letterSpacing: '0.5px', padding: '0.15rem 0.5rem', border: '1px solid var(--border-primary)', background: 'var(--bg-card)', borderRadius: '4px', opacity: 0.8, textTransform: 'uppercase' }}>Intern</span>
+                    </h3>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <span style={{ fontSize: '0.95rem', color: 'var(--text-primary)', opacity: 0.9, fontWeight: '500', paddingRight: '1rem' }}>StartupLab Business Center & AI Consulting Agency OPC</span>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-primary)', opacity: 0.6, fontWeight: '600', whiteSpace: 'nowrap', textAlign: 'right', minWidth: '120px' }}>Feb 23, 2026 - Present</span>
+                    </div>
+                  </div>
                 </div>
+
+                <div style={{ position: 'relative', paddingLeft: '2rem', zIndex: 1 }}>
+                  <motion.div 
+                    whileHover={{ scale: 1.2, backgroundColor: 'var(--text-primary)', borderColor: 'var(--text-primary)' }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                    style={{ position: 'absolute', left: '0px', top: '5px', width: '13px', height: '13px', background: 'var(--bg-primary)', border: '1.5px solid var(--border-primary)', borderRadius: '0px', cursor: 'pointer' }} 
+                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.3px', display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                      Full-Stack Developer
+                      <span style={{ fontSize: '0.7rem', fontWeight: '700', letterSpacing: '0.5px', padding: '0.15rem 0.5rem', border: '1px solid var(--border-primary)', background: 'var(--bg-card)', borderRadius: '4px', opacity: 0.8, textTransform: 'uppercase' }}>Freelance</span>
+                    </h3>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <span style={{ fontSize: '0.95rem', color: 'var(--text-primary)', opacity: 0.9, fontWeight: '500', paddingRight: '1rem' }}>Student Learner</span>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-primary)', opacity: 0.6, fontWeight: '600', whiteSpace: 'nowrap', textAlign: 'right', minWidth: '120px' }}>April 2026 - Present</span>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </section>
           </div>
@@ -1777,62 +1798,251 @@ function App() {
 
 // Compact ChatBot Component
 const ChatBot = () => {
+  const GROQ_API_KEY = process.env.REACT_APP_GROQ_KEY;
+  const [isMobileChat, setIsMobileChat] = useState(window.innerWidth < 640);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobileChat(window.innerWidth < 640);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  const SYSTEM_PROMPT = `You are John Carlo Aganan's personal AI assistant on his portfolio website. Be friendly, concise, and helpful. Answer questions about John based on the following:
+
+ABOUT: John is a Full-Stack Developer and final-year BSIT student at Cavite State University (2022–2026). He is passionate about building scalable, impact-driven digital solutions.
+
+EXPERIENCE:
+- Full-Stack Developer Intern @ StartupLab Business Center & AI Consulting Agency OPC (Feb 23, 2026 – Present)
+- Junior Freelance Full-Stack Developer (April 2026 – Present)
+
+TECH STACK: React, Node.js, Express, PHP, Laravel, MySQL, PostgreSQL, Supabase, TailwindCSS, TypeScript, Vite, Next.js, Git, GitHub, Python
+
+PROJECTS:
+- BBEK (BigBrew Event Kiosk): POS and event management system
+- StartupLab Business Ticketing: Full event ticketing platform with organizer management, AI features, Supabase auth, HitPay payments
+- MedFlow: Medical management system
+- LaundroSaaS: Laundry management SaaS
+- Artisano Pizzeria: Restaurant management system
+- NAGCO Management: Business management system
+
+CONTACT: johncarloaganan.startuplab@gmail.com
+LOCATION: Cavite, Philippines
+SOCIAL: LinkedIn, GitHub, Facebook, Instagram
+
+Keep responses short (2-4 sentences max). If asked something unrelated to John, politely redirect to his portfolio topics.`;
+
   const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { sender: 'bot', text: "👋 Hi there! I'm John's AI assistant powered by Groq. Ask me anything about his skills, projects, or experience!" }
+  ]);
+  const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isTyping]);
+
+  const handleSend = async (e) => {
+    e.preventDefault();
+    if (!input.trim() || isTyping) return;
+
+    const userMsg = input.trim();
+    const updatedMessages = [...messages, { sender: 'user', text: userMsg }];
+    setMessages(updatedMessages);
+    setInput('');
+    setIsTyping(true);
+
+    try {
+      // 🔑 Check if API key is loaded
+      console.log('%c[Groq ChatBot] API Key loaded:', 'color: #10b981; font-weight: bold;', GROQ_API_KEY ? '✅ Yes' : '❌ Missing!');
+
+      const groqMessages = [
+        { role: 'system', content: SYSTEM_PROMPT },
+        ...updatedMessages
+          .filter(m => m.sender === 'user' || m.sender === 'bot')
+          .map(m => ({ role: m.sender === 'user' ? 'user' : 'assistant', content: m.text }))
+      ];
+
+      // 📤 Log request payload
+      console.log('%c[Groq ChatBot] Sending request...', 'color: #3178C6; font-weight: bold;', { model: 'llama-3.3-70b-versatile', messages: groqMessages });
+
+      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${GROQ_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: 'llama-3.3-70b-versatile',
+          messages: groqMessages,
+          max_tokens: 300,
+          temperature: 0.7
+        })
+      });
+
+      // 📥 Log HTTP status
+      console.log('%c[Groq ChatBot] Response status:', 'color: #3178C6; font-weight: bold;', response.status, response.ok ? '✅ OK' : '❌ Error');
+
+      const data = await response.json();
+
+      // 📦 Log full response data
+      console.log('%c[Groq ChatBot] Full response:', 'color: #8B5CF6; font-weight: bold;', data);
+
+      if (!response.ok) {
+        console.error('%c[Groq ChatBot] API Error:', 'color: red; font-weight: bold;', data?.error?.message || data);
+      }
+
+      const reply = data.choices?.[0]?.message?.content || "Sorry, I couldn't get a response. Please try again!";
+      console.log('%c[Groq ChatBot] Reply:', 'color: #10b981; font-weight: bold;', reply);
+      setMessages(prev => [...prev, { sender: 'bot', text: reply }]);
+    } catch (err) {
+      console.error('%c[Groq ChatBot] Network/fetch error:', 'color: red; font-weight: bold;', err);
+      setMessages(prev => [...prev, { sender: 'bot', text: "Oops! Something went wrong. Please try again in a moment." }]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
 
   return (
-    <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 10003, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '1rem' }}>
+    <div style={{ 
+      position: 'fixed', 
+      bottom: isMobileChat && isOpen ? '0' : '1.5rem', 
+      right: isMobileChat && isOpen ? '0' : '1.5rem',
+      left: isMobileChat && isOpen ? '0' : 'auto',
+      top: isMobileChat && isOpen ? '0' : 'auto',
+      zIndex: 10003, 
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: isMobileChat && isOpen ? 'center' : 'flex-end', 
+      justifyContent: isMobileChat && isOpen ? 'center' : 'flex-end',
+      pointerEvents: 'none',
+      transition: 'all 0.3s ease'
+    }}>
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            style={{ 
-              width: '420px', 
-              minHeight: '550px',
-              background: 'var(--bg-primary)', 
-              border: '1.5px solid var(--text-primary)', 
-              boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'hidden'
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.8rem', borderBottom: '1px solid var(--border-primary)' }}>
-              <div>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: '900', color: 'var(--text-primary)', margin: 0 }}>Chat with John</h3>
-                <div style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', opacity: 0.6, color: 'var(--text-primary)', marginTop: '4px' }}>AI Assistant v1.0</div>
-              </div>
-              <button onClick={() => setIsOpen(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '1.8rem', fontWeight: '900', color: 'var(--text-primary)' }}>×</button>
-            </div>
-            
-            <div style={{ flex: '1 1 0%', padding: '1.8rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1.8rem' }}>
-              <div style={{ background: 'var(--bg-tertiary)', padding: '1.5rem', border: '1px solid var(--border-primary)' }}>
-                <p style={{ fontSize: '1rem', color: 'var(--text-primary)', fontWeight: '500', lineHeight: '1.7', margin: 0 }}>
-                  👋 Hi there! I'm John's digital assistant. 
-                  <br /><br />
-                  I'm currently <strong>Under Development</strong> as I'm being trained on John's specific projects and tech stack. 
-                  <br /><br />
-                  Soon, you'll be able to ask me about his work on <strong>BBEK</strong>, <strong>StartupLab</strong>, or his expertise in <strong>React, Node.js, Supabase, and PostgreSQL</strong>.
-                </p>
+          <>
+            {isMobileChat && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsOpen(false)}
+                style={{
+                  position: 'fixed',
+                  inset: 0,
+                  background: 'rgba(0,0,0,0.5)',
+                  backdropFilter: 'blur(4px)',
+                  zIndex: -1,
+                  pointerEvents: 'auto'
+                }}
+              />
+            )}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              style={{ 
+                width: isMobileChat ? '90vw' : '460px', 
+                height: isMobileChat ? '70vh' : '620px',
+                maxHeight: '700px',
+                background: 'var(--bg-primary)', 
+                border: '1.5px solid var(--text-primary)', 
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'hidden',
+                borderRadius: '24px',
+                pointerEvents: 'auto',
+                margin: isMobileChat ? 'auto' : '0'
+              }}
+            >
+              {/* Header */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.2rem 1.4rem', borderBottom: '1px solid var(--border-primary)', background: 'var(--bg-primary)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
+                  <div style={{ position: 'relative' }}>
+                    <img src={dsaImage} alt="John" style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--text-primary)' }} />
+                    <div style={{ position: 'absolute', bottom: '1px', right: '-1px', width: '12px', height: '12px', background: '#10b981', borderRadius: '50%', border: '2px solid var(--bg-primary)' }} />
+                  </div>
+                  <div>
+                    <h3 style={{ fontSize: '1.1rem', fontWeight: '900', color: 'var(--text-primary)', margin: 0 }}>Chat with John</h3>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.7rem', fontWeight: '700', color: '#10b981', marginTop: '3px' }}>
+                      <span style={{ width: '7px', height: '7px', background: '#10b981', borderRadius: '50%', display: 'inline-block' }} />
+                      Online
+                    </span>
+                  </div>
+                </div>
+                <button onClick={() => setIsOpen(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '1.5rem', fontWeight: '900', color: 'var(--text-primary)' }}>×</button>
               </div>
               
-              <div style={{ padding: '1rem', border: '1px dashed var(--border-primary)', textAlign: 'center' }}>
-                <div style={{ fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', opacity: 0.6, color: 'var(--text-primary)' }}>
-                  Coming soon - 2026
-                </div>
+              {/* Messages */}
+              <div style={{ flex: 1, padding: '1.2rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem', background: 'var(--bg-secondary)' }}>
+                {messages.map((msg, idx) => (
+                  <div key={idx} style={{ alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start', maxWidth: '80%', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    {msg.sender === 'bot' && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
+                        <img src={dsaImage} alt="John" style={{ width: '22px', height: '22px', borderRadius: '50%', objectFit: 'cover' }} />
+                        <span style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-primary)', opacity: 0.7 }}>John</span>
+                      </div>
+                    )}
+                    <div style={{ 
+                      padding: '0.8rem 1rem', 
+                      background: msg.sender === 'user' ? 'var(--text-primary)' : 'var(--bg-primary)', 
+                      color: msg.sender === 'user' ? 'var(--bg-primary)' : 'var(--text-primary)',
+                      border: msg.sender === 'user' ? 'none' : '1px solid var(--border-primary)',
+                      borderRadius: msg.sender === 'user' ? '16px 16px 0px 16px' : '16px 16px 16px 0px',
+                      fontSize: '0.95rem',
+                      fontWeight: '500',
+                      lineHeight: '1.5',
+                      boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
+                    }}>
+                      {msg.text}
+                    </div>
+                  </div>
+                ))}
+                {isTyping && (
+                  <div style={{ alignSelf: 'flex-start', maxWidth: '80%', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
+                      <img src={dsaImage} alt="John" style={{ width: '22px', height: '22px', borderRadius: '50%', objectFit: 'cover' }} />
+                      <span style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-primary)', opacity: 0.7 }}>John</span>
+                    </div>
+                    <div style={{ 
+                      padding: '0.8rem 1rem', 
+                      background: 'var(--bg-primary)', 
+                      border: '1px solid var(--border-primary)',
+                      borderRadius: '16px 16px 16px 0px',
+                      display: 'flex',
+                      gap: '6px',
+                      alignItems: 'center',
+                      height: '42px',
+                      boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
+                    }}>
+                      <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} style={{ width: '6px', height: '6px', background: 'var(--text-primary)', borderRadius: '50%', opacity: 0.6 }} />
+                      <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }} style={{ width: '6px', height: '6px', background: 'var(--text-primary)', borderRadius: '50%', opacity: 0.6 }} />
+                      <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.4 }} style={{ width: '6px', height: '6px', background: 'var(--text-primary)', borderRadius: '50%', opacity: 0.6 }} />
+                    </div>
+                  </div>
+                )}
+                <div ref={messagesEndRef} />
               </div>
-            </div>
 
-            <div style={{ padding: '1.8rem', borderTop: '1px solid var(--border-primary)', display: 'flex', gap: '0.8rem' }}>
-              <input 
-                disabled 
-                placeholder="Coming soon..." 
-                style={{ flex: '1 1 0%', background: 'transparent', border: '1px solid var(--border-primary)', padding: '1rem', fontSize: '1rem', color: 'var(--text-primary)', outline: 'none' }} 
-              />
-              <button disabled style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)', border: 'none', padding: '1rem 1.5rem', fontWeight: '800', opacity: 0.5 }}>Send</button>
-            </div>
-          </motion.div>
+              {/* Input */}
+              <form onSubmit={handleSend} style={{ padding: '1.2rem', borderTop: '1px solid var(--border-primary)', background: 'var(--bg-primary)', display: 'flex', gap: '0.8rem' }}>
+                <input 
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Type your message..." 
+                  style={{ flex: 1, background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)', padding: '0.9rem 1.2rem', borderRadius: '24px', fontSize: '0.95rem', color: 'var(--text-primary)', outline: 'none' }} 
+                />
+                <button type="submit" disabled={!input.trim() || isTyping} style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)', border: 'none', width: '48px', height: '48px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: input.trim() ? 'pointer' : 'default', opacity: input.trim() ? 1 : 0.5 }}>
+                  <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z"></path></svg>
+                </button>
+              </form>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
 
@@ -1850,26 +2060,19 @@ const ChatBot = () => {
               color: 'var(--bg-primary)',
               border: 'none',
               padding: '0.8rem 1.5rem',
-              height: '45px',
+              height: '50px',
+              borderRadius: '25px',
               fontWeight: '800',
-              fontSize: '0.9rem',
+              fontSize: '0.95rem',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '0.8rem',
-              boxShadow: '0 10px 20px rgba(0,0,0,0.2)'
+              boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
+              pointerEvents: 'auto'
             }}
           >
-            <style>{`
-              .chat-icon-svg {
-                width: 1.2rem;
-                height: 1.2rem;
-                fill: currentColor;
-              }
-            `}</style>
-            <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" className="chat-icon-svg" xmlns="http://www.w3.org/2000/svg">
-              <path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32zM128 272c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"></path>
-            </svg> 
+            <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="1.2em" width="1.2em" xmlns="http://www.w3.org/2000/svg"><path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32zM128 272c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"></path></svg>
             Chat with John
           </motion.button>
         )}
