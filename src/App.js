@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from './supabaseClient';
-import { FaEnvelope, FaMapMarkerAlt, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaLinkedin, FaBars, FaTimes, FaFacebook, FaInstagram, FaTwitter, FaCommentDots, FaPython, FaCalendarAlt, FaChevronRight, FaChevronDown, FaEye, FaStar } from 'react-icons/fa';
+import { FaEnvelope, FaMapMarkerAlt, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaLinkedin, FaBars, FaTimes, FaFacebook, FaInstagram, FaTwitter, FaCommentDots, FaPython, FaCalendarAlt, FaChevronRight, FaChevronLeft, FaChevronDown, FaEye, FaStar } from 'react-icons/fa';
 import { MdVerified } from 'react-icons/md';
 import { SiTailwindcss, SiExpress, SiAxios, SiMysql, SiVercel, SiSupabase, SiPostgresql, SiVite, SiLaravel, SiPython, SiNextdotjs, SiFramer, SiTypescript } from 'react-icons/si';
 
@@ -189,111 +189,180 @@ const SkillTag = ({ name, size = 'large' }) => {
       display: 'inline-flex', 
       alignItems: 'center', 
       justifyContent: 'center',
-      background: 'transparent', 
+      background: size === 'small' ? 'transparent' : 'rgba(255, 255, 255, 0.03)', 
       border: size === 'small' ? 'none' : '1.5px solid var(--border-primary)', 
-      padding: size === 'small' ? '0' : '0.8rem', 
-      fontSize: size === 'small' ? '1.4rem' : '1.8rem', 
+      padding: size === 'small' ? '0' : '1.2rem', 
+      fontSize: size === 'small' ? '1.4rem' : '2.2rem', 
       color: skill.color,
-      transition: 'all 0.3s ease'
+      borderRadius: '0px',
+      transition: 'all 0.3s ease',
+      boxShadow: size === 'small' ? 'none' : '0 4px 12px rgba(0,0,0,0.05)'
     }}>
       {Icon && <Icon />}
     </div>
   );
 };
 
-const TestimonialCard = ({ t, index, isMobile }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const maxLength = 120;
-  const isLong = t.content.length > maxLength;
-  const displayedContent = isExpanded ? t.content : t.content.substring(0, maxLength);
+const RecommendationSlider = ({ testimonials, isMobile }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const filtered = testimonials.filter(t => t.is_approved);
+
+  useEffect(() => {
+    if (filtered.length <= 1) return;
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % filtered.length);
+    }, 5000); // Slide every 5 seconds
+    return () => clearInterval(timer);
+  }, [filtered.length]);
+
+  if (filtered.length === 0) {
+    return (
+      <div style={{ padding: '5rem', textAlign: 'center', border: '1.5px solid var(--border-primary)', opacity: 0.4 }}>
+        <FaStar style={{ fontSize: '2rem', marginBottom: '1rem', opacity: 0.5 }} />
+        <p style={{ fontWeight: '800', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.9rem' }}>Awaiting first recommendation...</p>
+      </div>
+    );
+  }
+
+  const current = filtered[activeIndex];
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
-      style={{ 
-        padding: '3.5rem 2rem 2rem', 
-        background: 'var(--bg-card)', 
-        border: '1.5px solid var(--border-primary)',
-        borderRadius: '16px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem',
-        textAlign: 'center',
-        position: 'relative',
-        marginTop: '2.5rem',
-        boxShadow: 'var(--shadow-md)',
-        transition: 'transform 0.3s ease'
-      }}
-      whileHover={{ y: -5 }}
-    >
-      {/* Avatar at Top Center */}
-      <div style={{ 
-        position: 'absolute',
-        top: '-35px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: '70px', 
-        height: '70px', 
-        borderRadius: '50%', 
-        background: '#000', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center',
-        color: '#fff',
-        fontWeight: '800',
-        fontSize: '1.4rem',
-        boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
-        border: '4px solid var(--bg-card)'
-      }}>
-        {t.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)}
-      </div>
+    <div style={{ maxWidth: '900px', position: 'relative' }}>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeIndex}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.4 }}
+          style={{ minHeight: '220px' }}
+        >
+          <p style={{ 
+            fontSize: isMobile ? '1.1rem' : '1.35rem', 
+            lineHeight: '1.8', 
+            color: 'var(--text-primary)', 
+            fontWeight: '500',
+            margin: '0 0 2.5rem 0',
+            fontStyle: 'normal' // Removed italics
+          }}>
+            "{current.content}"
+          </p>
+          
+          <div style={{ width: '100%', height: '1.5px', background: 'var(--border-primary)', opacity: 0.2, marginBottom: '2.5rem' }} />
+          
+          <div>
+            <div style={{ fontWeight: '900', fontSize: '1.2rem', color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>{current.name}</div>
+            <div style={{ fontSize: '1rem', color: 'var(--text-primary)', fontWeight: '700', opacity: 0.5, marginTop: '4px' }}>{current.role}</div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
 
-      <div>
-        <div style={{ fontWeight: '900', fontSize: '1.2rem', color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>{t.name}</div>
-        <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', fontWeight: '700', opacity: 0.5, marginTop: '2px' }}>{t.role}</div>
-      </div>
-
-      {/* Stars Centered */}
-      <div style={{ display: 'flex', gap: '4px', justifyContent: 'center' }}>
-        {[...Array(t.rating || 5)].map((_, index) => (
-          <FaStar key={index} style={{ color: '#f59e0b', fontSize: '1.2rem' }} />
+      {/* Custom Square Pagination Indicators */}
+      <div style={{ display: 'flex', gap: '10px', marginTop: '3rem', flexWrap: 'wrap' }}>
+        {filtered.map((_, i) => (
+          <div 
+            key={i}
+            onClick={() => setActiveIndex(i)}
+            style={{ 
+              width: '14px', 
+              height: '14px', 
+              background: i === activeIndex ? '#333' : '#d1d5db', // Dark gray for active, light gray for inactive
+              borderRadius: '2px',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }} 
+          />
         ))}
       </div>
+    </div>
+  );
+};
+const Gallery = ({ isMobile }) => {
+  const images = ['/me.jpg', '/gal2.jpg', '/gal3.jpg', '/gal4.jpg', '/gall.jpg', '/thesis.jpg', '/baby.jpg', '/baby2.jpg', '/bb.jpg'];
+  const scrollRef = useRef(null);
 
-      {/* Quote Centered */}
-      <p style={{ 
-        fontSize: '1.05rem', 
-        lineHeight: '1.8', 
-        color: 'var(--text-primary)', 
-        fontWeight: '500',
-        margin: 0,
-        opacity: 0.8
-      }}>
-        "{displayedContent}{!isExpanded && isLong && '...'}"
-      </p>
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const { scrollLeft, clientWidth } = scrollRef.current;
+      const scrollAmount = isMobile ? clientWidth * 0.8 : 400;
+      const scrollTo = direction === 'left' ? scrollLeft - scrollAmount : scrollLeft + scrollAmount;
+      scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
+    }
+  };
 
-      {isLong && (
-        <button 
-          onClick={() => setIsExpanded(!isExpanded)}
+  return (
+    <section id="gallery" style={{ marginTop: '5rem', marginBottom: '3rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2.5rem' }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-1px', margin: 0 }}>Gallery</h2>
+        <div style={{ display: 'flex', gap: '0.8rem' }}>
+          <button 
+            onClick={() => scroll('left')}
+            style={{ 
+              background: 'transparent', border: '1.5px solid var(--border-primary)', 
+              width: '45px', height: '45px', display: 'flex', alignItems: 'center', justifyContent: 'center', 
+              cursor: 'pointer', color: 'var(--text-primary)', transition: 'all 0.3s'
+            }}
+          >
+            <FaChevronLeft />
+          </button>
+          <button 
+            onClick={() => scroll('right')}
+            style={{ 
+              background: 'transparent', border: '1.5px solid var(--border-primary)', 
+              width: '45px', height: '45px', display: 'flex', alignItems: 'center', justifyContent: 'center', 
+              cursor: 'pointer', color: 'var(--text-primary)', transition: 'all 0.3s'
+            }}
+          >
+            <FaChevronRight />
+          </button>
+        </div>
+      </div>
+      <div style={{ position: 'relative', width: '100%' }}>
+        <div 
+          ref={scrollRef}
+          className="no-scrollbar"
           style={{ 
-            background: 'transparent', 
-            border: 'none', 
-            color: '#3b82f6', 
-            fontWeight: '800', 
-            fontSize: '0.95rem', 
-            cursor: 'pointer',
-            padding: '5px',
-            textDecoration: 'underline',
-            marginTop: 'auto'
+            display: 'flex', gap: '1.5rem', overflowX: 'auto', scrollSnapType: 'x mandatory',
+            padding: '0.5rem 0', scrollbarWidth: 'none', msOverflowStyle: 'none'
           }}
         >
-          {isExpanded ? 'Read less' : 'Read more'}
-        </button>
-      )}
-    </motion.div>
+          {images.map((src, i) => (
+            <motion.a 
+              key={i}
+              href={src}
+              className="glightbox"
+              data-gallery="gallery"
+              whileHover={{ scale: 1.02 }}
+              style={{ 
+                flex: '0 0 auto', 
+                width: isMobile ? '85vw' : '400px', 
+                height: '400px', 
+                border: '1.5px solid var(--border-primary)', 
+                overflow: 'hidden',
+                scrollSnapAlign: 'start',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: '#ffffff', // Clean white background
+                cursor: 'zoom-in'
+              }}
+            >
+              <img 
+                src={src} 
+                alt={`Gallery ${i}`} 
+                style={{ 
+                  maxWidth: '100%', 
+                  maxHeight: '100%', 
+                  width: 'auto', 
+                  height: 'auto', 
+                  objectFit: 'contain' // No crop feels
+                }} 
+              />
+            </motion.a>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 
@@ -1052,14 +1121,21 @@ function App() {
           </div>
 
           {/* Smooth Cross-fading Profile Image */}
-          <div style={{ 
-            width: isMobile ? '120px' : '220px', 
-            height: isMobile ? '120px' : '220px', 
-            position: 'relative', 
-            flexShrink: 0 
-          }}>
+          <a 
+            href={`${process.env.PUBLIC_URL}/new-pfp.jpg`} 
+            className="glightbox" 
+            data-gallery="profile"
+            style={{ 
+              width: isMobile ? '120px' : '220px', 
+              height: isMobile ? '120px' : '220px', 
+              position: 'relative', 
+              flexShrink: 0,
+              display: 'block',
+              cursor: 'zoom-in'
+            }}
+          >
             <img 
-              src={`${process.env.PUBLIC_URL}/dsa.jpg`} 
+              src={`${process.env.PUBLIC_URL}/new-pfp.jpg`} 
               alt="Profile Light" 
               style={{ 
                 position: 'absolute',
@@ -1074,7 +1150,7 @@ function App() {
               }} 
             />
             <img 
-              src={`${process.env.PUBLIC_URL}/jc-sleeping.png`} 
+              src={`${process.env.PUBLIC_URL}/new-pfp.jpg`} 
               alt="Profile Dark" 
               style={{ 
                 position: 'absolute',
@@ -1088,7 +1164,7 @@ function App() {
                 zIndex: darkMode ? 1 : 0
               }} 
             />
-          </div>
+          </a>
           
           <div style={{ flex: 1, minWidth: 0, paddingTop: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem', flexWrap: 'wrap', paddingRight: isMobile ? '4rem' : '0' }}>
@@ -1180,7 +1256,7 @@ function App() {
                 My expertise lies in developing complex architectures using React, Node.js, and Modern Databases.
               </p>
               <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-primary)', marginTop: '1.5rem', fontWeight: '500' }}>
-                Currently in my final year of BSIT at Cavite State University, I have spent my academic years leading the development of real-world management systems,
+                Currently in my final year of BSIT at Cavite State University, I have spent my academic years leading the development of real-world management systems, 
                 including the BBEK and StartupLab platforms. I specialize in turning complex requirements into efficient, user-centric software.
               </p>
             </section>
@@ -1353,6 +1429,54 @@ function App() {
           </div>
         </div>
 
+        {/* Recommendations Section */}
+        <section id="testimonials" style={{ marginTop: '4rem', padding: '2rem 0' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3.5rem' }}>
+            <div>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-2px', margin: 0 }}>Recommendations</h2>
+              <div style={{ width: '80px', height: '5px', background: 'var(--text-primary)', marginTop: '1rem' }} />
+            </div>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              {!showAllTestimonials && testimonials.filter(t => t.is_approved).length > 3 && (
+                <button 
+                  onClick={() => setShowAllTestimonials(true)}
+                  style={{ 
+                    background: 'transparent', 
+                    border: '1.5px solid var(--border-primary)', 
+                    padding: '0.8rem 1.2rem', 
+                    fontWeight: '800', 
+                    fontSize: '0.8rem', 
+                    color: 'var(--text-primary)', 
+                    cursor: 'pointer',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px'
+                  }}
+                >
+                  View All →
+                </button>
+              )}
+              <button 
+                onClick={() => setIsFeedbackModalOpen(true)}
+                style={{ 
+                  background: 'var(--text-primary)', 
+                  border: 'none', 
+                  padding: '0.8rem 1.2rem', 
+                  fontWeight: '800', 
+                  fontSize: '0.8rem', 
+                  color: 'var(--bg-primary)', 
+                  cursor: 'pointer',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}
+              >
+                Write a Review
+              </button>
+            </div>
+          </div>
+
+          <RecommendationSlider testimonials={testimonials} isMobile={isMobile} />
+        </section>
+
         {/* Services Section */}
         <section id="services" style={{ marginTop: '2rem', marginBottom: '1.5rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Expertise & Services</h2>
@@ -1440,71 +1564,7 @@ function App() {
           </div>
         </section>
 
-        {/* What My Clients Say Section */}
-        <section id="testimonials" style={{ marginTop: '4rem', padding: '2rem 0' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3.5rem' }}>
-            <div>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-2px', margin: 0 }}>What My Clients Say</h2>
-              <div style={{ width: '80px', height: '5px', background: 'var(--text-primary)', marginTop: '1rem' }} />
-            </div>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              {!showAllTestimonials && testimonials.filter(t => t.is_approved).length > 3 && (
-                <button 
-                  onClick={() => setShowAllTestimonials(true)}
-                  style={{ 
-                    background: 'transparent', 
-                    border: '1.5px solid var(--border-primary)', 
-                    padding: '0.8rem 1.2rem', 
-                    fontWeight: '800', 
-                    fontSize: '0.8rem', 
-                    color: 'var(--text-primary)', 
-                    cursor: 'pointer',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px'
-                  }}
-                >
-                  View All →
-                </button>
-              )}
-              <button 
-                onClick={() => setIsFeedbackModalOpen(true)}
-                style={{ 
-                  background: 'var(--text-primary)', 
-                  border: 'none', 
-                  padding: '0.8rem 1.2rem', 
-                  fontWeight: '800', 
-                  fontSize: '0.8rem', 
-                  color: 'var(--bg-primary)', 
-                  cursor: 'pointer',
-                  textTransform: 'uppercase',
-                  letterSpacing: '1px'
-                }}
-              >
-                Write a Review
-              </button>
-            </div>
-          </div>
-
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(320px, 1fr))', 
-            gap: '2rem',
-            alignItems: 'start'
-          }}>
-            {testimonials.filter(t => t.is_approved).length > 0 ? (
-              testimonials.filter(t => t.is_approved)
-                .slice(0, showAllTestimonials ? undefined : 3)
-                .map((t, i) => (
-                  <TestimonialCard key={t.id} t={t} index={i} isMobile={isMobile} />
-                ))
-            ) : (
-              <div style={{ gridColumn: '1/-1', padding: '5rem', textAlign: 'center', border: '2px dashed var(--border-primary)', opacity: 0.4 }}>
-                <FaStar style={{ fontSize: '2rem', marginBottom: '1rem', opacity: 0.5 }} />
-                <p style={{ fontWeight: '800', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.9rem' }}>Awaiting first client feedback...</p>
-              </div>
-            )}
-          </div>
-        </section>
+        <Gallery isMobile={isMobile} />
 
         <section id="contact" style={{ marginTop: '3rem', padding: isMobile ? '2.5rem 1rem' : '4rem 0', borderTop: '1.5px solid var(--border-primary)' }}>
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(12, 1fr)', gap: isMobile ? '2.5rem' : '4rem', alignItems: 'flex-start' }}>
