@@ -24,6 +24,8 @@ import medflowImage from './medflow_new.png';
 import laundrosaasImage from './laundry_new.png';
 import logoImage from './logo.png';
 import dsaImage from './dsa.jpg';
+import dormpulseImage from './dormpulse.png';
+
 
 // Unique Animation Skill Icon Component
 const AnimatedSkillIcon = ({ icon: Icon, delay, color, percentage, name, animationType = 'rotate', size = '2.5rem', setToast }) => {
@@ -236,7 +238,7 @@ const TestimonialCard = ({ t, index, isMobile }) => {
         width: '70px', 
         height: '70px', 
         borderRadius: '50%', 
-        background: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899'][(t.email || t.name).length % 7], 
+        background: '#000', 
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'center',
@@ -1108,7 +1110,7 @@ function App() {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-primary)', fontSize: '0.8rem', opacity: 0.5, borderLeft: '1.5px solid var(--border-primary)', paddingLeft: '1.2rem' }}>
                 <FaCalendarAlt size={12} />
-                <span style={{ textTransform: 'uppercase', letterSpacing: '1px' }}>Updated: May 3, 2026</span>
+                <span style={{ textTransform: 'uppercase', letterSpacing: '1px' }}>Updated: May 4, 2026</span>
               </div>
             </div>
 
@@ -1302,6 +1304,7 @@ function App() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: '2rem' }}>
                 {[ 
+                  { title: 'DormPulse | Student Housing', img: dormpulseImage, url: 'https://studnet-iota.vercel.app/', desc: 'A premium student housing locator platform designed to help students find and track housing units with ease. Features real-time tracking and an interactive map.', tags: ['React', 'FastAPI', 'Supabase'] },
                   { title: 'LaundroSaaS Management', img: laundrosaasImage, url: 'https://laundro-phi.vercel.app/', desc: 'A comprehensive laundry management SaaS platform featuring real-time order tracking, customer management, and automated revenue reporting.', tags: ['React', 'Tailwind', 'Vite'] },
                   { title: 'MedFlow Healthcare Management', img: medflowImage, url: 'https://medflow-two.vercel.app/', desc: 'A modern healthcare management system for hospitals and clinics, featuring real-time analytics, patient tracking, and appointment scheduling.', tags: ['React', 'Vite', 'Tailwind'] },
                   { title: 'NAgCO Loan Management System', img: nagcoDashboardImage, url: 'https://nagcoloanmanagementsystem.vercel.app/', desc: 'A comprehensive loan management platform for the Napilihan Agriculture Cooperative, featuring automated workflows and real-time tracking.', tags: ['Next.js', 'Tailwind', 'Supabase'] },
@@ -1441,7 +1444,7 @@ function App() {
         <section id="testimonials" style={{ marginTop: '4rem', padding: '2rem 0' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3.5rem' }}>
             <div>
-              <h2 style={{ fontSize: isMobile ? '2.2rem' : '3rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-2px', margin: 0 }}>What My Clients Say</h2>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-2px', margin: 0 }}>What My Clients Say</h2>
               <div style={{ width: '80px', height: '5px', background: 'var(--text-primary)', marginTop: '1rem' }} />
             </div>
             <div style={{ display: 'flex', gap: '1rem' }}>
@@ -1485,7 +1488,8 @@ function App() {
           <div style={{ 
             display: 'grid', 
             gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(320px, 1fr))', 
-            gap: '2rem' 
+            gap: '2rem',
+            alignItems: 'start'
           }}>
             {testimonials.filter(t => t.is_approved).length > 0 ? (
               testimonials.filter(t => t.is_approved)
@@ -1505,7 +1509,7 @@ function App() {
         <section id="contact" style={{ marginTop: '3rem', padding: isMobile ? '2.5rem 1rem' : '4rem 0', borderTop: '1.5px solid var(--border-primary)' }}>
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(12, 1fr)', gap: isMobile ? '2.5rem' : '4rem', alignItems: 'flex-start' }}>
             <div style={{ gridColumn: isMobile ? 'span 1' : 'span 5' }}>
-              <h2 style={{ fontSize: isMobile ? '2rem' : '2.5rem', fontWeight: '900', color: 'var(--text-primary)', marginBottom: '1.5rem', letterSpacing: '-1px' }}>Let's work together</h2>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--text-primary)', marginBottom: '1.5rem', letterSpacing: '-1px' }}>Let's work together</h2>
               <p style={{ fontSize: '1.1rem', color: 'var(--text-primary)', opacity: 0.8, lineHeight: '1.8', marginBottom: '2.5rem', fontWeight: '500' }}>
                 I'm always looking for new opportunities and collaborations. <br /><br />
                 Whether you have a specific project in mind or just want to discuss the latest in software engineering, 
@@ -1806,29 +1810,65 @@ const ChatBot = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  const SYSTEM_PROMPT = `You are John Carlo Aganan's personal AI assistant on his portfolio website. Be friendly, concise, and helpful. Answer questions about John based on the following:
+  const SYSTEM_PROMPT = `You are John Carlo Aganan's (often called 'Ulac') personal AI assistant on his professional portfolio. You have deep knowledge about his career, projects, and skills.
 
-ABOUT: John is a Full-Stack Developer and final-year BSIT student at Cavite State University (2022–2026). He is passionate about building scalable, impact-driven digital solutions.
+IDENTITY:
+- Name: John Carlo Aganan (JC / Ulac)
+- Role: Full-Stack Engineer & Aspiring Full Stack Developer.
+- Education: Final year BSIT student at Cavite State University (2022–2026).
+- Location: Naic, Cavite, Philippines.
 
-EXPERIENCE:
-- Full-Stack Developer Intern @ StartupLab Business Center & AI Consulting Agency OPC (Feb 23, 2026 – Present)
-- Junior Freelance Full-Stack Developer (April 2026 – Present)
+CORE EXPERTISE:
+- Building scalable systems, complex architectures, and impact-driven digital solutions.
+- Specializes in React, Node.js, and Modern Databases.
+- Expert in turning complex requirements into user-centric software.
 
-TECH STACK: React, Node.js, Express, PHP, Laravel, MySQL, PostgreSQL, Supabase, TailwindCSS, TypeScript, Vite, Next.js, Git, GitHub, Python
+DETAILED TECH STACK:
+- Frontend: JavaScript (ES6+), React, Vue.js, Tailwind CSS, HTML5, CSS3, Vite, Next.js.
+- Backend: Node.js, Express.js, PHP, Laravel, Python, FastAPI.
+- Databases: MySQL, PostgreSQL, Supabase.
+- Tools: Git, GitHub, Vercel, VS Code, npm, Axios, REST APIs, Framer Motion.
 
 PROJECTS:
-- BBEK (BigBrew Event Kiosk): POS and event management system
-- StartupLab Business Ticketing: Full event ticketing platform with organizer management, AI features, Supabase auth, HitPay payments
-- MedFlow: Medical management system
-- LaundroSaaS: Laundry management SaaS
-- Artisano Pizzeria: Restaurant management system
-- NAGCO Management: Business management system
+- DormPulse: Premium student housing locator with real-time tracking and interactive maps. (React, FastAPI, Supabase)
+- LaundroSaaS: Comprehensive laundry management platform with real-time order tracking and revenue reporting. (React, Tailwind, Vite)
+- MedFlow: Healthcare management system for hospitals/clinics with real-time analytics. (React, Vite, Tailwind)
+- NAgCO Loan Management: Automated workflow for Napilihan Agriculture Cooperative. (Next.js, Tailwind, Supabase)
+- Artisano & Co. Pizzeria: Premium digital presence for an artisanal pizzeria. (Next.js, Tailwind, Framer Motion)
+- BigBrew POS: Coffee shop point-of-sale with real-time analytics. (React, Vite, Tailwind, Node.js)
+- StartupLab Ticketing: End-to-end event management and ticketing platform. (React, Node.js, PostgreSQL)
+- BBEK Administration: Administration platform for church operations. (Vue.js, Node.js, MySQL)
+- Baby Bliss Booking: Appointment system for wellness and spa centers. (React, Tailwind, Vercel)
+- Event Registration System: Streamlined platform for university events. (Laravel, PHP, MySQL)
 
-CONTACT: johncarloaganan.startuplab@gmail.com
-LOCATION: Cavite, Philippines
-SOCIAL: LinkedIn, GitHub, Facebook, Instagram
+SERVICES OFFERED:
+- Full-Stack Systems: Complex management systems and admin dashboards.
+- Custom Web Apps: Scalable apps tailored to business workflows.
+- Database Architecture: Robust schema design (PostgreSQL/MySQL).
+- E-commerce Solutions: Online stores with secure payments.
+- Responsive UI/UX: Mobile-first, modern interfaces.
+- API Development: Secure RESTful APIs.
 
-Keep responses short (2-4 sentences max). If asked something unrelated to John, politely redirect to his portfolio topics.`;
+EXPERIENCE:
+- Full-Stack Developer Intern @ StartupLab Business Center (Feb 2026 - Present).
+- Freelance Full-Stack Developer (April 2026 - Present).
+
+CONTACT & LINKS:
+- Email: johncarloaganan.startuplab@gmail.com
+- Social: LinkedIn, GitHub, Facebook, Instagram.
+- CTA: Users can "Schedule a Call" or "Inquire Now" for services.
+
+REVIEWS & TESTIMONIALS:
+- John maintains a 5-star reputation for his high-quality full-stack work.
+- Clients often praise his technical expertise, "modern" aesthetic, and ability to deliver complex systems on time.
+- Key feedback highlights his work on NAgCO, StartupLab, and MedFlow as being "exceptional" and "highly professional."
+
+TONE & RULES:
+1. Be professional, friendly, and helpful.
+2. Keep responses concise (3-5 sentences).
+3. If asked about pricing, mention that they should "Inquire Now" via the services section.
+4. If a question is outside these topics, politely steer them back to John's work.
+5. Use "Ulac" or "JC" if the user uses those names.`;
 
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
@@ -2030,14 +2070,14 @@ Keep responses short (2-4 sentences max). If asked something unrelated to John, 
               </div>
 
               {/* Input */}
-              <form onSubmit={handleSend} style={{ padding: '1.2rem', borderTop: '1px solid var(--border-primary)', background: 'var(--bg-primary)', display: 'flex', gap: '0.8rem' }}>
+              <form onSubmit={handleSend} style={{ padding: isMobileChat ? '0.8rem 1rem' : '1.2rem', borderTop: '1px solid var(--border-primary)', background: 'var(--bg-primary)', display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
                 <input 
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Type your message..." 
                   style={{ flex: 1, background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)', padding: '0.9rem 1.2rem', borderRadius: '24px', fontSize: '0.95rem', color: 'var(--text-primary)', outline: 'none' }} 
                 />
-                <button type="submit" disabled={!input.trim() || isTyping} style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)', border: 'none', width: '48px', height: '48px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: input.trim() ? 'pointer' : 'default', opacity: input.trim() ? 1 : 0.5 }}>
+                <button type="submit" disabled={!input.trim() || isTyping} style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)', border: 'none', width: '48px', height: '48px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: input.trim() ? 'pointer' : 'default', opacity: input.trim() ? 1 : 0.5, flexShrink: 0 }}>
                   <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z"></path></svg>
                 </button>
               </form>
