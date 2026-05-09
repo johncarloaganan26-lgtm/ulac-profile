@@ -20,6 +20,31 @@ app.post('/api/contact', contactHandler);
 app.post('/api/testimonial-thanks', testimonialHandler);
 app.post('/api/testimonial-approved', approvalHandler);
 
+// Chat API Proxy (Securely hides GROQ_API_KEY from frontend)
+app.post('/api/chat', async (req, res) => {
+  try {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.REACT_APP_GROQ_KEY}`
+      },
+      body: JSON.stringify(req.body)
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      return res.status(response.status).json(errorData);
+    }
+    
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('Chat API Error:', error);
+    res.status(500).json({ error: 'Failed to process chat request' });
+  }
+});
+
 // View Counter Persistence
 const VIEWS_FILE = path.join(__dirname, 'views.txt');
 

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "homepage": ".",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5001",
   "dependencies": {
     "@supabase/supabase-js": "^2.104.1",
     "@types/aos": "^3.0.7",
