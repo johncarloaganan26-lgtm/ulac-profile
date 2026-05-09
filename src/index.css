@@ -34,8 +34,8 @@
   /* Texture */
   --noise-opacity: 0.12; /* Slightly more visible for parchment effect */
   
-  --radius-lg: 0px; 
-  --radius-md: 0px;
+  --radius-lg: 12px; 
+  --radius-md: 12px;
 }
 
 /* Texture Overlay */

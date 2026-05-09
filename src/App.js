@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { supabase } from './supabaseClient';
 import { FaEnvelope, FaMapMarkerAlt, FaHtml5, FaCss3, FaJs, FaReact, FaVuejs, FaNodeJs, FaPhp, FaGit, FaGithub, FaCode, FaNpm, FaPlug, FaMoon, FaSun, FaLinkedin, FaBars, FaTimes, FaFacebook, FaInstagram, FaTwitter, FaCommentDots, FaPython, FaCalendarAlt, FaChevronRight, FaChevronLeft, FaChevronDown, FaEye, FaStar } from 'react-icons/fa';
 import { MdVerified } from 'react-icons/md';
@@ -75,6 +75,68 @@ const AnimatedSkillIcon = ({ icon: Icon, delay, color, percentage, name, animati
       onMouseLeave={handleMouseLeave}
     >
       <Icon style={{ fontSize: size, color: color }} />
+    </motion.div>
+  );
+};
+
+const TiltCard = ({ children, style = {}, className = "" }) => {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x);
+  const mouseYSpring = useSpring(y);
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["15deg", "-15deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-15deg", "15deg"]);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mX = e.clientX - rect.left;
+    const mY = e.clientY - rect.top;
+    const xPct = mX / width - 0.5;
+    const yPct = mY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+    mouseX.set(mX);
+    mouseY.set(mY);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        ...style,
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+      }}
+      className={className}
+    >
+      <motion.div 
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: useTransform(
+            [mouseX, mouseY],
+            ([mx, my]) => `radial-gradient(circle at ${mx}px ${my}px, rgba(255,255,255,0.15) 0%, transparent 80%)`
+          ),
+          zIndex: 0,
+          pointerEvents: 'none'
+        }}
+      />
+      <div style={{ transform: "translateZ(30px)", transformStyle: "preserve-3d", height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', zIndex: 1 }}>
+        {children}
+      </div>
     </motion.div>
   );
 };
@@ -291,39 +353,53 @@ const Gallery = ({ isMobile }) => {
   };
 
   return (
-    <section id="gallery" style={{ marginTop: '5rem', marginBottom: '3rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2.5rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-1px', margin: 0 }}>Gallery</h2>
-        <div style={{ display: 'flex', gap: '0.8rem' }}>
+    <section id="gallery" style={{ marginTop: '3rem', marginBottom: '1.5rem', position: 'relative' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+        <h2 style={{ fontSize: '1.4rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-0.5px', margin: 0 }}>Gallery</h2>
+      </div>
+
+      <div style={{ position: 'relative', width: '100%', display: 'flex', alignItems: 'center' }}>
+        {/* Left Arrow */}
+        {!isMobile && (
           <button 
             onClick={() => scroll('left')}
             style={{ 
-              background: 'transparent', border: '1.5px solid var(--border-primary)', 
-              width: '45px', height: '45px', display: 'flex', alignItems: 'center', justifyContent: 'center', 
-              cursor: 'pointer', color: 'var(--text-primary)', transition: 'all 0.3s'
+              position: 'absolute',
+              left: '-15px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 10,
+              background: '#ffffff', 
+              border: '1px solid #e5e7eb', 
+              width: '40px', 
+              height: '40px', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              cursor: 'pointer', 
+              color: '#000', 
+              boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+              borderRadius: '4px',
+              transition: 'all 0.2s'
             }}
+            className="gallery-nav-btn"
           >
-            <FaChevronLeft />
+            <FaChevronLeft size={16} />
           </button>
-          <button 
-            onClick={() => scroll('right')}
-            style={{ 
-              background: 'transparent', border: '1.5px solid var(--border-primary)', 
-              width: '45px', height: '45px', display: 'flex', alignItems: 'center', justifyContent: 'center', 
-              cursor: 'pointer', color: 'var(--text-primary)', transition: 'all 0.3s'
-            }}
-          >
-            <FaChevronRight />
-          </button>
-        </div>
-      </div>
-      <div style={{ position: 'relative', width: '100%' }}>
+        )}
+
         <div 
           ref={scrollRef}
           className="no-scrollbar"
           style={{ 
-            display: 'flex', gap: '1.5rem', overflowX: 'auto', scrollSnapType: 'x mandatory',
-            padding: '0.5rem 0', scrollbarWidth: 'none', msOverflowStyle: 'none'
+            display: 'flex', 
+            gap: '0.8rem', 
+            overflowX: 'auto', 
+            scrollSnapType: 'x mandatory',
+            padding: '0.5rem 0', 
+            scrollbarWidth: 'none', 
+            msOverflowStyle: 'none',
+            width: '100%'
           }}
         >
           {images.map((src, i) => (
@@ -335,15 +411,15 @@ const Gallery = ({ isMobile }) => {
               whileHover={{ scale: 1.02 }}
               style={{ 
                 flex: '0 0 auto', 
-                width: isMobile ? '85vw' : '400px', 
-                height: '400px', 
-                border: '1.5px solid var(--border-primary)', 
+                width: isMobile ? '80vw' : '230px', 
+                height: '230px', 
+                border: '1px solid #eee', 
                 overflow: 'hidden',
                 scrollSnapAlign: 'start',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: '#ffffff', // Clean white background
+                background: '#fff',
                 cursor: 'zoom-in'
               }}
             >
@@ -351,16 +427,43 @@ const Gallery = ({ isMobile }) => {
                 src={src} 
                 alt={`Gallery ${i}`} 
                 style={{ 
-                  maxWidth: '100%', 
-                  maxHeight: '100%', 
-                  width: 'auto', 
-                  height: 'auto', 
-                  objectFit: 'contain' // No crop feels
+                  width: '100%', 
+                  height: '100%', 
+                  objectFit: 'cover'
                 }} 
               />
             </motion.a>
           ))}
         </div>
+
+        {/* Right Arrow */}
+        {!isMobile && (
+          <button 
+            onClick={() => scroll('right')}
+            style={{ 
+              position: 'absolute',
+              right: '-15px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 10,
+              background: '#ffffff', 
+              border: '1px solid #e5e7eb', 
+              width: '40px', 
+              height: '40px', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              cursor: 'pointer', 
+              color: '#000', 
+              boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+              borderRadius: '4px',
+              transition: 'all 0.2s'
+            }}
+            className="gallery-nav-btn"
+          >
+            <FaChevronRight size={16} />
+          </button>
+        )}
       </div>
     </section>
   );
@@ -1186,7 +1289,7 @@ function App() {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-primary)', fontSize: '0.8rem', opacity: 0.5, borderLeft: '1.5px solid var(--border-primary)', paddingLeft: '1.2rem' }}>
                 <FaCalendarAlt size={12} />
-                <span style={{ textTransform: 'uppercase', letterSpacing: '1px' }}>Updated: May 4, 2026</span>
+                <span style={{ textTransform: 'uppercase', letterSpacing: '1px' }}>Updated: May 9, 2026</span>
               </div>
             </div>
 
@@ -1200,7 +1303,7 @@ function App() {
               flexWrap: 'wrap',
               gap: '0.5rem'
             }}>
-              <span>Junior Software Engineer</span> 
+              <span>Aspiring Software Engineer</span> 
               <span style={{ opacity: 0.3 }}>\</span>
               <span>Aspiring Full Stack Developer</span>
               <span style={{ opacity: 0.3 }}>\</span>
@@ -1247,7 +1350,7 @@ function App() {
           </div>
         </header>
         
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(12, 1fr)', gap: isMobile ? '2rem' : '4rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(12, 1fr)', gap: isMobile ? '1.5rem' : '2rem' }}>
           <div style={{ gridColumn: isMobile ? 'span 1' : 'span 8' }}>
             <section id="about" style={{ marginBottom: '1.5rem' }}>
               <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1rem', color: 'var(--text-primary)' }}>About</h2>
@@ -1310,16 +1413,30 @@ function App() {
           </div>
 
           <div style={{ gridColumn: isMobile ? 'span 1' : 'span 4', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            <div style={{ background: 'rgb(26, 26, 26)', padding: '2rem', color: 'white', position: 'relative', overflow: 'hidden', minHeight: '400px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <TiltCard 
+              style={{ background: 'linear-gradient(145deg, #1a1a1a, #333333)', padding: '2rem', color: 'white', position: 'relative', overflow: 'hidden', minHeight: '400px', cursor: 'pointer', perspective: '1000px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}
+            >
               <div style={{ fontSize: '3rem', opacity: 0.8 }}><FaCode /></div>
               <div>
-                <div style={{ textTransform: 'uppercase', fontSize: '1.2rem', fontWeight: '900', letterSpacing: '4px' }}>JOHN CARLO</div>
-                <div style={{ fontSize: '0.7rem', marginTop: '0.5rem', opacity: 0.6 }}>SOFTWARE ENGINEER</div>
+                <motion.div 
+                  whileHover={{ scale: 1.05, x: 5, color: '#61DAFB' }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                  style={{ textTransform: 'uppercase', fontSize: '1.2rem', fontWeight: '900', letterSpacing: '4px', cursor: 'default' }}
+                >
+                  JOHN CARLO
+                </motion.div>
+                <motion.div 
+                  whileHover={{ opacity: 1, x: 5 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                  style={{ fontSize: '0.7rem', marginTop: '0.5rem', opacity: 0.6, cursor: 'default' }}
+                >
+                  ASPIRING SOFTWARE ENGINEER
+                </motion.div>
               </div>
-              <div style={{ position: 'absolute', bottom: '2rem', right: '2rem', opacity: 0.3, fontHeight: '4rem', fontSize: '4rem' }}>
+              <div style={{ position: 'absolute', bottom: '0', right: '0', opacity: 0.3, fontSize: '4rem', transform: 'translateZ(20px)' }}>
                 <FaReact />
               </div>
-            </div>
+            </TiltCard>
 
             <section id="experience" style={{ marginBottom: '1.5rem' }}>
               <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Experience</h2>
@@ -1430,7 +1547,7 @@ function App() {
         </div>
 
         {/* Recommendations Section */}
-        <section id="testimonials" style={{ marginTop: '4rem', padding: '2rem 0' }}>
+        <section id="testimonials" style={{ marginTop: '2.5rem', padding: '1rem 0' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3.5rem' }}>
             <div>
               <h2 style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-2px', margin: 0 }}>Recommendations</h2>
@@ -1478,7 +1595,7 @@ function App() {
         </section>
 
         {/* Services Section */}
-        <section id="services" style={{ marginTop: '2rem', marginBottom: '1.5rem' }}>
+        <section id="services" style={{ marginTop: '1.5rem', marginBottom: '1rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Expertise & Services</h2>
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: '1.5rem' }}>
             {[
@@ -1566,7 +1683,7 @@ function App() {
 
         <Gallery isMobile={isMobile} />
 
-        <section id="contact" style={{ marginTop: '3rem', padding: isMobile ? '2.5rem 1rem' : '4rem 0', borderTop: '1.5px solid var(--border-primary)' }}>
+        <section id="contact" style={{ marginTop: '2rem', padding: isMobile ? '2rem 1rem' : '3rem 0', borderTop: '1.5px solid var(--border-primary)' }}>
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(12, 1fr)', gap: isMobile ? '2.5rem' : '4rem', alignItems: 'flex-start' }}>
             <div style={{ gridColumn: isMobile ? 'span 1' : 'span 5' }}>
               <h2 style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--text-primary)', marginBottom: '1.5rem', letterSpacing: '-1px' }}>Let's work together</h2>
