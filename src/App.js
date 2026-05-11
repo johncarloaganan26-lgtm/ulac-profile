@@ -1301,7 +1301,7 @@ function App() {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-primary)', fontSize: '0.8rem', opacity: 0.5, borderLeft: '1.5px solid var(--border-primary)', paddingLeft: '1.2rem' }}>
                 <FaCalendarAlt size={12} />
-                <span style={{ textTransform: 'uppercase', letterSpacing: '1px' }}>Updated: May 9, 2026</span>
+                <span style={{ textTransform: 'uppercase', letterSpacing: '1px' }}>Updated: May 11, 2026</span>
               </div>
             </div>
 
@@ -1554,19 +1554,16 @@ function App() {
                     whileHover={{ y: -5 }}
                   >
                     <a 
-                      href={p.img} 
-                      className="glightbox"
-                      data-gallery="projects-gallery"
-                      data-title={p.title}
-                      data-description={p.desc}
-                      style={{ cursor: 'zoom-in', flexShrink: 0, display: 'block', width: '100%', height: '200px' }}
+                      href={p.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      style={{ cursor: 'pointer', flexShrink: 0, display: 'block', width: '100%', height: '200px' }}
                     >
                       <img src={p.img} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={p.title} />
                     </a>
                     <div style={{ padding: '1.5rem', flex: '1 1 0%', display: 'flex', flexDirection: 'column' }}>
                       <h4 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--text-primary)' }}>{p.title}</h4>
                       <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)', marginTop: '0.5rem', fontWeight: '500', opacity: 0.7, lineHeight: '1.5' }}>{p.desc}</p>
-                      <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', marginTop: '0.8rem', fontSize: '0.85rem', fontWeight: '800', color: '#10b981', textDecoration: 'none' }}>Visit Live Project ↗</a>
                       
                       <div style={{ display: 'flex', gap: '0.8rem', marginTop: 'auto', paddingTop: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                         {p.tags.map(t => <SkillTag key={t} name={t} size="small" />)}

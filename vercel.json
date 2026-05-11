@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "env": {
+    "REACT_APP_SUPABASE_URL": "@react_app_supabase_url",
+    "REACT_APP_SUPABASE_ANON_KEY": "@react_app_supabase_anon_key",
+    "REACT_APP_GROQ_KEY": "@react_app_groq_key",
+    "SMTP_USER": "@smtp_user",
+    "SMTP_PASS": "@smtp_pass",
+    "SMTP_TO": "@smtp_to"
+  }
+}
