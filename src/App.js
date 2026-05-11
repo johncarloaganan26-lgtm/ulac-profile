@@ -500,18 +500,9 @@ function App() {
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1024);
     window.addEventListener('resize', handleResize);
-    
-    AOS.init({ duration: 1000, once: true });
-    const lightbox = GLightbox({
-      selector: '.glightbox',
-      keyboardNavigation: true, // Enables ESC to close, Left/Right to swipe
-      loop: true,
-      zoomable: true
-    });
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      lightbox.destroy();
     };
   }, []);
 
@@ -770,7 +761,8 @@ function App() {
       loop: true,
       keyboardNavigation: true,
       closeButton: true,
-      closeOnOutsideClick: true
+      closeOnOutsideClick: true,
+      zoomable: true
     });
     
     let typedInstance = null;
