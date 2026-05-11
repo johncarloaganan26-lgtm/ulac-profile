@@ -764,7 +764,14 @@ function App() {
 
   useEffect(() => {
     if (typeof AOS !== 'undefined') AOS.init({ duration: 600, easing: 'ease-in-out', once: true });
-    const lightbox = GLightbox({ touchNavigation: true, loop: true });
+    const lightbox = GLightbox({ 
+      selector: '.glightbox',
+      touchNavigation: true, 
+      loop: true,
+      keyboardNavigation: true,
+      closeButton: true,
+      closeOnOutsideClick: true
+    });
     
     let typedInstance = null;
     if (typedRef.current) {
