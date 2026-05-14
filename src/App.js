@@ -411,8 +411,9 @@ const Gallery = ({ isMobile }) => {
               whileHover={{ scale: 1.02 }}
               style={{ 
                 flex: '0 0 auto', 
-                width: isMobile ? '80vw' : '230px', 
-                height: '230px', 
+                width: isMobile ? '75vw' : 'clamp(200px, 18vw, 280px)', 
+                aspectRatio: '1 / 1',
+                borderRadius: '8px',
                 border: '1px solid #eee', 
                 overflow: 'hidden',
                 scrollSnapAlign: 'start',
