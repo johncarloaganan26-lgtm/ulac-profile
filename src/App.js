@@ -765,6 +765,14 @@ function App() {
       zoomable: true
     });
     
+    // Explicitly add an Escape key listener to close GLightbox
+    const handleEsc = (e) => {
+      if (e.key === 'Escape' || e.keyCode === 27) {
+        try { lightbox.close(); } catch (err) {}
+      }
+    };
+    window.addEventListener('keydown', handleEsc);
+    
     let typedInstance = null;
     if (typedRef.current) {
       typedInstance = new Typed(typedRef.current, {
@@ -804,6 +812,7 @@ function App() {
     return () => {
       clearTimeout(timer);
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('keydown', handleEsc);
       observer.disconnect();
       lightbox.destroy();
       if (typedInstance) typedInstance.destroy();
