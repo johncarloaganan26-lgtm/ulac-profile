@@ -45,12 +45,26 @@ export default async function handler(req, res) {
     console.log('Groq API response status:', response.status);
     
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorText = await response.text();
+      let errorData;
+      try {
+        errorData = JSON.parse(errorText);
+      } catch (e) {
+        errorData = { message: errorText || 'Empty error response from Groq' };
+      }
       console.error('Groq API error:', errorData);
       return res.status(response.status).json(errorData);
     }
     
-    const data = await response.json();
+    const textData = await response.text();
+    let data;
+    try {
+      data = JSON.parse(textData);
+    } catch (e) {
+      console.error('Groq API invalid JSON:', textData);
+      return res.status(500).json({ error: 'Invalid JSON from Groq', details: textData || 'Empty response' });
+    }
+    
     console.log('Groq API success');
     res.status(200).json(data);
   } catch (error) {
