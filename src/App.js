@@ -755,23 +755,6 @@ function App() {
 
   useEffect(() => {
     if (typeof AOS !== 'undefined') AOS.init({ duration: 600, easing: 'ease-in-out', once: true });
-    const lightbox = GLightbox({ 
-      selector: '.glightbox',
-      touchNavigation: true, 
-      loop: true,
-      keyboardNavigation: true,
-      closeButton: true,
-      closeOnOutsideClick: true,
-      zoomable: true
-    });
-    
-    // Explicitly add an Escape key listener to close GLightbox
-    const handleEsc = (e) => {
-      if (e.key === 'Escape' || e.keyCode === 27) {
-        try { lightbox.close(); } catch (err) {}
-      }
-    };
-    window.addEventListener('keydown', handleEsc);
     
     let typedInstance = null;
     if (typedRef.current) {
@@ -812,12 +795,47 @@ function App() {
     return () => {
       clearTimeout(timer);
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('keydown', handleEsc);
       observer.disconnect();
-      lightbox.destroy();
       if (typedInstance) typedInstance.destroy();
     };
   }, []);
+
+  // Separate useEffect for GLightbox to ensure dynamic DOM elements exist
+  useEffect(() => {
+    if (isLoggedIn === null) return;
+    
+    const initTimer = setTimeout(() => {
+      const lightbox = GLightbox({ 
+        selector: '.glightbox',
+        touchNavigation: true, 
+        loop: true,
+        keyboardNavigation: true,
+        closeButton: true,
+        closeOnOutsideClick: true,
+        zoomable: true
+      });
+      
+      const handleEsc = (e) => {
+        if (e.key === 'Escape' || e.keyCode === 27) {
+          document.querySelectorAll('.gclose').forEach(btn => btn.click());
+          try { lightbox.close(); } catch (err) {}
+        }
+      };
+      window.addEventListener('keydown', handleEsc, true);
+      
+      window._activeLightbox = { lightbox, handleEsc };
+    }, 100);
+
+    return () => {
+      clearTimeout(initTimer);
+      if (window._activeLightbox) {
+        window.removeEventListener('keydown', window._activeLightbox.handleEsc, true);
+        try { window._activeLightbox.lightbox.destroy(); } catch(e) {}
+        window._activeLightbox = null;
+      }
+      document.querySelectorAll('.glightbox-container').forEach(el => el.remove());
+    };
+  }, [isLoggedIn, view]);
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
   useEffect(() => {
