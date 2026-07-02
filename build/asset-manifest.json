@@ -1,14 +1,25 @@
 {
   "files": {
-    "main.css": "./static/css/main.27b500d8.css",
-    "main.js": "./static/js/main.a2243cd0.js",
+    "main.css": "./static/css/main.bb258867.css",
+    "main.js": "./static/js/main.13755c37.js",
     "static/media/Screenshot 2026-01-28 035743.png": "./static/media/Screenshot 2026-01-28 035743.f703da5b58f5f1c0b9d5.png",
+    "static/media/Screenshot 2026-02-27 090848.png": "./static/media/Screenshot 2026-02-27 090848.ece56793aeb3d7fc0ec8.png",
+    "static/media/dormpulse.png": "./static/media/dormpulse.d27fd614570f1e98c1b6.png",
+    "static/media/Screenshot 2026-01-31 091212.png": "./static/media/Screenshot 2026-01-31 091212.fcfbc3eb971daa39b751.png",
+    "static/media/artisano-pizzeria.png": "./static/media/artisano-pizzeria.34e06a568f306f6bee22.png",
+    "static/media/startuplab-event-creation.png": "./static/media/startuplab-event-creation.11d8e6fa7a2100df82ba.png",
+    "static/media/logo.png": "./static/media/logo.7fc76eabbafb11993a5a.png",
+    "static/media/dsa.jpg": "./static/media/dsa.d3006652e9f484d4476b.jpg",
+    "static/media/medflow_new.png": "./static/media/medflow_new.1fd73237b01afd048f67.png",
+    "static/media/laundry_new.png": "./static/media/laundry_new.0c0e908d7b056e347fcd.png",
+    "static/media/bigbrew-pos.png": "./static/media/bigbrew-pos.f4dae737e82f2c3551f5.png",
+    "static/media/nagco-dashboard.png": "./static/media/nagco-dashboard.ba315b68475b3f760f9b.png",
     "index.html": "./index.html",
-    "main.27b500d8.css.map": "./static/css/main.27b500d8.css.map",
-    "main.a2243cd0.js.map": "./static/js/main.a2243cd0.js.map"
+    "main.bb258867.css.map": "./static/css/main.bb258867.css.map",
+    "main.13755c37.js.map": "./static/js/main.13755c37.js.map"
   },
   "entrypoints": [
-    "static/css/main.27b500d8.css",
-    "static/js/main.a2243cd0.js"
+    "static/css/main.bb258867.css",
+    "static/js/main.13755c37.js"
   ]
 }
