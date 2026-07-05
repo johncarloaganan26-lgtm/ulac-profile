@@ -6,7 +6,7 @@ import {
   FaLinkedin, FaBars, FaTimes, FaGithub, FaCalendarAlt,
   FaChevronRight, FaChevronLeft, FaStar, FaLaptopCode,
   FaCheck, FaCheckCircle, FaUser, FaLock, FaExternalLinkAlt,
-  FaQuoteRight, FaDesktop
+  FaQuoteRight, FaDesktop, FaCoffee
 } from 'react-icons/fa';
 import { MdVerified } from 'react-icons/md';
 
@@ -21,6 +21,15 @@ import medflowImage from './medflow_new.png';
 import laundrosaasImage from './laundry_new.png';
 import dsaImage from './dsa.jpg';
 import dormpulseImage from './dormpulse.png';
+import bbekLogo from './bbek-logo.png';
+import babyblissLogo from './babybliss-logo.png';
+import nagcoLogo from './nagco-logo.png';
+import startuplabLogo from './startuplab-logo.webp';
+import dormpulseLogo from './dormpulse-logo.png';
+import laundrosaasLogo from './laundrosaas-logo.png';
+import medflowLogo from './medflow-logo.png';
+import artisanoLogo from './artisano-logo.png';
+import bigbrewLogo from './bigbrew-logo.png';
 
 // ─────────────────────────────────────────────────────────────
 // Terminal Typing Shell Mockup
@@ -213,6 +222,477 @@ const Gallery = () => {
 };
 
 // ─────────────────────────────────────────────────────────────
+// Project 3D Carousel Component & Data
+// ─────────────────────────────────────────────────────────────
+const ALL_PROJECTS_DATA = [
+  {
+    title: 'BBEK Administration System',
+    img: project1Image,
+    url: 'https://biblebaptistekklesiaofkawit.xyz/',
+    desc: 'Comprehensive administration platform for church operations — member management, event scheduling, and financial reporting.',
+    tags: ['Vue.js', 'Node.js', 'MySQL'],
+    badge: 'CHURCH ADMIN SYSTEM',
+    gradient: '#ffffff',
+    icon: <img src={bbekLogo} alt="BBEK Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+  },
+  {
+    title: 'StartupLab Ticketing',
+    img: project4Image,
+    url: 'https://startuplab-event-creation.vercel.app/',
+    desc: 'End-to-end event ticketing and management platform.',
+    tags: ['React', 'Node.js', 'PostgreSQL'],
+    badge: 'EVENT TICKETING SAAS',
+    gradient: '#ffffff',
+    icon: <img src={startuplabLogo} alt="StartupLab Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+  },
+  {
+    title: 'DormPulse Student Housing',
+    img: dormpulseImage,
+    url: 'https://studnet-iota.vercel.app/',
+    desc: 'Premium student housing locator with real-time tracking and interactive mapping.',
+    tags: ['React', 'FastAPI', 'Supabase'],
+    badge: 'STUDENT HOUSING LOCATOR',
+    gradient: '#ffffff',
+    icon: <img src={dormpulseLogo} alt="DormPulse Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+  },
+  {
+    title: 'Baby Bliss Booking',
+    img: project2Image,
+    url: 'https://babyblissbooking.vercel.app/',
+    desc: 'Advanced appointment system for wellness and spa centers.',
+    tags: ['React', 'Tailwind', 'Vercel'],
+    badge: 'WELLNESS BOOKING SYSTEM',
+    gradient: 'linear-gradient(135deg, #f472b6, #db2777)',
+    icon: <img src={babyblissLogo} alt="Baby Bliss Logo" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+  },
+  {
+    title: 'LaundroSaaS Management',
+    img: laundrosaasImage,
+    url: 'https://laundro-phi.vercel.app/',
+    desc: 'Comprehensive laundry SaaS with real-time order tracking and revenue reporting.',
+    tags: ['React', 'Vite'],
+    badge: 'LAUNDRY SAAS PLATFORM',
+    gradient: '#ffffff',
+    icon: <img src={laundrosaasLogo} alt="LaundroSaaS Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+  },
+  {
+    title: 'MedFlow Healthcare',
+    img: medflowImage,
+    url: 'https://medflow-two.vercel.app/',
+    desc: 'Healthcare management system with real-time analytics and patient tracking.',
+    tags: ['React', 'Vite'],
+    badge: 'HEALTHCARE DASHBOARD',
+    gradient: '#ffffff',
+    icon: <img src={medflowLogo} alt="MedFlow Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+  },
+  {
+    title: 'NAgCO Loan System',
+    img: nagcoDashboardImage,
+    url: 'https://nagcoloanmanagementsystem.vercel.app/',
+    desc: 'Cooperative loan platform with automated workflows and real-time tracking.',
+    tags: ['Next.js', 'Supabase'],
+    badge: 'COOPERATIVE LOAN SYSTEM',
+    gradient: '#ffffff',
+    icon: <img src={nagcoLogo} alt="NAgCO Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+  },
+  {
+    title: 'Artisano Pizzeria',
+    img: artisanoImage,
+    url: 'https://pizza-theta-inky.vercel.app/',
+    desc: 'Cinematic digital presence for an artisanal pizzeria.',
+    tags: ['Next.js', 'Framer Motion'],
+    badge: 'CINEMATIC PIZZA WEBSITE',
+    gradient: '#ffffff',
+    icon: <img src={artisanoLogo} alt="Artisano Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+  },
+  {
+    title: 'BigBrew POS System',
+    img: bigbrewPOSImage,
+    url: 'https://brew-sxrs.vercel.app/',
+    desc: 'Coffee shop POS with real-time analytics dashboard.',
+    tags: ['React', 'Node.js'],
+    badge: 'COFFEE SHOP POS',
+    gradient: '#ffffff',
+    icon: <img src={bigbrewLogo} alt="BigBrew Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+  },
+  {
+    title: 'Event Registration System',
+    img: project3Image,
+    url: 'https://startuplab-event-registration.vercel.app/',
+    desc: 'Streamlined registration for university and academic events.',
+    tags: ['Laravel', 'MySQL'],
+    badge: 'EVENT REGISTRATION APP',
+    gradient: '#ffffff',
+    icon: <img src={startuplabLogo} alt="StartupLab Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+  }
+];
+
+const Project3DCarousel = ({ projects, isMobile, isDark }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleNext = () => {
+    setActiveIndex(prev => (prev + 1) % projects.length);
+  };
+
+  const handlePrev = () => {
+    setActiveIndex(prev => (prev - 1 + projects.length) % projects.length);
+  };
+
+  const total = projects.length;
+  const leftIndex = (activeIndex - 1 + total) % total;
+  const rightIndex = (activeIndex + 1) % total;
+
+  return (
+    <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2.5rem' }}>
+      <div style={{
+        position: 'relative',
+        width: '100%',
+        height: '370px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'visible',
+        perspective: '1000px',
+        padding: '1rem 0'
+      }}>
+        {projects.map((project, idx) => {
+          let position = 'hidden';
+          if (idx === activeIndex) position = 'center';
+          else if (idx === leftIndex && !isMobile) position = 'left';
+          else if (idx === rightIndex && !isMobile) position = 'right';
+
+          if (position === 'hidden') return null;
+
+          const isCenter = position === 'center';
+          const isLeft = position === 'left';
+          const isRight = position === 'right';
+
+          let translate = '0px';
+          let rotate = '0deg';
+          let scale = 1;
+          let zIndex = 10;
+          let opacity = 1;
+
+          if (isLeft) {
+            translate = '-160px';
+            rotate = '-8deg';
+            scale = 0.85;
+            zIndex = 5;
+            opacity = 0.65;
+          } else if (isRight) {
+            translate = '160px';
+            rotate = '8deg';
+            scale = 0.85;
+            zIndex = 5;
+            opacity = 0.65;
+          }
+
+          return (
+            <motion.div
+              key={project.title}
+              onClick={() => {
+                if (isLeft) handlePrev();
+                if (isRight) handleNext();
+              }}
+              style={{
+                position: 'absolute',
+                width: 'clamp(280px, 85vw, 340px)',
+                height: '330px',
+                background: isDark ? '#0d0d11' : '#ffffff',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid var(--gray-200)',
+                borderRadius: '16px',
+                padding: '1.5rem',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                boxShadow: isCenter ? (isDark ? '0 25px 50px -12px rgba(0, 0, 0, 0.5)' : '0 25px 50px -12px rgba(0, 0, 0, 0.08)') : (isDark ? '0 10px 20px -5px rgba(0, 0, 0, 0.3)' : '0 10px 20px -5px rgba(0, 0, 0, 0.05)'),
+                cursor: isCenter ? 'default' : 'pointer',
+                userSelect: 'none',
+                zIndex,
+                transformStyle: 'preserve-3d',
+                x: translate,
+                rotateZ: rotate,
+                scale,
+                opacity
+              }}
+              animate={{
+                x: translate,
+                rotateZ: rotate,
+                scale,
+                opacity,
+                zIndex
+              }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            >
+              {/* Card Badge */}
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <span style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  background: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
+                  color: isDark ? '#ffffff' : 'var(--ink)',
+                  border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid var(--gray-200)',
+                  borderRadius: '9999px',
+                  padding: '4px 14px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.625rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  boxShadow: isDark ? '0 2px 4px rgba(0,0,0,0.15)' : 'none'
+                }}>
+                  {project.badge}
+                </span>
+              </div>
+
+              {/* Card Body */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem', flex: 1, justifyContent: 'center' }}>
+                <div style={{
+                  width: '56px',
+                  height: '56px',
+                  borderRadius: '12px',
+                  background: (project.gradient === '#ffffff') ? (isDark ? '#18181b' : '#ffffff') : project.gradient,
+                  border: (project.gradient === '#ffffff' && !isDark) ? '1px solid var(--gray-200)' : 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: isDark ? '#ffffff' : 'var(--ink)',
+                  boxShadow: '0 8px 16px rgba(0,0,0,0.15)',
+                  overflow: 'hidden'
+                }}>
+                  {project.icon}
+                </div>
+
+                <div style={{ textAlign: 'center' }}>
+                  <h4 style={{ fontSize: '1.15rem', fontWeight: 700, color: isDark ? '#ffffff' : 'var(--ink)', margin: 0, letterSpacing: '-0.02em' }}>{project.title}</h4>
+                  <p style={{ fontSize: '0.8125rem', color: isDark ? '#a1a1aa' : 'var(--gray-500)', lineHeight: '1.5', margin: '0.5rem 0 0', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+                    {project.desc}
+                  </p>
+                </div>
+              </div>
+
+              {/* Card Footer (Launch Link button) */}
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '0.75rem' }}>
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    background: isDark ? 'rgba(255, 255, 255, 0.06)' : '#f4f4f5',
+                    color: isDark ? '#ffffff' : 'var(--ink)',
+                    border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid var(--gray-200)',
+                    padding: '0.55rem 1.25rem',
+                    borderRadius: '8px',
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.12)' : '#e4e4e7'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.06)' : '#f4f4f5'; }}
+                >
+                  Launch Project <FaExternalLinkAlt size={10} />
+                </a>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Navigation Controls */}
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <button onClick={handlePrev} style={{
+          width: '36px', height: '36px',
+          border: '1px solid var(--gray-300)',
+          background: 'var(--bg)',
+          borderRadius: '50%',
+          cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: 'var(--gray-500)',
+          transition: 'all 0.2s'
+        }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--ink)'; e.currentTarget.style.color = 'var(--ink)'; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--gray-300)'; e.currentTarget.style.color = 'var(--gray-500)'; }}
+        >
+          <FaChevronLeft size={12} />
+        </button>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--gray-400)' }}>
+          {String(activeIndex + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+        </span>
+        <button onClick={handleNext} style={{
+          width: '36px', height: '36px',
+          border: '1px solid var(--gray-300)',
+          background: 'var(--bg)',
+          borderRadius: '50%',
+          cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: 'var(--gray-500)',
+          transition: 'all 0.2s'
+        }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--ink)'; e.currentTarget.style.color = 'var(--ink)'; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--gray-300)'; e.currentTarget.style.color = 'var(--gray-500)'; }}
+        >
+          <FaChevronRight size={12} />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────
+// GitHub Contributions Halftone Component
+// ─────────────────────────────────────────────────────────────
+const GithubContributions = () => {
+  const cols = 53;
+  const rows = 7;
+  
+  // Custom mapping modeled exactly after the user's uploaded contribution image
+  const activeCommits = [
+    // Column 13 (Oct)
+    { col: 13, row: 1, level: 1 },
+    { col: 13, row: 5, level: 1 },
+    // Column 14 (Oct)
+    { col: 14, row: 0, level: 1 },
+    { col: 14, row: 3, level: 2 },
+    { col: 14, row: 5, level: 2 },
+    { col: 14, row: 6, level: 1 },
+    // Column 16 (Oct)
+    { col: 16, row: 0, level: 1 },
+    { col: 16, row: 6, level: 1 },
+    // Column 18 (Nov)
+    { col: 18, row: 1, level: 2 },
+    { col: 18, row: 5, level: 1 },
+    { col: 18, row: 6, level: 3 },
+    // Column 20 (Nov)
+    { col: 20, row: 0, level: 1 },
+    // Column 22 (Dec)
+    { col: 22, row: 2, level: 3 },
+    { col: 22, row: 3, level: 2 },
+    { col: 22, row: 5, level: 3 },
+    // Column 23 (Dec)
+    { col: 23, row: 2, level: 2 },
+    // Column 25 (Jan)
+    { col: 25, row: 0, level: 1 },
+    // Column 26 (Jan)
+    { col: 26, row: 0, level: 1 },
+    // Column 30 (Feb)
+    { col: 30, row: 3, level: 1 },
+    // Column 34 (Mar)
+    { col: 34, row: 0, level: 1 },
+    // Column 35 (Mar)
+    { col: 35, row: 6, level: 1 },
+    // Column 38 (Apr)
+    { col: 38, row: 2, level: 1 },
+    // Column 40 (Apr)
+    { col: 40, row: 5, level: 1 },
+    // Column 41 (May)
+    { col: 41, row: 0, level: 2 },
+    // Column 42 (May)
+    { col: 42, row: 1, level: 1 }
+  ];
+
+  const cells = [];
+  for (let c = 0; c < cols; c++) {
+    for (let r = 0; r < rows; r++) {
+      const active = activeCommits.find(item => item.col === c && item.row === r);
+      
+      let radius = 1.1;
+      let opacity = 0.12;
+      
+      if (active) {
+        if (active.level === 3) {
+          radius = 5.7; // Dark green
+          opacity = 0.92;
+        } else if (active.level === 2) {
+          radius = 3.8; // Medium green
+          opacity = 0.92;
+        } else if (active.level === 1) {
+          radius = 2.7; // Light green
+          opacity = 0.92;
+        }
+      }
+
+      cells.push({
+        cx: 6.5 + c * 13,
+        cy: 6.5 + r * 13,
+        r: radius,
+        opacity
+      });
+    }
+  }
+
+  return (
+    <section id="github" style={{ padding: '5rem 0', borderTop: '1px solid var(--gray-200)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1.5rem' }}>
+        <div>
+          <div className="section-label">09 — GitHub</div>
+          <h2 style={{ fontSize: 'clamp(1.3rem, 2.5vw, 1.7rem)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)', margin: 0 }}>Contributions</h2>
+        </div>
+        <a 
+          href="https://github.com/Ulacdev" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.6875rem',
+            fontWeight: 500,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            color: 'var(--gray-500)',
+            textDecoration: 'none',
+            transition: 'color 0.2s'
+          }}
+          onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-500)'}
+        >
+          @Ulacdev ↗
+        </a>
+      </div>
+
+      <a 
+        href="https://github.com/Ulacdev" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        style={{ display: 'block', color: 'var(--ink)', textDecoration: 'none' }}
+      >
+        <svg 
+          viewBox="0 0 689 91" 
+          style={{ width: '100%', height: 'auto' }}
+          preserveAspectRatio="xMidYMid meet"
+          aria-label="GitHub contribution graph, halftone style"
+        >
+          {cells.map((cell, i) => (
+            <circle 
+              key={i} 
+              cx={cell.cx} 
+              cy={cell.cy} 
+              r={cell.r} 
+              fill="currentColor" 
+              opacity={cell.opacity} 
+            />
+          ))}
+        </svg>
+      </a>
+
+      <p style={{ 
+        fontFamily: 'var(--font-mono)', 
+        fontSize: '0.6875rem', 
+        textTransform: 'uppercase', 
+        letterSpacing: '0.1em', 
+        color: 'var(--gray-400)', 
+        marginTop: '1rem',
+        margin: 0 
+      }}>
+        25 contributions in the last year
+      </p>
+    </section>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────
 // Theme Toggle Capsule Component
 // ─────────────────────────────────────────────────────────────
 const ThemeToggleCapsule = ({ theme, setTheme }) => {
@@ -279,7 +759,7 @@ function App() {
   const [view, setView] = useState('portfolio');
   const [misView, setMisView] = useState('dashboard');
   const [isLoggedIn, setIsLoggedIn] = useState(null);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
   const [formStatus, setFormStatus] = useState({ loading: false, success: false, error: false, message: '' });
   const [totalViews, setTotalViews] = useState(0);
   const [user, setUser] = useState(null);
@@ -295,6 +775,17 @@ function App() {
     if (stored) return stored;
     return 'system';
   });
+
+  const handleSetTheme = (newTheme) => {
+    if (!document.startViewTransition) {
+      setTheme(newTheme);
+      return;
+    }
+    document.startViewTransition(() => {
+      setTheme(newTheme);
+    });
+  };
+
   const [resolvedDark, setResolvedDark] = useState(false);
   const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
   const [isPointer, setIsPointer] = useState(false);
@@ -327,7 +818,7 @@ function App() {
   }, [theme]);
 
   useEffect(() => {
-    const r = () => setIsMobile(window.innerWidth < 1024);
+    const r = () => setIsMobile(window.innerWidth < 900);
     window.addEventListener('resize', r);
     return () => window.removeEventListener('resize', r);
   }, []);
@@ -505,7 +996,7 @@ function App() {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) setActiveSection(e.target.id); });
     }, { rootMargin: '-20% 0px -70% 0px' });
-    ['hero', 'about', 'services', 'experience', 'projects', 'credentials', 'gallery', 'contact'].forEach(id => {
+    ['hero', 'about', 'services', 'experience', 'projects', 'credentials', 'gallery', 'github', 'contact'].forEach(id => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
@@ -709,6 +1200,7 @@ function App() {
     { label: 'Certificates', id: 'credentials' },
     { label: 'Reviews', id: 'reviews' },
     { label: 'Gallery', id: 'gallery' },
+    { label: 'GitHub', id: 'github' },
   ];
 
   return (
@@ -733,8 +1225,8 @@ function App() {
       <aside className="app-sidebar">
         {/* Top: Logo */}
         <div>
-          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.875rem', color: 'var(--ink)', letterSpacing: '-0.01em', padding: 0 }}>
-            ulac.dev
+          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: '"Geist Pixel", "Geist Mono", monospace', fontWeight: 500, fontSize: '15px', color: 'var(--ink)', letterSpacing: 'normal', padding: 0 }}>
+            Ulacdev
           </button>
         </div>
 
@@ -749,24 +1241,24 @@ function App() {
 
         {/* Bottom: Theme toggle & CTA stacked */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', alignItems: 'center', width: '100%' }}>
-          <ThemeToggleCapsule theme={theme} setTheme={setTheme} />
+          <ThemeToggleCapsule theme={theme} setTheme={handleSetTheme} />
           
-          <button onClick={() => scrollToSection('contact')} className="btn-glow" style={{ width: '100%', justifyContent: 'center' }}>
-            Let's talk
-          </button>
+          <a href="/resume.html" target="_blank" rel="noreferrer" className="btn-glow" style={{ width: '100%', justifyContent: 'center', textDecoration: 'none' }}>
+            See CV
+          </a>
         </div>
       </aside>
 
       {/* ── MOBILE HEADER ───────────────────────────────────── */}
       <header className="mobile-header">
         {/* Logo */}
-        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.875rem', color: 'var(--ink)', letterSpacing: '-0.01em', padding: 0 }}>
-          ulac.dev
+        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: '"Geist Pixel", "Geist Mono", monospace', fontWeight: 500, fontSize: '15px', color: 'var(--ink)', letterSpacing: 'normal', padding: 0 }}>
+          Ulacdev
         </button>
 
         {/* Right actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <ThemeToggleCapsule theme={theme} setTheme={setTheme} />
+          <ThemeToggleCapsule theme={theme} setTheme={handleSetTheme} />
 
           <button onClick={() => setMenuOpen(m => !m)} style={{ background: 'none', border: '1px solid var(--gray-200)', width: 32, height: 32, borderRadius: '5px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ink)' }}>
             {menuOpen ? <FaTimes size={12} /> : <FaBars size={12} />}
@@ -993,72 +1485,37 @@ function App() {
               onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
               onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-500)'}
             >
-              {showAllProjects ? 'Show less' : 'All projects'}
+              {showAllProjects ? 'Show Interactive' : 'Show All Projects'}
             </button>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
-
-            {/* Featured */}
-            <div style={{ border: '1px solid var(--gray-200)', borderRadius: '9px', overflow: 'hidden', display: 'flex', flexDirection: isMobile ? 'column' : 'row', transition: 'border-color 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gray-400)'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--gray-200)'}
-            >
-              <div style={{ flex: 1.2, padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center', background: 'var(--gray-50)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                  <span className="chip-inverted">Featured</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Production</span>
-                </div>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)', margin: 0 }}>BBEK Administration System</h3>
-                <p style={{ fontSize: '0.9375rem', color: 'var(--gray-500)', lineHeight: '1.65', margin: 0 }}>Comprehensive administration platform for church operations — member management, event scheduling, and financial reporting.</p>
-                <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                  {['Vue.js', 'Node.js', 'MySQL'].map(t => <span key={t} className="skill-tag">{t}</span>)}
-                </div>
-                <a href="https://biblebaptistekklesiaofkawit.xyz/" target="_blank" rel="noreferrer" className="btn-glow" style={{ width: 'fit-content', marginTop: '0.25rem' }}>
-                  Launch Site <FaExternalLinkAlt size={9} />
-                </a>
-              </div>
-              <div style={{ flex: 0.8, minHeight: isMobile ? '200px' : '300px', overflow: 'hidden' }}>
-                <img src={project1Image} alt="BBEK Admin" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(15%)', transition: 'filter 0.3s, transform 0.4s' }}
-                  onMouseEnter={e => { e.currentTarget.style.filter = 'grayscale(0%)'; e.currentTarget.style.transform = 'scale(1.03)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(15%)'; e.currentTarget.style.transform = 'scale(1)'; }}
-                />
-              </div>
-            </div>
-
-            {/* Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: '1px', marginTop: '1px' }}>
-              {[
-                { title: 'StartupLab Ticketing', img: project4Image, url: 'https://startuplab-event-creation.vercel.app/', desc: 'End-to-end event ticketing and management platform.', tags: ['React', 'Node.js', 'PostgreSQL'] },
-                { title: 'DormPulse Student Housing', img: dormpulseImage, url: 'https://studnet-iota.vercel.app/', desc: 'Premium student housing locator with real-time tracking and interactive mapping.', tags: ['React', 'FastAPI', 'Supabase'] },
-                { title: 'Baby Bliss Booking', img: project2Image, url: 'https://babyblissbooking.vercel.app/', desc: 'Advanced appointment system for wellness and spa centers.', tags: ['React', 'Tailwind', 'Vercel'] },
-                { title: 'LaundroSaaS Management', img: laundrosaasImage, url: 'https://laundro-phi.vercel.app/', desc: 'Comprehensive laundry SaaS with real-time order tracking and revenue reporting.', tags: ['React', 'Vite'] },
-                { title: 'MedFlow Healthcare', img: medflowImage, url: 'https://medflow-two.vercel.app/', desc: 'Healthcare management system with real-time analytics and patient tracking.', tags: ['React', 'Vite'] },
-                { title: 'NAgCO Loan System', img: nagcoDashboardImage, url: 'https://nagcoloanmanagementsystem.vercel.app/', desc: 'Cooperative loan platform with automated workflows and real-time tracking.', tags: ['Next.js', 'Supabase'] },
-                { title: 'Artisano Pizzeria', img: artisanoImage, url: 'https://pizza-theta-inky.vercel.app/', desc: 'Cinematic digital presence for an artisanal pizzeria.', tags: ['Next.js', 'Framer Motion'] },
-                { title: 'BigBrew POS System', img: bigbrewPOSImage, url: 'https://brew-sxrs.vercel.app/', desc: 'Coffee shop POS with real-time analytics dashboard.', tags: ['React', 'Node.js'] },
-                { title: 'Event Registration System', img: project3Image, url: 'https://startuplab-event-registration.vercel.app/', desc: 'Streamlined registration for university and academic events.', tags: ['Laravel', 'MySQL'] }
-              ].slice(0, showAllProjects ? undefined : 3).map((p, i) => (
-                <a key={i} href={p.url} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', border: '1px solid var(--gray-200)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'var(--bg)', transition: 'border-color 0.2s' }}
-                  onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gray-400)'}
-                  onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--gray-200)'}
-                >
-                  <div style={{ height: '160px', overflow: 'hidden', borderBottom: '1px solid var(--gray-200)' }}>
-                    <img src={p.img} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(15%)', transition: 'filter 0.3s, transform 0.4s' }}
-                      onMouseEnter={e => { e.currentTarget.style.filter = 'grayscale(0%)'; e.currentTarget.style.transform = 'scale(1.04)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(15%)'; e.currentTarget.style.transform = 'scale(1)'; }}
-                    />
-                  </div>
-                  <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <h4 style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'var(--ink)', margin: 0, letterSpacing: '-0.02em' }}>{p.title}</h4>
-                    <p style={{ fontSize: '0.8125rem', color: 'var(--gray-500)', lineHeight: '1.55', margin: 0 }}>{p.desc}</p>
-                    <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', marginTop: 'auto', paddingTop: '0.75rem' }}>
-                      {p.tags.map(t => <span key={t} className="skill-tag">{t}</span>)}
+            {!showAllProjects ? (
+              <Project3DCarousel projects={ALL_PROJECTS_DATA} isMobile={isMobile} isDark={resolvedDark} />
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: '1px' }}>
+                {ALL_PROJECTS_DATA.map((p, i) => (
+                  <a key={i} href={p.url} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', border: '1px solid var(--gray-200)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'var(--bg)', transition: 'border-color 0.2s' }}
+                    onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gray-400)'}
+                    onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--gray-200)'}
+                  >
+                    <div style={{ height: '160px', overflow: 'hidden', borderBottom: '1px solid var(--gray-200)' }}>
+                      <img src={p.img} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(15%)', transition: 'filter 0.3s, transform 0.4s' }}
+                        onMouseEnter={e => { e.currentTarget.style.filter = 'grayscale(0%)'; e.currentTarget.style.transform = 'scale(1.04)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(15%)'; e.currentTarget.style.transform = 'scale(1)'; }}
+                      />
                     </div>
-                  </div>
-                </a>
-              ))}
-            </div>
+                    <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      <h4 style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'var(--ink)', margin: 0, letterSpacing: '-0.02em' }}>{p.title}</h4>
+                      <p style={{ fontSize: '0.8125rem', color: 'var(--gray-500)', lineHeight: '1.55', margin: 0 }}>{p.desc}</p>
+                      <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', marginTop: 'auto', paddingTop: '0.75rem' }}>
+                        {p.tags.map(t => <span key={t} className="skill-tag">{t}</span>)}
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
@@ -1117,8 +1574,11 @@ function App() {
           </div>
         </section>
 
-        {/* ── 07 GALLERY ─────────────────────────────────────── */}
+        {/* ── 08 GALLERY ─────────────────────────────────────── */}
         <Gallery />
+
+        {/* ── 09 GITHUB CONTRIBUTIONS ────────────────────────── */}
+        <GithubContributions />
 
       {/* ── FOOTER / CONTACT ───────────────────────────────── */}
       <footer id="contact" style={{ borderTop: '1px solid var(--gray-200)', background: 'var(--bg)' }}>
