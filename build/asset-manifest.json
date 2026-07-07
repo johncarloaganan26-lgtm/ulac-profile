@@ -1,24 +1,33 @@
 {
   "files": {
-    "main.css": "./static/css/main.aecae538.css",
-    "main.js": "./static/js/main.535627cd.js",
+    "main.css": "./static/css/main.61bd3881.css",
+    "main.js": "./static/js/main.5f444bb9.js",
     "static/media/Screenshot 2026-01-28 035743.png": "./static/media/Screenshot 2026-01-28 035743.f703da5b58f5f1c0b9d5.png",
     "static/media/Screenshot 2026-02-27 090848.png": "./static/media/Screenshot 2026-02-27 090848.ece56793aeb3d7fc0ec8.png",
     "static/media/dormpulse.png": "./static/media/dormpulse.d27fd614570f1e98c1b6.png",
     "static/media/Screenshot 2026-01-31 091212.png": "./static/media/Screenshot 2026-01-31 091212.fcfbc3eb971daa39b751.png",
     "static/media/artisano-pizzeria.png": "./static/media/artisano-pizzeria.34e06a568f306f6bee22.png",
     "static/media/startuplab-event-creation.png": "./static/media/startuplab-event-creation.11d8e6fa7a2100df82ba.png",
+    "static/media/artisano-logo.png": "./static/media/artisano-logo.7e37f6b2b15628b89496.png",
+    "static/media/bbek-logo.png": "./static/media/bbek-logo.443737d57ac0477a45a7.png",
+    "static/media/laundrosaas-logo.png": "./static/media/laundrosaas-logo.25cea9d9ebfd7db9130c.png",
+    "static/media/bigbrew-logo.png": "./static/media/bigbrew-logo.5000345268effce882c6.png",
+    "static/media/medflow-logo.png": "./static/media/medflow-logo.ab00909e86ab9ea05f54.png",
+    "static/media/dormpulse-logo.png": "./static/media/dormpulse-logo.d79bfd3f4864dd18d47e.png",
+    "static/media/nagco-logo.png": "./static/media/nagco-logo.e86f4b2949574d478ed7.png",
     "static/media/dsa.jpg": "./static/media/dsa.d3006652e9f484d4476b.jpg",
     "static/media/medflow_new.png": "./static/media/medflow_new.1fd73237b01afd048f67.png",
     "static/media/laundry_new.png": "./static/media/laundry_new.0c0e908d7b056e347fcd.png",
     "static/media/bigbrew-pos.png": "./static/media/bigbrew-pos.f4dae737e82f2c3551f5.png",
+    "static/media/babybliss-logo.png": "./static/media/babybliss-logo.e71913c2c7cd5b4f79f2.png",
     "static/media/nagco-dashboard.png": "./static/media/nagco-dashboard.ba315b68475b3f760f9b.png",
+    "static/media/startuplab-logo.webp": "./static/media/startuplab-logo.ebb7bede39dae13a5112.webp",
     "index.html": "./index.html",
-    "main.aecae538.css.map": "./static/css/main.aecae538.css.map",
-    "main.535627cd.js.map": "./static/js/main.535627cd.js.map"
+    "main.61bd3881.css.map": "./static/css/main.61bd3881.css.map",
+    "main.5f444bb9.js.map": "./static/js/main.5f444bb9.js.map"
   },
   "entrypoints": [
-    "static/css/main.aecae538.css",
-    "static/js/main.535627cd.js"
+    "static/css/main.61bd3881.css",
+    "static/js/main.5f444bb9.js"
   ]
 }

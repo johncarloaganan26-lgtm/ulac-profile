@@ -250,8 +250,8 @@ const ALL_PROJECTS_DATA = [
     title: 'DormPulse Student Housing',
     img: dormpulseImage,
     url: 'https://studnet-iota.vercel.app/',
-    desc: 'Premium student housing locator with real-time tracking and interactive mapping.',
-    tags: ['React', 'FastAPI', 'Supabase'],
+    desc: 'Premium student housing locator with real-time tracking, interactive mapping, and an AI recommendation chatbot.',
+    tags: ['React', 'FastAPI', 'Supabase Vector', 'OpenAI'],
     badge: 'STUDENT HOUSING LOCATOR',
     gradient: '#ffffff',
     icon: <img src={dormpulseLogo} alt="DormPulse Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -280,8 +280,8 @@ const ALL_PROJECTS_DATA = [
     title: 'MedFlow Healthcare',
     img: medflowImage,
     url: 'https://medflow-two.vercel.app/',
-    desc: 'Healthcare management system with real-time analytics and patient tracking.',
-    tags: ['React', 'Vite'],
+    desc: 'Healthcare management system with real-time analytics, patient tracking, and AI-assisted clinical note generation.',
+    tags: ['React', 'Vite', 'OpenAI API'],
     badge: 'HEALTHCARE DASHBOARD',
     gradient: '#ffffff',
     icon: <img src={medflowLogo} alt="MedFlow Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -290,8 +290,8 @@ const ALL_PROJECTS_DATA = [
     title: 'NAgCO Loan System',
     img: nagcoDashboardImage,
     url: 'https://nagcoloanmanagementsystem.vercel.app/',
-    desc: 'Cooperative loan platform with automated workflows and real-time tracking.',
-    tags: ['Next.js', 'Supabase'],
+    desc: 'Cooperative loan platform with automated workflows, real-time tracking, and AI-assisted loan eligibility pre-screening.',
+    tags: ['Next.js', 'Supabase', 'Claude API'],
     badge: 'COOPERATIVE LOAN SYSTEM',
     gradient: '#ffffff',
     icon: <img src={nagcoLogo} alt="NAgCO Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -1386,9 +1386,9 @@ function App() {
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(4, 1fr)', gap: '2rem' }}>
             {[
               { category: 'Frontend', skills: ['React', 'Vue.js', 'Next.js', 'HTML5', 'CSS3', 'Tailwind CSS'] },
-              { category: 'Backend', skills: ['Node.js', 'Express.js', 'Python (FastAPI)', 'PHP'] },
-              { category: 'Database', skills: ['MySQL', 'PostgreSQL', 'Supabase'] },
-              { category: 'Tools & Platform', skills: ['Git', 'GitHub', 'VS Code', 'Vercel', 'Render'] }
+              { category: 'Backend & AI', skills: ['Node.js', 'Express.js', 'Laravel', 'Python (FastAPI)', 'PHP', 'Groq', 'OpenAI', 'Claude', 'Codex'] },
+              { category: 'Database', skills: ['MySQL', 'PostgreSQL', 'Supabase', 'Clever Cloud'] },
+              { category: 'Tools & Platform', skills: ['Git', 'GitHub', 'VS Code', 'Cursor', 'Antigravity', 'Vercel', 'Render'] }
             ].map((cat, i) => (
               <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--ink)', borderBottom: '1px solid var(--gray-200)', paddingBottom: '0.5rem', margin: 0 }}>
