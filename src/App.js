@@ -157,7 +157,7 @@ const RecommendationSlider = ({ testimonials }) => {
 // ─────────────────────────────────────────────────────────────
 // Gallery Component
 // ─────────────────────────────────────────────────────────────
-const Gallery = () => {
+const Gallery = ({ onImageClick }) => {
   const images = ['/me.jpg', '/gal2.jpg', '/gal3.jpg', '/gal4.jpg', '/gall.jpg', '/thesis.jpg', '/baby.jpg', '/baby2.jpg', '/bb.jpg'];
   const ref = useRef(null);
 
@@ -210,7 +210,8 @@ const Gallery = () => {
             onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gray-400)'}
             onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--gray-200)'}
           >
-            <img src={src} alt={`Gallery ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(15%)', transition: 'filter 0.3s, transform 0.4s' }}
+            <img src={src} alt={`Gallery ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(15%)', transition: 'filter 0.3s, transform 0.4s', cursor: 'pointer' }}
+              onClick={() => onImageClick && onImageClick(images, i)}
               onMouseEnter={e => { e.currentTarget.style.filter = 'grayscale(0%)'; e.currentTarget.style.transform = 'scale(1.04)'; }}
               onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(15%)'; e.currentTarget.style.transform = 'scale(1)'; }}
             />
@@ -751,6 +752,24 @@ const ThemeToggleCapsule = ({ theme, setTheme }) => {
 // ─────────────────────────────────────────────────────────────
 function App() {
   const [preloaderRemoved, setPreloaderRemoved] = useState(false);
+  const [lightboxImages, setLightboxImages] = useState([]);
+  const [lightboxIndex, setLightboxIndex] = useState(-1);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setLightboxImages([]);
+        setLightboxIndex(-1);
+      } else if (e.key === 'ArrowRight' && lightboxImages.length > 1) {
+        setLightboxIndex((prev) => (prev + 1) % lightboxImages.length);
+      } else if (e.key === 'ArrowLeft' && lightboxImages.length > 1) {
+        setLightboxIndex((prev) => (prev - 1 + lightboxImages.length) % lightboxImages.length);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxImages]);
+
   const [activeSection, setActiveSection] = useState('hero');
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -1307,7 +1326,12 @@ function App() {
                     borderRadius: '6px',
                     border: '1px solid var(--gray-200)',
                     filter: 'grayscale(20%)',
-                    transition: 'filter 0.3s, border-color 0.3s'
+                    transition: 'filter 0.3s, border-color 0.3s',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => {
+                    setLightboxImages(['/new-pfp.jpg']);
+                    setLightboxIndex(0);
                   }}
                   onMouseEnter={e => { e.currentTarget.style.filter = 'grayscale(0%)'; e.currentTarget.style.borderColor = 'var(--gray-400)'; }}
                   onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(20%)'; e.currentTarget.style.borderColor = 'var(--gray-200)'; }}
@@ -1575,7 +1599,10 @@ function App() {
         </section>
 
         {/* ── 08 GALLERY ─────────────────────────────────────── */}
-        <Gallery />
+        <Gallery onImageClick={(imgs, idx) => {
+          setLightboxImages(imgs);
+          setLightboxIndex(idx);
+        }} />
 
         {/* ── 09 GITHUB CONTRIBUTIONS ────────────────────────── */}
         <GithubContributions />
@@ -1723,6 +1750,143 @@ function App() {
         )}
       </AnimatePresence>
 
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {lightboxIndex >= 0 && lightboxImages.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => {
+              setLightboxImages([]);
+              setLightboxIndex(-1);
+            }}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              background: 'rgba(0, 0, 0, 0.85)',
+              backdropFilter: 'blur(8px)',
+              zIndex: 99999,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'zoom-out'
+            }}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => {
+                setLightboxImages([]);
+                setLightboxIndex(-1);
+              }}
+              style={{
+                position: 'absolute',
+                top: '20px',
+                right: '20px',
+                background: 'transparent',
+                border: 'none',
+                color: '#fff',
+                fontSize: '2rem',
+                cursor: 'pointer',
+                zIndex: 100000,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '44px',
+                height: '44px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(255,255,255,0.1)',
+                transition: 'background-color 0.2s'
+              }}
+              onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)'}
+              onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+            >
+              <FaTimes size={20} />
+            </button>
+
+            {/* Left navigation arrow */}
+            {lightboxImages.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxIndex((prev) => (prev - 1 + lightboxImages.length) % lightboxImages.length);
+                }}
+                style={{
+                  position: 'absolute',
+                  left: '20px',
+                  background: 'rgba(255,255,255,0.1)',
+                  border: 'none',
+                  color: '#fff',
+                  borderRadius: '50%',
+                  width: '48px',
+                  height: '48px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  zIndex: 100000,
+                  transition: 'background-color 0.2s'
+                }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+              >
+                <FaChevronLeft size={20} />
+              </button>
+            )}
+
+            {/* Right navigation arrow */}
+            {lightboxImages.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxIndex((prev) => (prev + 1) % lightboxImages.length);
+                }}
+                style={{
+                  position: 'absolute',
+                  right: '20px',
+                  background: 'rgba(255,255,255,0.1)',
+                  border: 'none',
+                  color: '#fff',
+                  borderRadius: '50%',
+                  width: '48px',
+                  height: '48px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  zIndex: 100000,
+                  transition: 'background-color 0.2s'
+                }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+              >
+                <FaChevronRight size={20} />
+              </button>
+            )}
+
+            <motion.img
+              key={lightboxIndex}
+              src={lightboxImages[lightboxIndex]}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              style={{
+                maxWidth: '80%',
+                maxHeight: '80%',
+                borderRadius: '8px',
+                boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
+                objectFit: 'contain',
+                cursor: 'default'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
