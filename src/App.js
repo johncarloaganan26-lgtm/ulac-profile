@@ -806,8 +806,6 @@ function App() {
   };
 
   const [resolvedDark, setResolvedDark] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
-  const [isPointer, setIsPointer] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Apply theme
@@ -840,22 +838,6 @@ function App() {
     const r = () => setIsMobile(window.innerWidth < 900);
     window.addEventListener('resize', r);
     return () => window.removeEventListener('resize', r);
-  }, []);
-
-  // Custom cursor
-  useEffect(() => {
-    const move = e => setMousePos({ x: e.clientX, y: e.clientY });
-    const check = e => {
-      const t = e.target;
-      setIsPointer(!!(t && (
-        window.getComputedStyle(t).cursor === 'pointer' ||
-        t.tagName === 'BUTTON' || t.tagName === 'A' ||
-        t.closest('a') || t.closest('button')
-      )));
-    };
-    window.addEventListener('mousemove', move);
-    window.addEventListener('mouseover', check);
-    return () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseover', check); };
   }, []);
 
   useEffect(() => {
@@ -910,9 +892,14 @@ function App() {
   };
 
   const scrollToSection = id => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
     setMenuOpen(false);
+    window.requestAnimationFrame(() => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const headerOffset = isMobile ? 64 : 0;
+      const top = Math.max(0, el.getBoundingClientRect().top + window.scrollY - headerOffset);
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
   };
 
   const handleInputChange = e => {
@@ -1225,14 +1212,6 @@ function App() {
   return (
     <div className="app-layout" style={{ position: 'relative', minHeight: '100vh' }}>
 
-      {/* Custom cursor */}
-      {!isMobile && (
-        <>
-          <div className="cursor-dot" style={{ top: mousePos.y, left: mousePos.x }} />
-          <div className={`cursor-ring${isPointer ? ' hovered' : ''}`} style={{ top: mousePos.y, left: mousePos.x }} />
-        </>
-      )}
-
       {/* Preloader */}
       {!preloaderRemoved && (
         <div id="preloader">
@@ -1279,7 +1258,14 @@ function App() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <ThemeToggleCapsule theme={theme} setTheme={handleSetTheme} />
 
-          <button onClick={() => setMenuOpen(m => !m)} style={{ background: 'none', border: '1px solid var(--gray-200)', width: 32, height: 32, borderRadius: '5px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ink)' }}>
+          <button
+            type="button"
+            aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+            onClick={() => setMenuOpen(m => !m)}
+            style={{ background: 'none', border: '1px solid var(--gray-200)', width: 32, height: 32, borderRadius: '5px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ink)' }}
+          >
             {menuOpen ? <FaTimes size={12} /> : <FaBars size={12} />}
           </button>
         </div>
@@ -1294,12 +1280,15 @@ function App() {
               transition={{ duration: 0.22 }}
               style={{ position: 'absolute', top: '56px', left: 0, right: 0, overflow: 'hidden', borderBottom: '1px solid var(--gray-200)', background: 'var(--bg)', zIndex: 999 }}
             >
-              <div style={{ padding: '1rem 2rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div id="mobile-navigation" style={{ padding: '1rem 2rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 {[...navItems, { label: 'Contact', id: 'contact' }].map(n => (
                   <button key={n.id} onClick={() => scrollToSection(n.id)} className="nav-link" style={{ textAlign: 'left', padding: '0.5rem 0', borderBottom: '1px solid var(--gray-100)' }}>
                     {n.label}
                   </button>
                 ))}
+                <a href="/resume.html" target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)} className="btn-glow" style={{ justifyContent: 'center', marginTop: '0.75rem' }}>
+                  See CV
+                </a>
               </div>
             </motion.div>
           )}
@@ -1358,15 +1347,15 @@ function App() {
                 Currently completing my BSIT degree at Cavite State University. I enjoy building applications that are highly functional and snappy to use. When I'm not writing code, I enjoy working out, listening to music, and studying full stack architectures.
               </p>
               {/* Stats row */}
-              <div style={{ display: 'flex', gap: '2.5rem', marginTop: '0.5rem', flexWrap: 'wrap', paddingTop: '1.5rem', borderTop: '1px solid var(--gray-200)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: isMobile ? '0.5rem' : '2.5rem', marginTop: '0.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--gray-200)' }}>
                 {[
                   { num: '10+', label: 'Projects shipped' },
                   { num: '< 1', label: 'Year of experience' },
                   { num: '100%', label: 'Client satisfaction' }
                 ].map((s, i) => (
-                  <div key={i}>
+                  <div key={i} style={{ minWidth: 0 }}>
                     <div style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--ink)' }}>{s.num}</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '2px' }}>{s.label}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: isMobile ? '0.55rem' : '0.625rem', lineHeight: 1.35, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: isMobile ? '0.06em' : '0.1em', marginTop: '2px' }}>{s.label}</div>
                   </div>
                 ))}
               </div>
@@ -1383,7 +1372,7 @@ function App() {
             <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)', margin: 0 }}>Technical Toolkit</h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(4, 1fr)', gap: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, 1fr)', gap: isMobile ? '1.5rem 1rem' : '2rem' }}>
             {[
               { category: 'Frontend', skills: ['React', 'Vue.js', 'Next.js', 'HTML5', 'CSS3', 'Tailwind CSS'] },
               { category: 'Backend & AI', skills: ['Node.js', 'Express.js', 'Laravel', 'Python (FastAPI)', 'PHP', 'Groq', 'OpenAI', 'Claude', 'Codex'] },
