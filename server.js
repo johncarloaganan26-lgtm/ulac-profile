@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -10,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 5001;
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 // Reuse the contact logic
 const contactHandler = require('./api/contact');

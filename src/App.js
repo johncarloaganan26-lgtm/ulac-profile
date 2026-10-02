@@ -1459,18 +1459,25 @@ function App() {
             <div className="timeline-line" />
             {[
               {
+                role: 'Service Level Technician',
+                company: 'CXI Services Inc.',
+                duration: 'Sep 2026 – Present',
+                desc: 'Manage employee attendance records, conduct scheduled roll calls, and develop internal tools and software solutions as a programmer to streamline operational workflows.',
+                badge: 'Active'
+              },
+              {
+                role: 'Freelance Software Developer',
+                company: 'Self-employed',
+                duration: 'Jun 2026 – Present',
+                desc: 'Built and styled responsive web applications, developed clean backend APIs, and integrated MySQL databases for various client systems.',
+                badge: 'Freelance'
+              },
+              {
                 role: 'Full-Stack Developer Intern',
                 company: 'StartupLab Business Center & AI Consulting Agency OPC',
                 duration: 'Feb 2026 – May 2026',
                 desc: 'Worked on loan reminder systems and AI-powered workflows. Handled databases, email queues, and server configurations for production applications.',
                 badge: 'Internship'
-              },
-              {
-                role: 'Freelance Software Developer',
-                company: 'Self-employed',
-                duration: 'Jun 2023 – Present',
-                desc: 'Built and shipped 10+ production applications across retail, e-commerce, POS platforms, and academic management systems.',
-                badge: 'Freelance'
               }
             ].map((exp, i) => (
               <div key={i} className="timeline-item" style={{ position: 'relative', paddingLeft: '2.5rem', paddingBottom: '2.5rem' }}>
@@ -1555,11 +1562,18 @@ function App() {
                 <div className="section-label">06 — Credentials</div>
                 <h2 style={{ fontSize: 'clamp(1.3rem, 2.5vw, 1.7rem)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)', margin: 0 }}>Certifications</h2>
               </div>
-              {[{
-                name: 'Full-Stack Developer Internship',
-                issuer: 'StartupLab Business Center & AI Consulting Agency OPC',
-                url: 'https://drive.google.com/file/d/1cglPPYuWbCDnZOVmWlq5bx0pZ3keFK1M/view?usp=drive_link'
-              }].map((cert, i) => (
+              {[
+                {
+                  name: 'TESDA Training Program (AI Essentials – Competency Certificate)',
+                  issuer: 'CompTIA (2026)',
+                  url: '/comptia-ai-essentials.pdf'
+                },
+                {
+                  name: 'Full-Stack Developer Internship',
+                  issuer: 'StartupLab Business Center & AI Consulting Agency OPC (2026)',
+                  url: 'https://drive.google.com/file/d/1cglPPYuWbCDnZOVmWlq5bx0pZ3keFK1M/view?usp=drive_link'
+                }
+              ].map((cert, i) => (
                 <div key={i} onClick={() => cert.url !== '#' && window.open(cert.url, '_blank')} style={{
                   border: '1px solid var(--gray-200)', borderRadius: '8px', padding: '1.25rem',
                   background: 'var(--gray-50)', cursor: 'pointer', display: 'flex', gap: '1rem', alignItems: 'center',
@@ -1571,10 +1585,11 @@ function App() {
                   <div style={{ width: 40, height: 40, borderRadius: '7px', background: 'var(--gray-100)', border: '1px solid var(--gray-200)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <FaLaptopCode size={16} style={{ color: 'var(--gray-500)' }} />
                   </div>
-                  <div>
+                  <div style={{ flex: 1 }}>
                     <h4 style={{ fontSize: '0.9375rem', fontWeight: 700, margin: 0, color: 'var(--ink)', letterSpacing: '-0.01em' }}>{cert.name}</h4>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', marginTop: '3px' }}>{cert.issuer}</div>
                   </div>
+                  <FaExternalLinkAlt size={11} style={{ color: 'var(--gray-400)' }} />
                 </div>
               ))}
             </div>

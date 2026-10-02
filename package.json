@@ -23,14 +23,14 @@
     "typed.js": "^3.0.0"
   },
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"npm run start\"",
+    "dev": "concurrently \"node server.js\" \"react-scripts start\"",
     "start": "react-scripts start",
     "server": "node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "vercel-build": "npx --yes react-scripts build",
-    "postinstall": "chmod +x node_modules/.bin/react-scripts || true"
+    "postinstall": "node -e \"try { require('fs').chmodSync('node_modules/.bin/react-scripts', 0o755) } catch(e) {}\""
   },
   "eslintConfig": {
     "extends": [
