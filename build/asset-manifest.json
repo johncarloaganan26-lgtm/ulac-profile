@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.398768aa.css",
-    "main.js": "./static/js/main.336b723e.js",
+    "main.js": "./static/js/main.023019d8.js",
     "static/media/Screenshot 2026-01-28 035743.png": "./static/media/Screenshot 2026-01-28 035743.f703da5b58f5f1c0b9d5.png",
     "static/media/Screenshot 2026-02-27 090848.png": "./static/media/Screenshot 2026-02-27 090848.ece56793aeb3d7fc0ec8.png",
     "static/media/dormpulse.png": "./static/media/dormpulse.d27fd614570f1e98c1b6.png",
@@ -24,10 +24,10 @@
     "static/media/startuplab-logo.webp": "./static/media/startuplab-logo.ebb7bede39dae13a5112.webp",
     "index.html": "./index.html",
     "main.398768aa.css.map": "./static/css/main.398768aa.css.map",
-    "main.336b723e.js.map": "./static/js/main.336b723e.js.map"
+    "main.023019d8.js.map": "./static/js/main.023019d8.js.map"
   },
   "entrypoints": [
     "static/css/main.398768aa.css",
-    "static/js/main.336b723e.js"
+    "static/js/main.023019d8.js"
   ]
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from './supabaseClient';
+import { respond } from './bot/respond';
 import {
   FaEnvelope, FaMapMarkerAlt, FaCode, FaMoon, FaSun,
   FaLinkedin, FaBars, FaTimes, FaGithub, FaCalendarAlt,
@@ -1902,42 +1903,45 @@ const ChatBot = ({ isDark }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [messages, setMessages] = useState([
-    { sender: 'bot', text: "Hi! I'm John's AI assistant. Ask me anything about his skills, projects, or background." }
-  ]);
+  const [lastIntentId, setLastIntentId] = useState(null);
+  const [messages, setMessages] = useState(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('ulac_bot_messages') || 'null');
+      if (Array.isArray(saved) && saved.length) return saved;
+    } catch (_) { /* storage unavailable */ }
+    return [{
+      sender: 'bot',
+      text: "Hi! I'm John's FAQ assistant — ask me about his skills, projects, experience, or how to get in touch.",
+      chips: ['What are his skills?', 'What projects has he built?', 'How can I contact him?']
+    }];
+  });
   const endRef = useRef(null);
 
-  const SYSTEM_PROMPT = `You are John Carlo Aganan's personal AI assistant.
-John Carlo is a Full-Stack Developer specializing in React, Node.js, and Supabase.
-He is in his 4th Year of BSIT at Cavite State University. He lives in Naic, Cavite, Philippines.
-Key projects: DormPulse (Student locator), LaundroSaaS, MedFlow (Healthcare), NAgCO (Cooperative loan management).
-Keep answers brief, professional, and strictly relevant to his portfolio.`;
+  useEffect(() => {
+    try { localStorage.setItem('ulac_bot_messages', JSON.stringify(messages.slice(-30))); } catch (_) { /* ignore */ }
+  }, [messages]);
 
   useEffect(() => {
     if (isOpen) endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping, isOpen]);
 
-  const handleSend = async e => {
-    e.preventDefault();
-    if (!input.trim() || isTyping) return;
-    const text = input.trim();
+  const sendText = raw => {
+    const text = String(raw || '').slice(0, 300).trim();
+    if (!text || isTyping) return;
     setMessages(p => [...p, { sender: 'user', text }]);
     setInput('');
     setIsTyping(true);
-    try {
-      const history = [
-        { role: 'system', content: SYSTEM_PROMPT },
-        ...messages.map(m => ({ role: m.sender === 'user' ? 'user' : 'assistant', content: m.text })),
-        { role: 'user', content: text }
-      ];
-      const res = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: 'llama-3.1-8b-instant', messages: history, max_tokens: 250, temperature: 0.7 }) });
-      const data = await res.json();
-      setMessages(p => [...p, { sender: 'bot', text: data.choices?.[0]?.message?.content || "Sorry, couldn't process that." }]);
-    } catch (_) {
-      setMessages(p => [...p, { sender: 'bot', text: "Oops! Something went wrong." }]);
-    } finally {
+    const result = respond(text, { lastIntentId });
+    if (result.intentId) setLastIntentId(result.intentId);
+    setTimeout(() => {
+      setMessages(p => [...p, { sender: 'bot', text: result.text, chips: result.chips, links: result.links }]);
       setIsTyping(false);
-    }
+    }, 350 + Math.round(Math.random() * 450));
+  };
+
+  const handleSend = e => {
+    e.preventDefault();
+    sendText(input);
   };
 
   return (
@@ -1975,6 +1979,16 @@ Keep answers brief, professional, and strictly relevant to his portfolio.`;
                   }}>
                     {m.text}
                   </div>
+                  {i === messages.length - 1 && m.sender === 'bot' && ((m.chips && m.chips.length > 0) || (m.links && m.links.length > 0)) && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '6px' }}>
+                      {(m.links || []).map(l => (
+                        <a key={l.href} href={l.href} target={l.href.indexOf('http') === 0 ? '_blank' : undefined} rel="noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', padding: '0.3rem 0.6rem', borderRadius: '999px', border: '1px solid var(--gray-300)', background: 'var(--ink)', color: 'var(--bg)', textDecoration: 'none' }}>{l.label}</a>
+                      ))}
+                      {(m.chips || []).map(c => (
+                        <button key={c} type="button" onClick={() => sendText(c)} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', padding: '0.3rem 0.6rem', borderRadius: '999px', border: '1px solid var(--gray-300)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer' }}>{c}</button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
               {isTyping && (
