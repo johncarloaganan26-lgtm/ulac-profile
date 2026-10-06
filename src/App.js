@@ -751,6 +751,38 @@ const ThemeToggleCapsule = ({ theme, setTheme }) => {
 // ─────────────────────────────────────────────────────────────
 // Main App Component
 // ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// Proficiency ratings revealed on hover in the Technical Toolkit
+// ─────────────────────────────────────────────────────────────
+const SKILL_LEVELS = {
+  'React': 92,
+  'Vue.js': 84,
+  'Next.js': 80,
+  'HTML5': 95,
+  'CSS3': 93,
+  'Tailwind CSS': 88,
+  'Node.js': 90,
+  'Express.js': 88,
+  'Laravel': 76,
+  'Python (FastAPI)': 74,
+  'PHP': 72,
+  'Groq': 78,
+  'OpenAI': 86,
+  'Claude': 84,
+  'Codex': 82,
+  'MySQL': 88,
+  'PostgreSQL': 82,
+  'Supabase': 85,
+  'Clever Cloud': 75,
+  'Git': 90,
+  'GitHub': 90,
+  'VS Code': 95,
+  'Cursor': 88,
+  'Antigravity': 70,
+  'Vercel': 85,
+  'Render': 80
+};
+
 function App() {
   const [preloaderRemoved, setPreloaderRemoved] = useState(false);
   const [lightboxImages, setLightboxImages] = useState([]);
@@ -1342,10 +1374,10 @@ function App() {
               <div className="section-label">01 — About</div>
               <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)', margin: 0 }}>About Me</h2>
               <p style={{ fontSize: '1.0625rem', lineHeight: '1.75', color: 'var(--gray-500)', fontFamily: 'var(--font-serif)' }}>
-                I'm a Full-Stack Developer with a deep interest in backend stability, clean frontend rendering, and database efficiency. Over the past few years, I have successfully designed, built, and shipped production platforms for e-commerce, scheduling, point-of-sale, and loan management.
+                I'm a Full-Stack Developer with a deep focus on backend stability, clean frontend rendering, and database efficiency. Over the past few years, I have designed, built, and shipped production platforms for e-commerce, scheduling, point-of-sale, and loan management.
               </p>
               <p style={{ fontSize: '1.0625rem', lineHeight: '1.75', color: 'var(--gray-500)', fontFamily: 'var(--font-serif)' }}>
-                Currently completing my BSIT degree at Cavite State University. I enjoy building applications that are highly functional and snappy to use. When I'm not writing code, I enjoy working out, listening to music, and studying full stack architectures.
+                A BSIT graduate of Cavite State University, I'm now a Service Level Technician at CXI Services, where I build internal tools that keep operations running — and a freelance developer since 2026. I care about applications that are highly functional and snappy to use. When I'm not writing code, I'm working out, listening to music, or studying full-stack architectures.
               </p>
               {/* Stats row */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: isMobile ? '0.5rem' : '2.5rem', marginTop: '0.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--gray-200)' }}>
@@ -1386,9 +1418,10 @@ function App() {
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {cat.skills.map(s => (
-                    <div key={s} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <div key={s} className="skill-row" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <span style={{ width: 4, height: 4, background: 'var(--gray-400)', borderRadius: '50%' }} />
-                      <span style={{ fontSize: '0.9375rem', color: 'var(--gray-600)' }}>{s}</span>
+                      <span className="skill-name" style={{ fontSize: '0.9375rem', color: 'var(--gray-600)' }}>{s}</span>
+                      <span className="skill-pct">{SKILL_LEVELS[s] != null ? `${SKILL_LEVELS[s]}%` : ''}</span>
                     </div>
                   ))}
                 </div>

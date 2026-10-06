@@ -348,6 +348,40 @@ body::before {
   color: var(--ink);
 }
 
+/* ─── Toolkit proficiency % (hover) ──────────────────────── */
+.skill-name {
+  transition: color 0.2s;
+}
+
+.skill-pct {
+  margin-left: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.skill-row:hover .skill-pct,
+.skill-row:active .skill-pct {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.skill-row:hover .skill-name,
+.skill-row:active .skill-name {
+  color: var(--ink);
+}
+
+@media (hover: none) {
+  .skill-pct {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* ─── Timeline ───────────────────────────────────────────── */
 .timeline-line {
   position: absolute;

@@ -50,8 +50,8 @@ export const intents = [
     patterns: ['who is john', 'who is he', 'what does he do', 'tell me about john', 'tell me about him', 'about him', 'about john', 'his background', 'background', 'bio'],
     keywords: ['background', 'bio', 'developer', 'bsit', 'degree', 'intro', 'student'],
     replies: [
-      'John Carlo Aganan is a Full-Stack Developer from Naic, Cavite, finishing his BSIT at Cavite State University. He ships production platforms — POS, booking, and loan systems — and cares about backend stability, clean rendering, and efficient databases.',
-      'A Filipino full-stack developer focused on React, Node.js, and databases. Currently a student, a freelancer, and a Service Level Technician at CXI Services.'
+      'John Carlo Aganan is a Full-Stack Developer from Naic, Cavite, and a BSIT graduate of Cavite State University. He ships production platforms — POS, booking, and loan systems — and cares about backend stability, clean rendering, and efficient databases.',
+      'A Filipino full-stack developer focused on React, Node.js, and databases. A BSIT graduate, a freelance developer, and a Service Level Technician at CXI Services.'
     ],
     chips: ['What is his experience?', 'Where does he study?', 'Is he available for work?']
   },
@@ -204,8 +204,8 @@ export const intents = [
     patterns: ['where does he study', 'education', 'school', 'university', 'college', 'degree course', 'bsit'],
     keywords: ['education', 'school', 'university', 'college', 'degree', 'bsit', 'student', 'study', 'studies', 'course'],
     replies: [
-      'John is in his 4th year of BSIT at Cavite State University, and holds a CompTIA AI Essentials certificate.',
-      'Studying BSIT at Cavite State University (4th year), with a CompTIA AI Essentials certificate on the side.'
+      'John earned his BSIT at Cavite State University (2022 – 2026), and holds a CompTIA AI Essentials certificate.',
+      'Graduated with a BSIT from Cavite State University, with a CompTIA AI Essentials certificate on the side.'
     ],
     chips: ['What is his experience?', 'What are his skills?']
   },
