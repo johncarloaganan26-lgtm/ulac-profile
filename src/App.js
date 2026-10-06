@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from './supabaseClient';
 import { respond } from './bot/respond';
@@ -7,7 +7,7 @@ import {
   FaLinkedin, FaBars, FaTimes, FaGithub, FaCalendarAlt,
   FaChevronRight, FaChevronLeft, FaStar, FaLaptopCode,
   FaCheck, FaCheckCircle, FaUser, FaLock, FaExternalLinkAlt,
-  FaQuoteRight, FaDesktop, FaCoffee
+  FaDesktop, FaCoffee
 } from 'react-icons/fa';
 import { MdVerified } from 'react-icons/md';
 
@@ -783,6 +783,9 @@ const SKILL_LEVELS = {
   'Render': 80
 };
 
+// Fire-and-forget bridge so sidebar entries can open the fullscreen overlays
+const launchOverlay = name => window.dispatchEvent(new CustomEvent('ulac-overlay', { detail: name }));
+
 function App() {
   const [preloaderRemoved, setPreloaderRemoved] = useState(false);
   const [lightboxImages, setLightboxImages] = useState([]);
@@ -1261,14 +1264,26 @@ function App() {
           </button>
         </div>
 
-        {/* Middle: Navigation Links */}
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', margin: '2rem 0' }}>
-          {navItems.map(n => (
-            <button key={n.id} onClick={() => scrollToSection(n.id)} className={`nav-link${activeSection === n.id ? ' active' : ''}`} style={{ textAlign: 'left' }}>
-              {n.label}
+        {/* Middle: Navigation Links + Tools */}
+        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', margin: '2rem 0' }}>
+          <nav style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            {navItems.map(n => (
+              <button key={n.id} onClick={() => scrollToSection(n.id)} className={`nav-link${activeSection === n.id ? ' active' : ''}`} style={{ textAlign: 'left' }}>
+                {n.label}
+              </button>
+            ))}
+          </nav>
+
+          {/* Tools: fullscreen overlays */}
+          <div className="sidebar-tools">
+            <button type="button" className="tool-link" onClick={() => launchOverlay('ask')}>
+              <span>ask anything</span><b>alt k</b>
             </button>
-          ))}
-        </nav>
+            <button type="button" className="tool-link" onClick={() => launchOverlay('test')}>
+              <span>typing test</span><b>alt j</b>
+            </button>
+          </div>
+        </div>
 
         {/* Bottom: Theme toggle & CTA stacked */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', alignItems: 'center', width: '100%' }}>
@@ -1319,6 +1334,12 @@ function App() {
                     {n.label}
                   </button>
                 ))}
+                <button type="button" className="tool-link tool-link--mobile" onClick={() => { setMenuOpen(false); launchOverlay('ask'); }}>
+                  <span>ask anything</span><b>alt k</b>
+                </button>
+                <button type="button" className="tool-link tool-link--mobile" onClick={() => { setMenuOpen(false); launchOverlay('test'); }}>
+                  <span>typing test</span><b>alt j</b>
+                </button>
                 <a href="/resume.html" target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)} className="btn-glow" style={{ justifyContent: 'center', marginTop: '0.75rem' }}>
                   See CV
                 </a>
@@ -1418,7 +1439,7 @@ function App() {
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {cat.skills.map(s => (
-                    <div key={s} className="skill-row" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <div key={s} className="skill-row" tabIndex={0} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <span style={{ width: 4, height: 4, background: 'var(--gray-400)', borderRadius: '50%' }} />
                       <span className="skill-name" style={{ fontSize: '0.9375rem', color: 'var(--gray-600)' }}>{s}</span>
                       <span className="skill-pct">{SKILL_LEVELS[s] != null ? `${SKILL_LEVELS[s]}%` : ''}</span>
@@ -1712,7 +1733,7 @@ function App() {
       </main>
 
       {/* ── CHATBOT ─────────────────────────────────────────── */}
-      <ChatBot isDark={resolvedDark} />
+      <ChatBot />
 
       {/* ── INQUIRY MODAL ───────────────────────────────────── */}
       <AnimatePresence>
@@ -1930,137 +1951,384 @@ function App() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// ChatBot Component
+// Fullscreen overlays — "ask anything" (alt/⌘ K) & typing test (alt/⌘ J)
 // ─────────────────────────────────────────────────────────────
-const ChatBot = ({ isDark }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const Overlay = ({ label, open, onClose, children }) => {
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, [open]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="fs-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label={label}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.26 }}
+        >
+          <div className="fs-backdrop" onClick={onClose} />
+          <motion.div
+            className="fs-inner"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.3 }}
+          >
+            {children}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const KeyCaps = ({ items }) => (
+  <div className="kbd-hints">
+    {items.map(([key, action]) => (
+      <span className="kbd-hint" key={key + action}><b>{key}</b>{action}</span>
+    ))}
+  </div>
+);
+
+// ─── ask anything ────────────────────────────────────────────
+const ASK_STARTERS = [
+  'what are his skills?',
+  'what projects has he built?',
+  'what is his experience?',
+  'how can i contact him?'
+];
+
+const AskOverlay = ({ open, onClose }) => {
   const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  const [pending, setPending] = useState(false);
   const [lastIntentId, setLastIntentId] = useState(null);
-  const [messages, setMessages] = useState(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem('ulac_bot_messages') || 'null');
-      if (Array.isArray(saved) && saved.length) return saved;
-    } catch (_) { /* storage unavailable */ }
-    return [{
-      sender: 'bot',
-      text: "Hi! I'm John's FAQ assistant — ask me about his skills, projects, experience, or how to get in touch.",
-      chips: ['What are his skills?', 'What projects has he built?', 'How can I contact him?']
-    }];
-  });
+  const [pairs, setPairs] = useState([]);
+  const inputRef = useRef(null);
   const endRef = useRef(null);
 
-  useEffect(() => {
-    try { localStorage.setItem('ulac_bot_messages', JSON.stringify(messages.slice(-30))); } catch (_) { /* ignore */ }
-  }, [messages]);
-
-  useEffect(() => {
-    if (isOpen) endRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping, isOpen]);
-
-  const sendText = raw => {
+  const send = raw => {
     const text = String(raw || '').slice(0, 300).trim();
-    if (!text || isTyping) return;
-    setMessages(p => [...p, { sender: 'user', text }]);
-    setInput('');
-    setIsTyping(true);
+    if (!text || pending) return;
     const result = respond(text, { lastIntentId });
     if (result.intentId) setLastIntentId(result.intentId);
-    setTimeout(() => {
-      setMessages(p => [...p, { sender: 'bot', text: result.text, chips: result.chips, links: result.links }]);
-      setIsTyping(false);
+    setInput('');
+    setPairs(p => [...p, { q: text.toLowerCase(), a: null, chips: [], links: [] }]);
+    setPending(true);
+    window.setTimeout(() => {
+      setPairs(p => p.map((pair, i) => (i === p.length - 1
+        ? { ...pair, a: result.text, chips: result.chips || [], links: result.links || [] }
+        : pair)));
+      setPending(false);
     }, 350 + Math.round(Math.random() * 450));
   };
 
-  const handleSend = e => {
-    e.preventDefault();
-    sendText(input);
-  };
+  useEffect(() => {
+    if (!open) { setInput(''); return; }
+    const t = window.setTimeout(() => inputRef.current?.focus(), 140);
+    return () => window.clearTimeout(t);
+  }, [open]);
+
+  useEffect(() => {
+    if (open) endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, [pairs, pending, open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = e => {
+      if (e.key === 'Escape') { e.preventDefault(); onClose(); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open, onClose]);
+
+  const latest = pairs.length - 1;
 
   return (
-    <div style={{ position: 'fixed', bottom: '1.5rem', right: '1.5rem', zIndex: 10003 }}>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 12 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 12 }}
-            className="chat-window"
-            style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', marginBottom: '0.75rem' }}
-          >
-            {/* Header */}
-            <div style={{ padding: '0.9rem 1rem', borderBottom: '1px solid var(--gray-200)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: '0.875rem', color: 'var(--ink)' }}>Chat with John's AI</div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', marginTop: '1px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Online</div>
-              </div>
-              <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', color: 'var(--gray-400)', fontSize: '1.1rem', cursor: 'pointer', lineHeight: 1 }}>×</button>
-            </div>
+    <Overlay label="Ask anything" open={open} onClose={onClose}>
+      <div className="ask-eyebrow">ask anything</div>
 
-            {/* Messages */}
-            <div style={{ flex: 1, padding: '0.9rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.6rem', background: 'var(--gray-50)' }}>
-              {messages.map((m, i) => (
-                <div key={i} style={{ alignSelf: m.sender === 'user' ? 'flex-end' : 'flex-start', maxWidth: '85%' }}>
-                  <div style={{
-                    padding: '0.55rem 0.8rem',
-                    borderRadius: m.sender === 'user' ? '10px 10px 2px 10px' : '10px 10px 10px 2px',
-                    background: m.sender === 'user' ? 'var(--ink)' : 'var(--bg)',
-                    color: m.sender === 'user' ? 'var(--bg)' : 'var(--ink)',
-                    border: m.sender === 'user' ? 'none' : '1px solid var(--gray-200)',
-                    fontSize: '0.8125rem',
-                    lineHeight: '1.5'
-                  }}>
-                    {m.text}
-                  </div>
-                  {i === messages.length - 1 && m.sender === 'bot' && ((m.chips && m.chips.length > 0) || (m.links && m.links.length > 0)) && (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '6px' }}>
-                      {(m.links || []).map(l => (
-                        <a key={l.href} href={l.href} target={l.href.indexOf('http') === 0 ? '_blank' : undefined} rel="noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', padding: '0.3rem 0.6rem', borderRadius: '999px', border: '1px solid var(--gray-300)', background: 'var(--ink)', color: 'var(--bg)', textDecoration: 'none' }}>{l.label}</a>
-                      ))}
-                      {(m.chips || []).map(c => (
-                        <button key={c} type="button" onClick={() => sendText(c)} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', padding: '0.3rem 0.6rem', borderRadius: '999px', border: '1px solid var(--gray-300)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer' }}>{c}</button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-              {isTyping && (
-                <div style={{ alignSelf: 'flex-start', padding: '0.5rem 0.7rem', background: 'var(--bg)', border: '1px solid var(--gray-200)', borderRadius: '10px 10px 10px 2px', fontSize: '0.75rem', color: 'var(--gray-400)', fontFamily: 'var(--font-mono)' }}>
-                  Thinking…
+      {pairs.length === 0 ? (
+        <h2 className="ask-headline">what do you want to ask?</h2>
+      ) : (
+        <div className="ask-transcript">
+          {pairs.map((pair, i) => (
+            <div key={i} className={'ask-pair' + (i === latest ? ' is-latest' : '')}>
+              <div className="ask-q">{pair.q}</div>
+              {pair.a === null
+                ? <div className="ask-a ask-pending">thinking…</div>
+                : <p className="ask-a">{pair.a}</p>}
+              {i === latest && pair.a !== null && (pair.links.length > 0 || pair.chips.length > 0) && (
+                <div className="ask-followups">
+                  {pair.links.map(l => (
+                    <a
+                      key={l.href}
+                      className="ask-link"
+                      href={l.href}
+                      target={l.href.indexOf('http') === 0 ? '_blank' : undefined}
+                      rel="noreferrer"
+                    >
+                      {l.label}<i>↗</i>
+                    </a>
+                  ))}
+                  {pair.chips.map(c => (
+                    <button type="button" key={c} className="ask-chip" onClick={() => send(c)}>{c}</button>
+                  ))}
                 </div>
               )}
-              <div ref={endRef} />
             </div>
-
-            {/* Input */}
-            <form onSubmit={handleSend} style={{ padding: '0.75rem', borderTop: '1px solid var(--gray-200)', display: 'flex', gap: '0.5rem', background: 'var(--bg)' }}>
-              <input
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                placeholder="Ask something…"
-                style={{ flex: 1, background: 'var(--gray-50)', border: '1px solid var(--gray-200)', borderRadius: '5px', padding: '0.45rem 0.7rem', fontSize: '0.8125rem', color: 'var(--ink)', outline: 'none', fontFamily: 'var(--font-body)', transition: 'border-color 0.2s' }}
-                onFocus={e => e.currentTarget.style.borderColor = 'var(--gray-400)'}
-                onBlur={e => e.currentTarget.style.borderColor = 'var(--gray-200)'}
-              />
-              <button type="submit" disabled={!input.trim() || isTyping} className="btn-glow" style={{ padding: '0.45rem 0.9rem', borderRadius: '5px', fontSize: '0.75rem' }}>Send</button>
-            </form>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {!isOpen && (
-        <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          onClick={() => setIsOpen(true)}
-          className="btn-glow"
-          style={{ borderRadius: '8px', padding: '0.65rem 1.2rem', gap: '6px' }}
-        >
-          <FaQuoteRight size={11} />
-          Ask AI
-        </motion.button>
+          ))}
+          <div ref={endRef} />
+        </div>
       )}
-    </div>
+
+      <form className="ask-form" onSubmit={e => { e.preventDefault(); send(input); }}>
+        <span className="ask-caret">›</span>
+        <input
+          ref={inputRef}
+          className="ask-input"
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          placeholder="type your question"
+          aria-label="Type your question"
+          autoComplete="off"
+          spellCheck="false"
+        />
+      </form>
+
+      {pairs.length === 0 && (
+        <div className="ask-starters">
+          {ASK_STARTERS.map(s => (
+            <button type="button" key={s} className="ask-chip" onClick={() => send(s)}>{s}</button>
+          ))}
+        </div>
+      )}
+
+      <KeyCaps items={[['enter', 'send'], ['esc', 'close'], ['alt k', 'toggle']]} />
+    </Overlay>
+  );
+};
+
+// ─── typing test ─────────────────────────────────────────────
+const TT_WORDS = [
+  'react', 'express', 'node', 'mysql', 'postgresql', 'supabase', 'tailwind', 'laravel',
+  'fastapi', 'vercel', 'render', 'clever', 'dashboard', 'ecommerce', 'checkout', 'payroll',
+  'inventory', 'scheduling', 'loan', 'ledger', 'endpoint', 'schema', 'migration', 'query',
+  'index', 'cache', 'deploy', 'commit', 'refactor', 'backend', 'frontend', 'database',
+  'responsive', 'accessible', 'component', 'state', 'async', 'await', 'promise', 'request'
+];
+
+const TT_ROWS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+
+const shuffleWords = list => {
+  const out = list.slice();
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = out[i];
+    out[i] = out[j];
+    out[j] = tmp;
+  }
+  return out;
+};
+
+const TypingOverlay = ({ open, onClose }) => {
+  const [words, setWords] = useState(() => shuffleWords(TT_WORDS));
+  const [index, setIndex] = useState(0);
+  const [typed, setTyped] = useState('');
+  const [hits, setHits] = useState(0);
+  const [keys, setKeys] = useState(0);
+  const [startedAt, setStartedAt] = useState(null);
+  const [elapsed, setElapsed] = useState(0);
+  const [confirmRestart, setConfirmRestart] = useState(false);
+  const [activeKey, setActiveKey] = useState(null);
+
+  const finished = index >= words.length;
+
+  const resetRun = useCallback(() => {
+    setWords(shuffleWords(TT_WORDS));
+    setIndex(0);
+    setTyped('');
+    setHits(0);
+    setKeys(0);
+    setStartedAt(null);
+    setElapsed(0);
+    setConfirmRestart(false);
+    setActiveKey(null);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    resetRun();
+  }, [open, resetRun]);
+
+  useEffect(() => {
+    if (!open || !startedAt || finished) return;
+    const iv = window.setInterval(() => setElapsed(Math.floor((Date.now() - startedAt) / 1000)), 200);
+    return () => window.clearInterval(iv);
+  }, [open, startedAt, finished]);
+
+  useEffect(() => {
+    if (!open) return;
+    const flash = k => {
+      setActiveKey(k);
+      window.setTimeout(() => setActiveKey(cur => (cur === k ? null : cur)), 130);
+    };
+    const onKey = e => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        if (confirmRestart) setConfirmRestart(false); else onClose();
+        return;
+      }
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        setConfirmRestart(c => !c);
+        return;
+      }
+      if (confirmRestart) {
+        if (e.key === 'Enter') { e.preventDefault(); resetRun(); }
+        return;
+      }
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.key === 'Backspace') {
+        e.preventDefault();
+        flash('backspace');
+        setTyped(t => t.slice(0, -1));
+        return;
+      }
+      if (e.key === ' ') {
+        e.preventDefault();
+        flash(' ');
+        setTyped('');
+        setIndex(i => i + 1);
+        return;
+      }
+      if (e.key.length !== 1) return;
+      e.preventDefault();
+      const target = (words[index] || '')[typed.length];
+      setKeys(k => k + 1);
+      if (target === e.key) setHits(h => h + 1);
+      setTyped(t => t + e.key);
+      if (!startedAt) setStartedAt(Date.now());
+      flash(e.key);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open, onClose, confirmRestart, index, typed, words, startedAt, resetRun]);
+
+  const minutes = elapsed / 60;
+  const wpm = minutes > 0 ? Math.round((hits / 5) / minutes) : 0;
+  const acc = keys > 0 ? Math.round((hits / keys) * 100) : 100;
+  const from = Math.max(0, index - 3);
+  const visible = words.slice(from, from + 13);
+  const current = words[index] || '';
+
+  return (
+    <Overlay label="Typing test" open={open} onClose={onClose}>
+      <div className="tt-stats">
+        <div className="tt-stat">
+          <span className="tt-num">{wpm}</span>
+          <span className="tt-label">wpm</span>
+        </div>
+        <div className="tt-stat">
+          <span className="tt-num">{acc}<i>%</i></span>
+          <span className="tt-label">acc</span>
+        </div>
+        <div className="tt-stat">
+          <span className="tt-num">{elapsed}<i>s</i></span>
+          <span className="tt-label">time</span>
+        </div>
+      </div>
+
+      <div className="tt-words">
+        {visible.map((word, i) => {
+          const abs = from + i;
+          if (abs < index) return <span className="tt-word is-done" key={abs}>{word}</span>;
+          if (abs > index) return <span className="tt-word" key={abs}>{word}</span>;
+          return (
+            <span className="tt-word is-current" key={abs}>
+              {word.split('').map((ch, ci) => {
+                const t = typed[ci];
+                const cls = t == null ? 'todo' : (t === ch ? 'ok' : 'bad');
+                return <span className={cls} key={ci}>{ch}</span>;
+              })}
+            </span>
+          );
+        })}
+      </div>
+
+      {finished && (
+        <div className="tt-done">done — {wpm} wpm at {acc}%</div>
+      )}
+
+      <div className="tt-keyboard">
+        {TT_ROWS.map(row => (
+          <div className="tt-krow" key={row}>
+            {row.split('').map(k => (
+              <span className={'tt-key' + (activeKey === k ? ' is-active' : '')} key={k}>{k}</span>
+            ))}
+          </div>
+        ))}
+        <div className="tt-krow">
+          <span
+            className={'tt-key tt-space' + (activeKey === ' ' ? ' is-active' : '')}
+            style={{ width: '11rem' }}
+          >
+            space
+          </span>
+        </div>
+      </div>
+
+      {confirmRestart
+        ? <div className="tt-confirm">restart test? <b>↵</b> to confirm · <b>esc</b> cancel</div>
+        : <KeyCaps items={[['tab', 'restart'], ['esc', 'close']]} />}
+    </Overlay>
+  );
+};
+
+// ─── launchers + global shortcuts ────────────────────────────
+const ChatBot = () => {
+  const [askOpen, setAskOpen] = useState(false);
+  const [testOpen, setTestOpen] = useState(false);
+
+  useEffect(() => {
+    const onKey = e => {
+      if (!e.altKey || e.ctrlKey || e.metaKey) return;
+      if (e.code === 'KeyK') {
+        e.preventDefault();
+        setTestOpen(false);
+        setAskOpen(o => !o);
+      }
+      if (e.code === 'KeyJ') {
+        e.preventDefault();
+        setAskOpen(false);
+        setTestOpen(o => !o);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  useEffect(() => {
+    const onLaunch = e => {
+      if (e.detail === 'ask') { setTestOpen(false); setAskOpen(true); }
+      if (e.detail === 'test') { setAskOpen(false); setTestOpen(true); }
+    };
+    window.addEventListener('ulac-overlay', onLaunch);
+    return () => window.removeEventListener('ulac-overlay', onLaunch);
+  }, []);
+
+  return (
+    <>
+      <AskOverlay open={askOpen} onClose={() => setAskOpen(false)} />
+      <TypingOverlay open={testOpen} onClose={() => setTestOpen(false)} />
+    </>
   );
 };
 
