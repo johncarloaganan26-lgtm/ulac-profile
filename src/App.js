@@ -2032,8 +2032,19 @@ const AskOverlay = ({ open, onClose }) => {
 
   useEffect(() => {
     if (!open) { setInput(''); return; }
-    const t = window.setTimeout(() => inputRef.current?.focus(), 140);
-    return () => window.clearTimeout(t);
+    const target = inputRef.current;
+    if (!target) return;
+    // Mobile virtual keyboards can delay focus; retry so the input is
+    // immediately usable on phones and tablets.
+    let attempts = 0;
+    const tryFocus = () => {
+      if (document.activeElement === target || attempts > 8) return;
+      attempts++;
+      try { target.focus({ preventScroll: true }); } catch (_) {}
+      window.setTimeout(tryFocus, 70);
+    };
+    tryFocus();
+    return () => { try { target.blur(); } catch (_) {} };
   }, [open]);
 
   useEffect(() => {
@@ -2148,6 +2159,7 @@ const TypingOverlay = ({ open, onClose }) => {
   const [elapsed, setElapsed] = useState(0);
   const [confirmRestart, setConfirmRestart] = useState(false);
   const [activeKey, setActiveKey] = useState(null);
+  const inputRef = useRef(null);
 
   const finished = index >= words.length;
 
@@ -2161,6 +2173,10 @@ const TypingOverlay = ({ open, onClose }) => {
     setElapsed(0);
     setConfirmRestart(false);
     setActiveKey(null);
+    if (inputRef.current) {
+      inputRef.current.value = '';
+      inputRef.current.focus({ preventScroll: true });
+    }
   }, []);
 
   useEffect(() => {
@@ -2174,53 +2190,118 @@ const TypingOverlay = ({ open, onClose }) => {
     return () => window.clearInterval(iv);
   }, [open, startedAt, finished]);
 
+  // Keep the hidden text input focused so both physical and mobile virtual
+  // keyboards feed characters into the test. Mobile keyboards do not fire
+  // keydown for each character, so we read the input's value instead.
   useEffect(() => {
     if (!open) return;
-    const flash = k => {
-      setActiveKey(k);
-      window.setTimeout(() => setActiveKey(cur => (cur === k ? null : cur)), 130);
+    const el = inputRef.current;
+    if (!el) return;
+    let stopped = false;
+    let frame = 0;
+    const drive = () => {
+      if (stopped) return;
+      if (frame) cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        if (stopped) return;
+        try { el.focus({ preventScroll: true }); } catch (_) {}
+      });
     };
+    drive();
+    const iv = window.setInterval(drive, 250);
+    return () => { stopped = true; window.clearInterval(iv); if (frame) cancelAnimationFrame(frame); };
+  }, [open]);
+
+  const flash = useCallback(k => {
+    setActiveKey(k);
+    window.setTimeout(() => setActiveKey(cur => (cur === k ? null : cur)), 130);
+  }, []);
+
+  const press = useCallback((ch, fromKeyboard) => {
+    if (confirmRestart) {
+      if (ch === 'Enter') { resetRun(); }
+      return;
+    }
+    if (ch === 'Escape') { if (confirmRestart) setConfirmRestart(false); else onClose(); return; }
+    if (ch === 'Tab') { setConfirmRestart(c => !c); return; }
+    if (finished) return;
+    if (ch === 'Backspace') {
+      flash('backspace');
+      setTyped(t => t.slice(0, -1));
+      return;
+    }
+    if (ch === ' ') {
+      flash(' ');
+      setTyped('');
+      setIndex(i => i + 1);
+      return;
+    }
+    if (ch.length !== 1) return;
+    const target = (words[index] || '')[typed.length];
+    setKeys(k => k + 1);
+    if (target === ch) setHits(h => h + 1);
+    setTyped(t => t + ch);
+    if (!startedAt) setStartedAt(Date.now());
+    flash(ch);
+  }, [confirmRestart, finished, words, index, typed, startedAt, onClose, resetRun, flash]);
+
+  // Physical-keyboard path: handles Escape / Tab immediately so desktop users
+  // can close or restart without the hidden input intercepting those keys. Character
+  // keys are intentionally left for the input's input-event path below so that the
+  // per-key highlight stays in sync with what the hidden input actually contains.
+  useEffect(() => {
+    if (!open) return;
     const onKey = e => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        if (confirmRestart) setConfirmRestart(false); else onClose();
-        return;
-      }
-      if (e.key === 'Tab') {
-        e.preventDefault();
-        setConfirmRestart(c => !c);
-        return;
-      }
-      if (confirmRestart) {
-        if (e.key === 'Enter') { e.preventDefault(); resetRun(); }
-        return;
-      }
       if (e.ctrlKey || e.metaKey || e.altKey) return;
-      if (e.key === 'Backspace') {
+      if (e.key === 'Escape' || e.key === 'Tab') {
         e.preventDefault();
-        flash('backspace');
-        setTyped(t => t.slice(0, -1));
-        return;
+        press(e.key);
       }
-      if (e.key === ' ') {
-        e.preventDefault();
-        flash(' ');
-        setTyped('');
-        setIndex(i => i + 1);
-        return;
-      }
-      if (e.key.length !== 1) return;
-      e.preventDefault();
-      const target = (words[index] || '')[typed.length];
-      setKeys(k => k + 1);
-      if (target === e.key) setHits(h => h + 1);
-      setTyped(t => t + e.key);
-      if (!startedAt) setStartedAt(Date.now());
-      flash(e.key);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [open, onClose, confirmRestart, index, typed, words, startedAt, resetRun]);
+  }, [open, press]);
+
+  // Mobile / any-device path: read characters typed into the hidden input.
+  // This is what makes the test usable on phones and tablets, where the
+  // on-screen keyboard never fires keydown per character.
+  const lastRef = useRef('');
+  useEffect(() => {
+    if (!open) return;
+    const el = inputRef.current;
+    if (!el) return;
+    el.value = '';
+    lastRef.current = '';
+    const onInput = () => {
+      const v = el.value;
+      // New characters appended at the end.
+      if (v.length > lastRef.current.length) {
+        for (let i = lastRef.current.length; i < v.length; i++) {
+          press(v[i]);
+          if (finished) break;
+        }
+      } else if (v.length < lastRef.current.length) {
+        // Backspace/delete: the keyboard already shortened the input; undo
+        // the corresponding number of typed characters in our state.
+        const cut = lastRef.current.length - v.length;
+        for (let i = 0; i < cut; i++) press('Backspace');
+      }
+      lastRef.current = v;
+    };
+    el.addEventListener('input', onInput);
+    return () => el.removeEventListener('input', onInput);
+  }, [open, finished, press]);
+
+  // Prevent the hidden input fromever gaining visible focus styling and keep
+  // the page scroll stable while it stays focused on mobile.
+  useEffect(() => {
+    if (!open) return;
+    const onBlur = () => {
+      if (inputRef.current) inputRef.current.focus({ preventScroll: true });
+    };
+    window.addEventListener('blur', onBlur, true);
+    return () => window.removeEventListener('blur', onBlur, true);
+  }, [open]);
 
   const minutes = elapsed / 60;
   const wpm = minutes > 0 ? Math.round((hits / 5) / minutes) : 0;
@@ -2245,6 +2326,22 @@ const TypingOverlay = ({ open, onClose }) => {
           <span className="tt-label">time</span>
         </div>
       </div>
+
+      {/* Hidden focused input: this is what captures characters on mobile
+          virtual keyboards, which never fire keydown per character. On desktop
+          the keydown listener still drives instant per-key feedback; this input
+          is the cross-device source of truth for typed characters. The input is
+          left uncontrolled so mobile keyboards can type into it without React
+          fighting the DOM value on every keystroke. */}
+      <input
+        ref={inputRef}
+        className="tt-input"
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
+        aria-hidden="true"
+      />
 
       <div className="tt-words">
         {visible.map((word, i) => {
