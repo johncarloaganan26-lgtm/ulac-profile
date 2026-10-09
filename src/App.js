@@ -2215,11 +2215,11 @@ const TypingOverlay = ({ open, onClose }) => {
   }, []);
 
   const press = useCallback((ch, fromKeyboard) => {
+    if (ch === 'Escape') { onClose(); return; }
     if (confirmRestart) {
       if (ch === 'Enter') { resetRun(); }
       return;
     }
-    if (ch === 'Escape') { if (confirmRestart) setConfirmRestart(false); else onClose(); return; }
     if (ch === 'Tab') { setConfirmRestart(c => !c); return; }
     if (finished) return;
     if (ch === 'Backspace') {
