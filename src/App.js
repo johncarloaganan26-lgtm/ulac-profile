@@ -346,10 +346,7 @@ const Project3DCarousel = ({ projects, isMobile, isDark }) => {
 
   return (
     <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2.5rem' }}>
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        height: '370px',
+      <div style={{ position: 'relative', width: '100%', height: '340px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -376,17 +373,17 @@ const Project3DCarousel = ({ projects, isMobile, isDark }) => {
           let opacity = 1;
 
           if (isLeft) {
-            translate = '-160px';
-            rotate = '-8deg';
-            scale = 0.85;
+            translate = '-130px';
+            rotate = '-6deg';
+            scale = 0.92;
             zIndex = 5;
-            opacity = 0.65;
+            opacity = 0.85;
           } else if (isRight) {
-            translate = '160px';
-            rotate = '8deg';
-            scale = 0.85;
+            translate = '130px';
+            rotate = '6deg';
+            scale = 0.92;
             zIndex = 5;
-            opacity = 0.65;
+            opacity = 0.85;
           }
 
           return (
@@ -398,8 +395,8 @@ const Project3DCarousel = ({ projects, isMobile, isDark }) => {
               }}
               style={{
                 position: 'absolute',
-                width: 'clamp(280px, 85vw, 340px)',
-                height: '330px',
+                width: 'clamp(240px, 32vw, 300px)',
+                height: '300px',
                 background: isDark ? '#0d0d11' : '#ffffff',
                 border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid var(--gray-200)',
                 borderRadius: '16px',
