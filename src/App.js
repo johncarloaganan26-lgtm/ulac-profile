@@ -1523,16 +1523,37 @@ function App() {
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                     <path d="M13.73 21a2 2 0 0 1-3.46 0" />
                   </svg>
-                  <span style={{
-                    position: 'absolute',
-                    top: '7px',
-                    right: '7px',
-                    width: '7px',
-                    height: '7px',
-                    borderRadius: '50%',
-                    background: '#f97316',
-                    boxShadow: '0 0 6px #f97316'
-                  }} />
+                  {(inquiries.length + testimonials.filter(t => !t.is_approved).length) > 0 ? (
+                    <span style={{
+                      position: 'absolute',
+                      top: '-4px',
+                      right: '-4px',
+                      minWidth: '17px',
+                      height: '17px',
+                      borderRadius: '9px',
+                      background: '#f97316',
+                      color: '#ffffff',
+                      fontSize: '0.625rem',
+                      fontWeight: 700,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '0 4px',
+                      boxShadow: '0 0 8px rgba(249, 115, 22, 0.6)'
+                    }}>
+                      {inquiries.length + testimonials.filter(t => !t.is_approved).length}
+                    </span>
+                  ) : (
+                    <span style={{
+                      position: 'absolute',
+                      top: '7px',
+                      right: '7px',
+                      width: '7px',
+                      height: '7px',
+                      borderRadius: '50%',
+                      background: 'rgba(255, 255, 255, 0.2)'
+                    }} />
+                  )}
                 </button>
 
                 {showNotifications && (
@@ -1540,31 +1561,118 @@ function App() {
                     position: 'absolute',
                     top: 'calc(100% + 8px)',
                     right: 0,
-                    width: '290px',
+                    width: '320px',
                     background: '#0d121d',
                     border: '1px solid rgba(255, 255, 255, 0.12)',
-                    borderRadius: '10px',
-                    padding: '0.85rem',
+                    borderRadius: '12px',
+                    padding: '0.9rem',
                     zIndex: 60,
-                    boxShadow: '0 12px 30px rgba(0,0,0,0.65)'
+                    boxShadow: '0 12px 35px rgba(0,0,0,0.75)'
                   }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.65rem', paddingBottom: '0.5rem', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#ffffff', letterSpacing: '0.04em' }}>NOTIFICATIONS</span>
-                      <span style={{ fontSize: '0.68rem', color: '#f97316', background: 'rgba(249, 115, 22, 0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px' }}>
-                        {inquiries.length + testimonials.filter(t => !t.is_approved).length} new
-                      </span>
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '200px', overflowY: 'auto' }}>
-                      <div style={{ padding: '0.5rem', borderRadius: '6px', background: 'rgba(255,255,255,0.03)', fontSize: '0.78rem' }}>
-                        <div style={{ color: '#ffffff', fontWeight: 600 }}>System Online</div>
-                        <div style={{ color: '#64748b', fontSize: '0.72rem', marginTop: '0.2rem' }}>All admin and dashboard modules running</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#ffffff', letterSpacing: '0.05em' }}>NOTIFICATIONS</span>
+                        <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#f97316', background: 'rgba(249, 115, 22, 0.12)', padding: '0.15rem 0.45rem', borderRadius: '4px' }}>
+                          {inquiries.length + testimonials.filter(t => !t.is_approved).length} new
+                        </span>
                       </div>
-                      {inquiries.length > 0 && (
-                        <div style={{ padding: '0.5rem', borderRadius: '6px', background: 'rgba(255,255,255,0.03)', fontSize: '0.78rem' }}>
-                          <div style={{ color: '#ffffff', fontWeight: 600 }}>{inquiries.length} New Inquiries</div>
-                          <div style={{ color: '#64748b', fontSize: '0.72rem', marginTop: '0.2rem' }}>You have received messages from visitors</div>
+                      <button
+                        onClick={() => { fetchInquiries(); fetchTestimonials(); }}
+                        title="Refresh"
+                        style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '0.7rem', padding: '2px 6px', borderRadius: '4px', transition: 'color 0.2s' }}
+                        onMouseEnter={e => e.currentTarget.style.color = '#fff'}
+                        onMouseLeave={e => e.currentTarget.style.color = '#94a3b8'}
+                      >
+                        ↻ Refresh
+                      </button>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '260px', overflowY: 'auto' }}>
+                      {/* Unapproved Reviews */}
+                      {testimonials.filter(t => !t.is_approved).length > 0 && (
+                        <div
+                          onClick={() => { setMisView('testimonials'); setShowNotifications(false); }}
+                          style={{
+                            padding: '0.6rem 0.7rem',
+                            borderRadius: '8px',
+                            background: 'rgba(249, 115, 22, 0.08)',
+                            border: '1px solid rgba(249, 115, 22, 0.25)',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s'
+                          }}
+                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(249, 115, 22, 0.15)'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'rgba(249, 115, 22, 0.08)'}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <span style={{ color: '#f97316', fontWeight: 700, fontSize: '0.75rem' }}>★ New Testimonial Pending</span>
+                            <span style={{ fontSize: '0.68rem', color: '#fb923c' }}>Approve →</span>
+                          </div>
+                          <div style={{ color: '#e2e8f0', fontSize: '0.72rem', marginTop: '0.2rem' }}>
+                            {testimonials.filter(t => !t.is_approved).length} client review(s) waiting for approval
+                          </div>
                         </div>
                       )}
+
+                      {/* Inquiries */}
+                      {inquiries.length > 0 ? (
+                        inquiries.slice(0, 4).map((inq, idx) => (
+                          <div
+                            key={inq.id || idx}
+                            onClick={() => { setMisView('inquiries'); setShowNotifications(false); }}
+                            style={{
+                              padding: '0.6rem 0.7rem',
+                              borderRadius: '8px',
+                              background: 'rgba(255, 255, 255, 0.035)',
+                              border: '1px solid rgba(255, 255, 255, 0.06)',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s'
+                            }}
+                            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.07)'; e.currentTarget.style.borderColor = 'rgba(249, 115, 22, 0.4)'; }}
+                            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.035)'; e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)'; }}
+                          >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '0.78rem' }}>{inq.name}</span>
+                              <span style={{ color: '#64748b', fontSize: '0.65rem' }}>
+                                {inq.created_at ? new Date(inq.created_at).toLocaleDateString([], { month: 'short', day: 'numeric' }) : 'Recent'}
+                              </span>
+                            </div>
+                            <div style={{ color: '#f97316', fontSize: '0.72rem', fontWeight: 600, marginTop: '0.15rem' }}>{inq.subject}</div>
+                            <div style={{ color: '#94a3b8', fontSize: '0.7rem', marginTop: '0.15rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {inq.message}
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div style={{ padding: '1rem', textAlign: 'center', color: '#64748b', fontSize: '0.75rem' }}>
+                          No new inquiries. Inbox is clear!
+                        </div>
+                      )}
+                    </div>
+
+                    <div style={{ marginTop: '0.75rem', paddingTop: '0.5rem', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                      <button
+                        onClick={() => { setMisView('inquiries'); setShowNotifications(false); }}
+                        style={{
+                          width: '100%',
+                          background: 'rgba(249, 115, 22, 0.1)',
+                          border: '1px solid rgba(249, 115, 22, 0.3)',
+                          borderRadius: '6px',
+                          color: '#f97316',
+                          fontWeight: 700,
+                          fontSize: '0.75rem',
+                          padding: '0.5rem',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.35rem'
+                        }}
+                        onMouseEnter={e => { e.currentTarget.style.background = '#f97316'; e.currentTarget.style.color = '#ffffff'; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(249, 115, 22, 0.1)'; e.currentTarget.style.color = '#f97316'; }}
+                      >
+                        View All Inquiries ({inquiries.length}) →
+                      </button>
                     </div>
                   </div>
                 )}

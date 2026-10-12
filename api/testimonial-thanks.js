@@ -74,7 +74,25 @@ module.exports = async (req, res) => {
         `
       });
 
-      console.log(`✅ SUCCESS: Testimonial thank-you sent to ${name}`);
+      // 2b. Notify Admin of new testimonial
+      const adminEmail = process.env.SMTP_TO || process.env.SMTP_USER;
+      if (adminEmail) {
+        await transporter.sendMail({
+          from: `"Portfolio Reviews" <${process.env.SMTP_USER}>`,
+          to: adminEmail,
+          subject: `New Testimonial (${rating || 5}★) from ${name}`,
+          html: `
+            <div style="font-family: sans-serif; padding: 20px; background: #f9fafb;">
+              <h2 style="color: #111827;">New Testimonial Submitted</h2>
+              <p><strong>${name}</strong> &lt;${email}&gt; (${role || 'Client'}) left a <strong>${rating || 5}-star</strong> review:</p>
+              <blockquote style="border-left: 4px solid #f97316; padding-left: 12px; color: #4b5563; font-style: italic;">"${content}"</blockquote>
+              <p>Log in to your Admin Dashboard to approve this testimonial for your homepage.</p>
+            </div>
+          `
+        });
+      }
+
+      console.log(`✅ SUCCESS: Testimonial thank-you sent to ${name} and admin notified.`);
     } catch (emailErr) {
       console.error('Email sending failed (testimonial still saved in Neon):', emailErr.message);
     }
