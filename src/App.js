@@ -802,7 +802,7 @@ function App() {
   }, [lightboxImages]);
 
   const [activeSection, setActiveSection] = useState('hero');
-  const [showAllProjects, setShowAllProjects] = useState(false);
+  const [showAllProjects, setShowAllProjects] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentService, setCurrentService] = useState(null);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -2517,7 +2517,7 @@ function App() {
               onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
               onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-500)'}
             >
-              {showAllProjects ? 'Show Interactive' : 'Show All Projects'}
+              {showAllProjects ? 'Show 3D Carousel' : 'Show All Projects'}
             </button>
           </div>
 
@@ -2525,7 +2525,7 @@ function App() {
             {!showAllProjects ? (
               <Project3DCarousel projects={ALL_PROJECTS_DATA} isMobile={isMobile} isDark={resolvedDark} />
             ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: '1px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: isMobile ? '1rem' : '1.25rem' }}>
                 {ALL_PROJECTS_DATA.map((p, i) => (
                   <a key={i} href={p.url} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', border: '1px solid var(--gray-200)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'var(--bg)', transition: 'border-color 0.2s' }}
                     onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gray-400)'}
