@@ -1181,3 +1181,119 @@ body::before {
     width: 7rem !important;
   }
 }
+
+/* ============================================================
+   JC MIS Management Console — Dark Obsidian Theme
+   ============================================================ */
+.mis-shell {
+  min-height: 100vh;
+  background-color: #080b11;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+  color: #f8fafc;
+  font-family: var(--font-body);
+  display: flex;
+  position: relative;
+  z-index: 20;
+}
+
+.mis-sidebar {
+  width: 250px;
+  min-width: 250px;
+  background: rgba(9, 13, 22, 0.96);
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 1.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  box-sizing: border-box;
+  backdrop-filter: blur(16px);
+  z-index: 30;
+}
+
+.mis-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  padding: 0.72rem 0.95rem;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  font-family: var(--font-body);
+}
+
+.mis-nav-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.mis-nav-btn.active {
+  background: #151b27;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.mis-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 2.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(8, 11, 18, 0.85);
+  backdrop-filter: blur(16px);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .mis-topbar {
+    padding: 0.85rem 1.25rem;
+  }
+}
+
+.mis-card {
+  background: rgba(13, 18, 29, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mis-card:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.mis-activity-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.15rem 1.6rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background-color 0.15s ease;
+}
+
+.mis-activity-row:hover {
+  background-color: rgba(255, 255, 255, 0.025);
+}
+
+@keyframes mis-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.mis-spin {
+  animation: mis-spin 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+}
+

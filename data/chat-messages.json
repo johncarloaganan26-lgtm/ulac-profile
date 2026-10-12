@@ -1,0 +1,38 @@
+[
+  {
+    "id": "murcx3v2fl4ozea2efu",
+    "sessionId": "test-session-1",
+    "role": "user",
+    "content": "Hello, this is a test message",
+    "metadata": {
+      "source": "test-script"
+    },
+    "timestamp": "2026-10-02T19:29:26.990Z"
+  },
+  {
+    "id": "murcx3vdhcwj6ghrh7",
+    "sessionId": "test-session-1",
+    "role": "assistant",
+    "content": "Hi there! How can I help you?",
+    "metadata": {},
+    "timestamp": "2026-10-02T19:29:27.001Z"
+  },
+  {
+    "id": "murd28wnu87tnr9dk1r",
+    "sessionId": "test-session-1",
+    "role": "user",
+    "content": "Hello, this is a test message",
+    "metadata": {
+      "source": "test-script"
+    },
+    "timestamp": "2026-10-02T19:33:26.807Z"
+  },
+  {
+    "id": "murd28wv230h70kku23",
+    "sessionId": "test-session-1",
+    "role": "assistant",
+    "content": "Hi there! How can I help you?",
+    "metadata": {},
+    "timestamp": "2026-10-02T19:33:26.815Z"
+  }
+]

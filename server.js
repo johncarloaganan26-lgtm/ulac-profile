@@ -6,7 +6,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 5001;
+const port = parseInt(process.env.PORT, 10) || 5001;
 
 app.use(cors());
 app.use(express.json());
@@ -15,12 +15,52 @@ app.use(express.json());
 const contactHandler = require('./api/contact');
 const testimonialHandler = require('./api/testimonial-thanks');
 const approvalHandler = require('./api/testimonial-approved');
+const chatHistoryHandler = require('./api/chat');
 app.post('/api/contact', contactHandler);
 app.post('/api/testimonial-thanks', testimonialHandler);
 app.post('/api/testimonial-approved', approvalHandler);
+app.post('/api/chat-history', chatHistoryHandler);
+app.get('/api/chat-history', chatHistoryHandler);
+
+// Admin APIs backed by Neon Postgres (dashboard, inquiries, testimonials, views)
+const adminHandler = require('./api/admin');
+app.use('/api/admin', adminHandler);
 
 // View Counter Persistence
 const VIEWS_FILE = path.join(__dirname, 'views.txt');
+
+let githubCache = { data: null, timestamp: 0 };
+app.get('/api/github-contributions', async (req, res) => {
+  const now = Date.now();
+  if (githubCache.data && now - githubCache.timestamp < 10 * 60 * 1000) {
+    return res.json(githubCache.data);
+  }
+  try {
+    const response = await fetch('https://github.com/users/Ulacdev/contributions');
+    const html = await response.text();
+    const totalMatch = html.match(/([0-9,]+)\s+contributions\s+in the last year/i);
+    const total = totalMatch ? parseInt(totalMatch[1].replace(/,/g, ''), 10) : 112;
+
+    const cellRegex = /<td[^>]*?data-date="([^"]+)"[^>]*?id="contribution-day-component-(\d+)-(\d+)"[^>]*?data-level="(\d+)"/g;
+    let match;
+    const active = [];
+    while ((match = cellRegex.exec(html)) !== null) {
+      const date = match[1];
+      const row = parseInt(match[2], 10);
+      const col = parseInt(match[3], 10);
+      const level = parseInt(match[4], 10);
+      if (level > 0) {
+        active.push({ col, row, level, date });
+      }
+    }
+    const result = { total, active };
+    githubCache = { data: result, timestamp: now };
+    res.json(result);
+  } catch (err) {
+    console.error('Failed to fetch github contributions:', err);
+    res.json({ total: 112, active: [] });
+  }
+});
 
 app.get('/api/views', async (req, res) => {
   try {
@@ -45,8 +85,29 @@ app.get('*', (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`🚀 BACKEND ALIVE: Server is running on port ${port}`);
-  console.log(`📧 Contact API: http://localhost:${port}/api/contact`);
-  console.log(`📧 Testimonial API: http://localhost:${port}/api/testimonial-thanks`);
+let server;
+async function start() {
+  try {
+    const db = require('./db');
+    await db.initSchema();
+  } catch (err) {
+    console.warn('Neon admin table check skipped:', err.message);
+  }
+
+  server = app.listen(port, () => {
+    console.log(`[server] ADMIN API: http://localhost:${port}/api/admin/inquiries`);
+    console.log(`[server] ADMIN API: http://localhost:${port}/api/admin/testimonials`);
+    console.log(`[server] ADMIN API: http://localhost:${port}/api/admin/inquiries/:id`);
+    console.log(`[server] ADMIN API: http://localhost:${port}/api/admin/testimonials/:id/approval`);
+  });
+}
+
+start().catch((err) => {
+  console.error('Failed to start server:', err);
+  process.exit(1);
+});
+
+process.on('SIGTERM', () => {
+  if (server) server.close();
+  process.exit(0);
 });
