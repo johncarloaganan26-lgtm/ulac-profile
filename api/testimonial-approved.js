@@ -12,6 +12,11 @@ module.exports = async (req, res) => {
     return res.status(400).json({ message: 'Missing name or email' });
   }
 
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.log('Approval email skipped: SMTP credentials not configured.');
+    return res.status(200).json({ message: 'Approval recorded (email notification skipped: SMTP not configured).' });
+  }
+
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {

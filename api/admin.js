@@ -3,8 +3,9 @@ const db = require('../db');
 module.exports = async (req, res) => {
   // Generic admin router: normalizes path so it works with both Express mounting and serverless
   const { method } = req;
-  const rawPath = (req.originalUrl || req.url || '').split('?')[0];
-  const path = rawPath.replace(/^\/api\/admin/, '') || '/';
+  const rawPath = (req.headers['x-matched-path'] || req.headers['x-now-route-matches'] || req.originalUrl || req.url || '').split('?')[0];
+  let path = rawPath.replace(/^\/api\/admin/, '') || '/';
+  if (!path.startsWith('/')) path = '/' + path;
 
   // GET /inquiries
   if (path === '/inquiries' && method === 'GET') {

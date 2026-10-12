@@ -1,7 +1,15 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/api/admin/:path*",
+      "destination": "/api/admin"
+    },
+    {
+      "source": "/api/chat-history",
+      "destination": "/api/chat"
+    },
+    {
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ]
