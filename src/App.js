@@ -11,6 +11,12 @@ import {
   FaDesktop, FaCoffee
 } from 'react-icons/fa';
 import { MdVerified } from 'react-icons/md';
+import {
+  SiReact, SiVuedotjs, SiNextdotjs, SiHtml5, SiCss3, SiTailwindcss,
+  SiNodedotjs, SiExpress, SiLaravel, SiFastapi, SiPhp, SiOpenai,
+  SiMysql, SiPostgresql, SiSupabase, SiGit, SiGithub, SiVercel,
+  SiRender, SiCloudflare
+} from 'react-icons/si';
 
 import project1Image from './Screenshot 2026-01-28 035743.png';
 import project2Image from './Screenshot 2026-01-31 091212.png';
@@ -769,6 +775,7 @@ const SKILL_LEVELS = {
   'MySQL': 88,
   'PostgreSQL': 82,
   'Supabase': 85,
+  'Neon': 80,
   'Clever Cloud': 75,
   'Git': 90,
   'GitHub': 90,
@@ -776,7 +783,39 @@ const SKILL_LEVELS = {
   'Cursor': 88,
   'Antigravity': 70,
   'Vercel': 85,
-  'Render': 80
+  'Render': 80,
+  'Cloudflare': 80
+};
+
+const SKILL_ICONS = {
+  'React': { Icon: SiReact, color: '#61DAFB' },
+  'Vue.js': { Icon: SiVuedotjs, color: '#4FC08D' },
+  'Next.js': { Icon: SiNextdotjs, color: 'var(--ink)' },
+  'HTML5': { Icon: SiHtml5, color: '#E34F26' },
+  'CSS3': { Icon: SiCss3, color: '#1572B6' },
+  'Tailwind CSS': { Icon: SiTailwindcss, color: '#06B6D4' },
+  'Node.js': { Icon: SiNodedotjs, color: '#5FA04E' },
+  'Express.js': { Icon: SiExpress, color: 'var(--ink)' },
+  'Laravel': { Icon: SiLaravel, color: '#FF2D20' },
+  'Python (FastAPI)': { Icon: SiFastapi, color: '#009688' },
+  'PHP': { Icon: SiPhp, color: '#777BB4' },
+  'Groq': { src: '/assets/icons/toolkit/groq.svg' },
+  'OpenAI': { Icon: SiOpenai, color: 'var(--ink)' },
+  'Claude': { src: '/assets/icons/toolkit/claude.svg' },
+  'Codex': { Icon: SiOpenai, color: 'var(--ink)' },
+  'MySQL': { Icon: SiMysql, color: '#4479A1' },
+  'PostgreSQL': { Icon: SiPostgresql, color: '#4169E1' },
+  'Supabase': { Icon: SiSupabase, color: '#3FCF8E' },
+  'Neon': { src: '/assets/icons/toolkit/neon.svg' },
+  'Clever Cloud': { src: '/assets/icons/toolkit/clevercloud.svg' },
+  'Git': { Icon: SiGit, color: '#F05032' },
+  'GitHub': { Icon: SiGithub, color: 'var(--ink)' },
+  'VS Code': { src: '/assets/icons/toolkit/vscode.svg' },
+  'Cursor': { src: '/assets/icons/toolkit/cursor.svg' },
+  'Antigravity': { src: '/assets/icons/toolkit/antigravity.svg' },
+  'Vercel': { Icon: SiVercel, color: 'var(--ink)' },
+  'Render': { Icon: SiRender, color: '#46E3B7' },
+  'Cloudflare': { Icon: SiCloudflare, color: '#F38020' }
 };
 
 // Fire-and-forget bridge so sidebar entries can open the fullscreen overlays
@@ -1453,21 +1492,26 @@ function App() {
             {[
               { category: 'Frontend', skills: ['React', 'Vue.js', 'Next.js', 'HTML5', 'CSS3', 'Tailwind CSS'] },
               { category: 'Backend & AI', skills: ['Node.js', 'Express.js', 'Laravel', 'Python (FastAPI)', 'PHP', 'Groq', 'OpenAI', 'Claude', 'Codex'] },
-              { category: 'Database', skills: ['MySQL', 'PostgreSQL', 'Supabase', 'Clever Cloud'] },
-              { category: 'Tools & Platform', skills: ['Git', 'GitHub', 'VS Code', 'Cursor', 'Antigravity', 'Vercel', 'Render'] }
+              { category: 'Database', skills: ['MySQL', 'PostgreSQL', 'Supabase', 'Neon', 'Clever Cloud'] },
+              { category: 'Tools & Platform', skills: ['Git', 'GitHub', 'VS Code', 'Cursor', 'Antigravity', 'Vercel', 'Render', 'Cloudflare'] }
             ].map((cat, i) => (
               <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--ink)', borderBottom: '1px solid var(--gray-200)', paddingBottom: '0.5rem', margin: 0 }}>
                   {cat.category}
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  {cat.skills.map(s => (
-                    <div key={s} className="skill-row" tabIndex={0} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <span style={{ width: 4, height: 4, background: 'var(--gray-400)', borderRadius: '50%' }} />
-                      <span className="skill-name" style={{ fontSize: '0.9375rem', color: 'var(--gray-600)' }}>{s}</span>
-                      <span className="skill-pct">{SKILL_LEVELS[s] != null ? `${SKILL_LEVELS[s]}%` : ''}</span>
-                    </div>
-                  ))}
+                  {cat.skills.map(s => {
+                    const { Icon, color, src } = SKILL_ICONS[s];
+                    return (
+                      <div key={s} className="skill-row" tabIndex={0} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        {src
+                          ? <img className="skill-icon" src={src} alt="" aria-hidden="true" />
+                          : <Icon className="skill-icon" color={color} aria-hidden="true" />}
+                        <span className="skill-name" style={{ fontSize: '0.9375rem', color: 'var(--gray-600)' }}>{s}</span>
+                        <span className="skill-pct">{SKILL_LEVELS[s] != null ? `${SKILL_LEVELS[s]}%` : ''}</span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             ))}
