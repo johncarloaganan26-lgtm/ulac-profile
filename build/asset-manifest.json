@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.ebaf4638.css",
-    "main.js": "./static/js/main.9fe58ead.js",
+    "main.css": "./static/css/main.291d9f93.css",
+    "main.js": "./static/js/main.b68cd985.js",
     "static/media/Screenshot 2026-01-28 035743.png": "./static/media/Screenshot 2026-01-28 035743.f703da5b58f5f1c0b9d5.png",
     "static/media/Screenshot 2026-02-27 090848.png": "./static/media/Screenshot 2026-02-27 090848.ece56793aeb3d7fc0ec8.png",
     "static/media/dormpulse.png": "./static/media/dormpulse.d27fd614570f1e98c1b6.png",
@@ -23,11 +23,11 @@
     "static/media/nagco-dashboard.png": "./static/media/nagco-dashboard.ba315b68475b3f760f9b.png",
     "static/media/startuplab-logo.webp": "./static/media/startuplab-logo.ebb7bede39dae13a5112.webp",
     "index.html": "./index.html",
-    "main.ebaf4638.css.map": "./static/css/main.ebaf4638.css.map",
-    "main.9fe58ead.js.map": "./static/js/main.9fe58ead.js.map"
+    "main.291d9f93.css.map": "./static/css/main.291d9f93.css.map",
+    "main.b68cd985.js.map": "./static/js/main.b68cd985.js.map"
   },
   "entrypoints": [
-    "static/css/main.ebaf4638.css",
-    "static/js/main.9fe58ead.js"
+    "static/css/main.291d9f93.css",
+    "static/js/main.b68cd985.js"
   ]
 }
