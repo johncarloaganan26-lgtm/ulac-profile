@@ -38,6 +38,12 @@ import laundrosaasLogo from './laundrosaas-logo.png';
 import medflowLogo from './medflow-logo.png';
 import artisanoLogo from './artisano-logo.png';
 import bigbrewLogo from './bigbrew-logo.png';
+import fullStackSystemsArt from './assets/service-art/full-stack-systems.svg';
+import customWebAppsArt from './assets/service-art/custom-web-apps.svg';
+import databaseArchitectureArt from './assets/service-art/database-architecture.svg';
+import ecommerceSolutionsArt from './assets/service-art/ecommerce-solutions.svg';
+import responsiveUiUxArt from './assets/service-art/responsive-ui-ux.svg';
+import apiDevelopmentArt from './assets/service-art/api-development.svg';
 
 // ─────────────────────────────────────────────────────────────
 // Terminal Typing Shell Mockup
@@ -549,7 +555,7 @@ const Project3DCarousel = ({ projects, isMobile, isDark }) => {
 };
 
 // ─────────────────────────────────────────────────────────────
-// GitHub Contributions Halftone Component
+// GitHub Contributions Component
 // ─────────────────────────────────────────────────────────────
 const GithubContributions = () => {
   const cols = 53;
@@ -580,6 +586,30 @@ const GithubContributions = () => {
   const [activeCommits, setActiveCommits] = useState(defaultCommits);
   const [totalContributions, setTotalContributions] = useState(112);
 
+  const today = new Date();
+  const lastSunday = new Date(today);
+  lastSunday.setDate(today.getDate() - today.getDay());
+  lastSunday.setHours(0, 0, 0, 0);
+
+  const weeks = Array.from({ length: cols }, (_, col) => {
+    const firstDay = new Date(lastSunday);
+    firstDay.setDate(lastSunday.getDate() - (cols - col - 1) * 7);
+    return firstDay;
+  });
+  const monthLabels = weeks.reduce((labels, firstDay, col) => {
+    if (col === 0 || firstDay.getMonth() !== weeks[col - 1].getMonth()) {
+      labels.push({
+        label: firstDay.toLocaleString('en', { month: 'short' }),
+        col
+      });
+    }
+    return labels;
+  }, []);
+  const contributionsByCell = new Map(
+    activeCommits.map(contribution => [`${contribution.col}-${contribution.row}`, contribution])
+  );
+  const contributionShades = ['var(--gray-200)', 'var(--gray-300)', 'var(--gray-400)', 'var(--gray-500)'];
+
   useEffect(() => {
     const fetchContributions = async () => {
       try {
@@ -595,103 +625,80 @@ const GithubContributions = () => {
     fetchContributions();
   }, []);
 
-  const cells = [];
-  for (let c = 0; c < cols; c++) {
-    for (let r = 0; r < rows; r++) {
-      const active = activeCommits.find(item => item.col === c && item.row === r);
-      
-      let radius = 1.1;
-      let opacity = 0.12;
-      
-      if (active) {
-        if (active.level === 4) {
-          radius = 5.8;
-          opacity = 0.95;
-        } else if (active.level === 3) {
-          radius = 4.6;
-          opacity = 0.92;
-        } else if (active.level === 2) {
-          radius = 3.4;
-          opacity = 0.85;
-        } else if (active.level === 1) {
-          radius = 2.4;
-          opacity = 0.75;
-        }
-      }
-
-      cells.push({
-        cx: 6.5 + c * 13,
-        cy: 6.5 + r * 13,
-        r: radius,
-        opacity
-      });
-    }
-  }
-
   return (
     <section id="github" style={{ padding: '5rem 0', borderTop: '1px solid var(--gray-200)' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1.5rem' }}>
-        <div>
-          <div className="section-label">09 — GitHub</div>
-          <h2 style={{ fontSize: 'clamp(1.3rem, 2.5vw, 1.7rem)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)', margin: 0 }}>Contributions</h2>
+      <div style={{ border: '1px solid var(--gray-200)', borderRadius: '20px', padding: 'clamp(1.25rem, 4vw, 2.25rem)', background: 'var(--bg)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+            <FaGithub size={21} color="var(--ink)" aria-hidden="true" />
+            <div>
+              <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--gray-500)' }}>GitHub contributions</div>
+              <div style={{ fontSize: '1.1rem', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--ink)' }}>{totalContributions} contributions in the last year</div>
+            </div>
+          </div>
+          <a
+            href="https://github.com/Ulacdev"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--gray-500)', textDecoration: 'none', transition: 'color 0.2s' }}
+            onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
+            onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-500)'}
+          >
+            View profile ↗
+          </a>
         </div>
-        <a 
-          href="https://github.com/Ulacdev" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.6875rem',
-            fontWeight: 500,
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em',
-            color: 'var(--gray-500)',
-            textDecoration: 'none',
-            transition: 'color 0.2s'
-          }}
-          onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
-          onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-500)'}
-        >
-          @Ulacdev ↗
-        </a>
-      </div>
 
-      <a 
-        href="https://github.com/Ulacdev" 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        style={{ display: 'block', color: 'var(--ink)', textDecoration: 'none' }}
-      >
-        <svg 
-          viewBox="0 0 689 91" 
-          style={{ width: '100%', height: 'auto' }}
-          preserveAspectRatio="xMidYMid meet"
-          aria-label="GitHub contribution graph, halftone style"
-        >
-          {cells.map((cell, i) => (
-            <circle 
-              key={i} 
-              cx={cell.cx} 
-              cy={cell.cy} 
-              r={cell.r} 
-              fill="currentColor" 
-              opacity={cell.opacity} 
-            />
+        <div style={{ overflowX: 'auto', paddingBottom: '0.25rem' }}>
+          <div role="img" aria-label="GitHub contribution activity over the last year" style={{ minWidth: '700px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`, marginLeft: '2rem', height: '1.4rem', position: 'relative' }}>
+              {monthLabels.map(({ label, col }, i) => (
+                <span key={`${label}-${col}`} style={{ position: 'absolute', left: `${(col / cols) * 100}%`, top: 0, fontSize: '0.65rem', color: 'var(--gray-500)' }}>{label}</span>
+              ))}
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1.5rem minmax(0, 1fr)', gap: '0.5rem' }}>
+              <div style={{ display: 'grid', gridTemplateRows: `repeat(${rows}, 1fr)`, gap: '4px', fontSize: '0.62rem', color: 'var(--gray-500)' }} aria-hidden="true">
+                {['', 'Mon', '', 'Wed', '', 'Fri', ''].map((day, i) => <span key={i}>{day}</span>)}
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, minmax(8px, 1fr))`, gridTemplateRows: `repeat(${rows}, 12px)`, gap: '4px' }}>
+                {Array.from({ length: cols * rows }, (_, index) => {
+                  const col = Math.floor(index / rows);
+                  const row = index % rows;
+                  const contribution = contributionsByCell.get(`${col}-${row}`);
+                  const date = new Date(weeks[col]);
+                  date.setDate(date.getDate() + row);
+                  const dateLabel = contribution?.date || [
+                    date.getFullYear(),
+                    String(date.getMonth() + 1).padStart(2, '0'),
+                    String(date.getDate()).padStart(2, '0')
+                  ].join('-');
+                  const title = contribution
+                    ? `${dateLabel}: contribution level ${contribution.level} of 4`
+                    : `${dateLabel}: no contributions`;
+                  const background = contribution
+                    ? contributionShades[Math.max(0, Math.min(3, contribution.level - 1))]
+                    : 'var(--gray-100)';
+
+                  return (
+                    <span
+                      key={`${col}-${row}`}
+                      title={title}
+                      style={{ display: 'block', borderRadius: '3px', background, transition: 'transform 0.15s ease' }}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.3rem', marginTop: '1.25rem', fontSize: '0.68rem', color: 'var(--gray-500)' }} aria-label="Contribution intensity legend">
+          <span style={{ marginRight: '0.2rem' }}>Less</span>
+          {['var(--gray-100)', 'var(--gray-200)', 'var(--gray-300)', 'var(--gray-400)', 'var(--gray-500)'].map(color => (
+            <span key={color} style={{ width: '11px', height: '11px', borderRadius: '3px', background: color }} />
           ))}
-        </svg>
-      </a>
-
-      <p style={{ 
-        fontFamily: 'var(--font-mono)', 
-        fontSize: '0.6875rem', 
-        textTransform: 'uppercase', 
-        letterSpacing: '0.1em', 
-        color: 'var(--gray-400)', 
-        marginTop: '1rem',
-        margin: 0 
-      }}>
-        {totalContributions} contributions in the last year
-      </p>
+          <span style={{ marginLeft: '0.2rem' }}>More</span>
+        </div>
+      </div>
     </section>
   );
 };
@@ -1529,15 +1536,18 @@ function App() {
 
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: '1px', border: '1px solid var(--gray-200)', borderRadius: '9px', overflow: 'hidden' }}>
             {[
-              { num: '01', title: 'Full-Stack Systems', desc: 'Complex management systems, POS platforms, and admin dashboards built with React and Node.js.', tag: '99.9% uptime' },
-              { num: '02', title: 'Custom Web Apps', desc: 'Scalable web applications tailored to specific business requirements and workflows.', tag: 'Ship-ready' },
-              { num: '03', title: 'Database Architecture', desc: 'Robust and optimized database schemas using PostgreSQL and MySQL for high-performance data handling.', tag: 'Sub-ms queries' },
-              { num: '04', title: 'E-commerce Solutions', desc: 'End-to-end online store development with secure payment integrations and inventory management.', tag: 'Conversion-tuned' },
-              { num: '05', title: 'Responsive UI/UX', desc: 'Modern, mobile-first interfaces focused on user experience and brand identity.', tag: 'Pixel-perfect' },
-              { num: '06', title: 'API Development', desc: 'Secure RESTful APIs connecting platforms with mobile apps and third-party services.', tag: 'Documented' }
+              { num: '01', title: 'Full-Stack Systems', desc: 'Complex management systems, POS platforms, and admin dashboards built with React and Node.js.', tag: '99.9% uptime', image: fullStackSystemsArt },
+              { num: '02', title: 'Custom Web Apps', desc: 'Scalable web applications tailored to specific business requirements and workflows.', tag: 'Ship-ready', image: customWebAppsArt },
+              { num: '03', title: 'Database Architecture', desc: 'Robust and optimized database schemas using PostgreSQL and MySQL for high-performance data handling.', tag: 'Sub-ms queries', image: databaseArchitectureArt },
+              { num: '04', title: 'E-commerce Solutions', desc: 'End-to-end online store development with secure payment integrations and inventory management.', tag: 'Conversion-tuned', image: ecommerceSolutionsArt },
+              { num: '05', title: 'Responsive UI/UX', desc: 'Modern, mobile-first interfaces focused on user experience and brand identity.', tag: 'Pixel-perfect', image: responsiveUiUxArt },
+              { num: '06', title: 'API Development', desc: 'Secure RESTful APIs connecting platforms with mobile apps and third-party services.', tag: 'Documented', image: apiDevelopmentArt }
             ].map((s, i) => (
-              <div key={i}
+              <div key={i} className="service-card"
                 style={{
+                  position: 'relative',
+                  isolation: 'isolate',
+                  overflow: 'hidden',
                   padding: '2rem',
                   background: 'var(--bg)',
                   borderRight: i % 3 !== 2 && !isMobile ? '1px solid var(--gray-200)' : 'none',
@@ -1548,10 +1558,13 @@ function App() {
                 onMouseEnter={e => e.currentTarget.style.background = 'var(--gray-50)'}
                 onMouseLeave={e => e.currentTarget.style.background = 'var(--bg)'}
               >
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', fontWeight: 500 }}>{s.num}</span>
-                <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: 'var(--ink)', margin: 0, letterSpacing: '-0.02em' }}>{s.title}</h3>
-                <p style={{ fontSize: '0.875rem', color: 'var(--gray-500)', lineHeight: '1.6', margin: 0 }}>{s.desc}</p>
-                <span className="chip-border" style={{ marginTop: '0.5rem', width: 'fit-content' }}>{s.tag}</span>
+                <img className="service-card-image" src={s.image} alt="" aria-hidden="true" />
+                <div className="service-card-content">
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', fontWeight: 500 }}>{s.num}</span>
+                  <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: 'var(--ink)', margin: 0, letterSpacing: '-0.02em' }}>{s.title}</h3>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--gray-500)', lineHeight: '1.6', margin: 0 }}>{s.desc}</p>
+                  <span className="chip-border" style={{ marginTop: '0.5rem', width: 'fit-content' }}>{s.tag}</span>
+                </div>
               </div>
             ))}
           </div>
@@ -1574,6 +1587,7 @@ function App() {
                 company: 'CXI Services Inc.',
                 duration: 'Sep 2026 – Present',
                 desc: 'Manage employee attendance records, conduct scheduled roll calls, and develop internal tools and software solutions as a programmer to streamline operational workflows.',
+                logo: '/assets/img/experience/cxi-logo.png',
                 badge: 'Active'
               },
               {
@@ -1581,6 +1595,7 @@ function App() {
                 company: 'Self-employed',
                 duration: 'Jun 2026 – Present',
                 desc: 'Built and styled responsive web applications, developed clean backend APIs, and integrated MySQL databases for various client systems.',
+                logo: '/assets/img/experience/ulacdev-logo.png',
                 badge: 'Freelance'
               },
               {
@@ -1588,26 +1603,36 @@ function App() {
                 company: 'StartupLab Business Center & AI Consulting Agency OPC',
                 duration: 'Feb 2026 – May 2026',
                 desc: 'Worked on loan reminder systems and AI-powered workflows. Handled databases, email queues, and server configurations for production applications.',
+                logo: '/assets/img/experience/startuplab-logo.png',
                 badge: 'Internship'
               }
             ].map((exp, i) => (
               <div key={i} className="timeline-item" style={{ position: 'relative', paddingLeft: '2.5rem', paddingBottom: '2.5rem' }}>
                 <div className="timeline-dot" />
-                <div style={{ border: '1px solid var(--gray-200)', borderRadius: '8px', padding: '1.5rem', background: 'var(--gray-50)', textAlign: 'left', transition: 'border-color 0.2s' }}
+                <div style={{ position: 'relative', overflow: 'hidden', border: '1px solid var(--gray-200)', borderRadius: '8px', padding: '1.5rem', background: 'var(--gray-50)', textAlign: 'left', transition: 'border-color 0.2s' }}
                   onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gray-400)'}
                   onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--gray-200)'}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.75rem' }}>
-                    <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
-                        <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: 'var(--ink)', margin: 0, letterSpacing: '-0.02em' }}>{exp.role}</h3>
-                        <span className="chip-border">{exp.badge}</span>
+                  <img
+                    className={`experience-logo${exp.company === 'Self-employed' ? ' experience-logo--personal' : ''}`}
+                    src={exp.logo}
+                    alt=""
+                    aria-hidden="true"
+                    style={{ position: 'absolute', top: '50%', right: '0.75rem', width: exp.company === 'Self-employed' ? 'min(58%, 360px)' : 'min(42%, 240px)', height: exp.company === 'Self-employed' ? '90%' : '72%', objectFit: 'contain', objectPosition: 'right center', transform: 'translateY(-50%)', pointerEvents: 'none' }}
+                  />
+                  <div style={{ position: 'relative', zIndex: 1 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                          <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: 'var(--ink)', margin: 0, letterSpacing: '-0.02em' }}>{exp.role}</h3>
+                          <span className="chip-border">{exp.badge}</span>
+                        </div>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--gray-500)', marginTop: '4px' }}>{exp.company}</div>
                       </div>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--gray-500)', marginTop: '4px' }}>{exp.company}</div>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>{exp.duration}</span>
                     </div>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>{exp.duration}</span>
+                    <p style={{ fontSize: '0.9375rem', color: 'var(--gray-500)', lineHeight: '1.65', margin: 0 }}>{exp.desc}</p>
                   </div>
-                  <p style={{ fontSize: '0.9375rem', color: 'var(--gray-500)', lineHeight: '1.65', margin: 0 }}>{exp.desc}</p>
                 </div>
               </div>
             ))}
