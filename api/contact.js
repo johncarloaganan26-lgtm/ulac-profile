@@ -2,6 +2,16 @@ const nodemailer = require('nodemailer');
 const db = require('../db');
 require('dotenv').config();
 
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
@@ -39,52 +49,130 @@ module.exports = async (req, res) => {
       });
 
       const recipientEmail = process.env.SMTP_TO || process.env.SMTP_USER;
-      const firstName = (name || '').trim().split(' ')[0] || 'there';
+      const cleanSenderName = (name || '').trim();
+      const firstName = cleanSenderName.split(' ')[0] || 'there';
+      const buttonText = cleanSenderName ? `Reply directly to ${escapeHtml(cleanSenderName)} &rarr;` : 'Reply to sender &rarr;';
+      const currentYear = new Date().getFullYear();
 
-      // 2a. Notification Email to Receiver (John Carlo)
+      // 2a. Notification Email to Receiver (John Carlo / Ulacdev)
       await transporter.sendMail({
-        from: `"Portfolio Contact Form" <${process.env.SMTP_USER}>`,
+        from: `"Ulacdev Portfolio" <${process.env.SMTP_USER}>`,
         to: recipientEmail,
         replyTo: email,
-        subject: `New Inquiry from ${name}: ${subject}`,
-        text: `New contact inquiry received:
+        subject: `New System Inquiry from ${name}: ${subject}`,
+        text: `Ulacdev - New System Inquiry
 
-From: ${name} <${email}>
-Subject: ${subject}
+You have received a new message from your portfolio contact form.
 
-Message:
+FROM:
+${name} <${email}>
+
+SUBJECT:
+${subject}
+
+MESSAGE:
 ${message}
 
-Reply directly to: ${email}`,
+Reply directly to ${cleanSenderName || 'sender'}:
+${email}
+
+---
+This message was sent from your portfolio contact form.
+Please do not reply to this automated notification if not necessary.
+
+Ulacdev
+Portfolio · Projects · Contact
+© ${currentYear} Ulacdev. All rights reserved.`,
         html: `
-          <div style="background-color: #f3f4f6; padding: 40px 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-            <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-              <div style="background: linear-gradient(135deg, #111827 0%, #1f2937 100%); padding: 30px; text-align: center; border-bottom: 3px solid #f97316;">
-                <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 700;">New Inquiry Received</h1>
-              </div>
-              <div style="padding: 40px;">
-                <div style="margin-bottom: 24px; border-bottom: 1px solid #f3f4f6; padding-bottom: 16px;">
-                  <p style="margin: 0; color: #6b7280; font-size: 12px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">From</p>
-                  <p style="margin: 4px 0 0; color: #111827; font-size: 17px; font-weight: 600;">${name} &lt;${email}&gt;</p>
-                </div>
-                <div style="margin-bottom: 24px; border-bottom: 1px solid #f3f4f6; padding-bottom: 16px;">
-                  <p style="margin: 0; color: #6b7280; font-size: 12px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Subject</p>
-                  <p style="margin: 4px 0 0; color: #111827; font-size: 17px; font-weight: 600;">${subject}</p>
-                </div>
-                <div>
-                  <p style="margin: 0; color: #6b7280; font-size: 12px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Message Content</p>
-                  <div style="margin-top: 10px; background-color: #f9fafb; border-radius: 6px; padding: 20px; border-left: 4px solid #f97316;">
-                    <p style="margin: 0; color: #374151; font-size: 15px; line-height: 1.6; white-space: pre-wrap;">${message}</p>
-                  </div>
-                </div>
-                <div style="margin-top: 30px; text-align: center;">
-                  <a href="mailto:${email}?subject=Re: ${encodeURIComponent(subject)}" style="display: inline-block; background-color: #f97316; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: 700; font-size: 14px;">Reply directly to ${name}</a>
-                </div>
-              </div>
-              <div style="background-color: #f9fafb; padding: 16px; text-align: center; border-top: 1px solid #f3f4f6;">
-                <p style="margin: 0; color: #9ca3af; font-size: 12px; font-weight: 600;">PORTFOLIO AUTOMATION SYSTEM &bull; NEON POSTGRES CONNECTED</p>
-              </div>
-            </div>
+          <div style="background-color: #f3f4f6; padding: 40px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
+              <tr>
+                <td align="center">
+                  <!-- Main Card Container -->
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 580px; background-color: #ffffff; border-radius: 8px; border: 1px solid #e5e7eb; border-collapse: separate; text-align: left;">
+                    <tr>
+                      <td style="padding: 40px 40px 32px 40px;">
+                        
+                        <!-- Header -->
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
+                          <tr>
+                            <td align="left" valign="middle">
+                              <span style="font-size: 24px; font-weight: 800; color: #111111; letter-spacing: -0.5px;">Ulacdev</span>
+                            </td>
+                            <td align="right" valign="middle">
+                              <span style="font-size: 13px; color: #6b7280; line-height: 1.4; display: block;">Portfolio<br>Contact Form</span>
+                            </td>
+                          </tr>
+                        </table>
+
+                        <!-- Divider -->
+                        <div style="border-top: 1px solid #e5e7eb; margin: 24px 0 28px 0;"></div>
+
+                        <!-- Main Heading -->
+                        <h1 style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700; color: #111111; letter-spacing: -0.3px; line-height: 1.25;">New System Inquiry</h1>
+                        <p style="margin: 0 0 24px 0; font-size: 14px; color: #6b7280; line-height: 1.5;">You have received a new message from your portfolio contact form.</p>
+
+                        <!-- Divider -->
+                        <div style="border-top: 1px solid #e5e7eb; margin: 0 0 24px 0;"></div>
+
+                        <!-- FROM -->
+                        <div style="margin-bottom: 24px;">
+                          <p style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">FROM</p>
+                          <p style="margin: 0; font-size: 15px; color: #111111; font-weight: 500; word-break: break-all;">${escapeHtml(name)} &lt;${escapeHtml(email)}&gt;</p>
+                        </div>
+
+                        <!-- SUBJECT -->
+                        <div style="margin-bottom: 24px;">
+                          <p style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">SUBJECT</p>
+                          <p style="margin: 0; font-size: 15px; color: #111111; font-weight: 500; word-break: break-word;">${escapeHtml(subject)}</p>
+                        </div>
+
+                        <!-- MESSAGE -->
+                        <div style="margin-bottom: 32px;">
+                          <p style="margin: 0 0 8px 0; font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">MESSAGE</p>
+                          <div style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px 24px;">
+                            <p style="margin: 0; color: #111111; font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-break: break-word;">${escapeHtml(message)}</p>
+                          </div>
+                        </div>
+
+                        <!-- Reply Button -->
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; margin-bottom: 32px;">
+                          <tr>
+                            <td align="center">
+                              <a href="mailto:${escapeHtml(email)}?subject=${encodeURIComponent('Re: ' + (subject || 'Portfolio Inquiry'))}" style="display: inline-block; background-color: #111111; color: #ffffff; text-decoration: none; padding: 13px 28px; border-radius: 6px; font-weight: 600; font-size: 14px; letter-spacing: 0.2px;">${buttonText}</a>
+                            </td>
+                          </tr>
+                        </table>
+
+                        <!-- Divider -->
+                        <div style="border-top: 1px solid #e5e7eb; margin: 0 0 20px 0;"></div>
+
+                        <!-- Automated Notification Note -->
+                        <div style="text-align: center; margin-bottom: 28px;">
+                          <p style="margin: 0; color: #6b7280; font-size: 12px; line-height: 1.5;">This message was sent from your portfolio contact form.</p>
+                          <p style="margin: 4px 0 0 0; color: #6b7280; font-size: 12px; line-height: 1.5;">Please do not reply to this automated notification if not necessary.</p>
+                        </div>
+
+                        <!-- Footer -->
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; border-top: 1px solid #e5e7eb;">
+                          <tr>
+                            <td align="left" valign="middle" style="padding-top: 20px;">
+                              <p style="margin: 0; font-size: 14px; font-weight: 700; color: #111111;">Ulacdev</p>
+                              <p style="margin: 4px 0 0 0; font-size: 12px; color: #6b7280;">Portfolio &bull; Projects &bull; Contact</p>
+                            </td>
+                            <td align="right" valign="middle" style="padding-top: 20px; border-left: 1px solid #e5e7eb; padding-left: 20px;">
+                              <p style="margin: 0; font-size: 12px; color: #6b7280;">&copy; ${currentYear} Ulacdev</p>
+                              <p style="margin: 2px 0 0 0; font-size: 12px; color: #6b7280;">All rights reserved.</p>
+                            </td>
+                          </tr>
+                        </table>
+
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
           </div>
         `,
       });
