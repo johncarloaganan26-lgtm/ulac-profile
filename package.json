@@ -5,6 +5,7 @@
   "private": true,
   "proxy": "http://localhost:5001",
   "dependencies": {
+    "@marsidev/react-turnstile": "^1.6.2",
     "@playwright/test": "^1.64.0",
     "@supabase/supabase-js": "^2.104.1",
     "@types/aos": "^3.0.7",

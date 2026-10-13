@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from './supabaseClient';
+import AdminDashboard from './admin/AdminDashboard';
 import { respond } from './bot/respond';
 import {
   FaEnvelope, FaMapMarkerAlt, FaCode, FaMoon, FaSun,
@@ -882,7 +883,7 @@ function App() {
     const handleLocation = () => {
       const p = window.location.pathname;
       const h = window.location.hash;
-      if (p === '/ulac' || h === '#login') setView('mis');
+      if (p === '/ulac' || p.startsWith('/admin') || h === '#login' || h.startsWith('#admin') || h.startsWith('#blogs')) setView('mis');
       else setView('portfolio');
     };
     const master = localStorage.getItem('ulac_session');
@@ -912,7 +913,7 @@ function App() {
     e.preventDefault();
     setLoginError('');
     if (loginForm.email === 'ulac' && loginForm.password === 'ulac') {
-      const u = { email: 'ulac', id: 'master-admin' };
+      const u = { email: 'ulac', id: 'master-admin', name: 'John Carlo Aganan', username: 'ulacdev' };
       setIsLoggedIn(true); setUser(u);
       localStorage.setItem('ulac_session', JSON.stringify(u));
       return;
@@ -926,7 +927,9 @@ function App() {
     localStorage.removeItem('ulac_session');
     setIsLoggedIn(false); setUser(null); setView('portfolio');
     window.location.hash = '';
-    if (window.location.pathname === '/ulac') window.history.pushState({}, '', '/');
+    if (window.location.pathname === '/ulac' || window.location.pathname.startsWith('/admin')) {
+      window.history.pushState({}, '', '/');
+    }
   };
 
   const scrollToSection = id => {
@@ -1114,27 +1117,28 @@ function App() {
   // ─────────────────────────────────────────────────────────
   // MIS View — Dark Obsidian Executive Console (/ulac)
   // ─────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────
+  // MIS View — Ulacdev Monochrome Administration Console
+  // ─────────────────────────────────────────────────────────
   if (view === 'mis') {
     if (!isLoggedIn) {
       return (
-        <div className="mis-shell" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem' }}>
+        <div style={{ minHeight: '100vh', backgroundColor: '#050607', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', fontFamily: 'var(--font-body)' }}>
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                <rect x="2.5" y="4.5" width="7" height="15" rx="3.5" stroke="#f97316" strokeWidth="2.5" />
-                <rect x="14.5" y="4.5" width="7" height="15" rx="3.5" stroke="#f97316" strokeWidth="2.5" />
-                <line x1="8" y1="12" x2="16" y2="12" stroke="#f97316" strokeWidth="2.5" />
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18.178 8c5.096 0 5.096 8 0 8-2.67 0-4.655-4.223-6.178-8-1.523 3.777-3.508 8-6.178 8-5.096 0-5.096-8 0-8 2.67 0 4.655 4.223 6.178 8 1.523-3.777 3.508-8 6.178-8z" />
               </svg>
-              <h1 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#ffffff' }}>Ulacdev MIS</h1>
+              <h1 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#ffffff', margin: 0 }}>Ulacdev MIS</h1>
             </div>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Management Console</p>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0 }}>Management Console</p>
           </div>
 
-          <div className="mis-card" style={{ width: '100%', maxWidth: '380px', padding: '2.25rem 2rem' }}>
+          <div style={{ width: '100%', maxWidth: '380px', padding: '2.25rem 2rem', backgroundColor: '#0B0D10', border: '1px solid #22252B', borderRadius: '14px', boxSizing: 'border-box' }}>
             <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.4rem', fontFamily: 'var(--font-mono)' }}>USERNAME OR EMAIL</label>
+                  <label style={{ display: 'block', fontSize: '0.72rem', color: '#A1A1AA', marginBottom: '0.45rem', fontFamily: 'var(--font-mono)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>USERNAME OR EMAIL</label>
                   <input
                     type="text"
                     placeholder="ulac"
@@ -1143,8 +1147,8 @@ function App() {
                     style={{
                       width: '100%',
                       padding: '0.75rem 0.9rem',
-                      background: 'rgba(8, 11, 18, 0.75)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      background: '#111418',
+                      border: '1px solid #22252B',
                       borderRadius: '8px',
                       color: '#ffffff',
                       fontSize: '0.875rem',
@@ -1152,13 +1156,13 @@ function App() {
                       boxSizing: 'border-box',
                       fontFamily: 'var(--font-body)'
                     }}
-                    onFocus={e => { e.target.style.borderColor = '#f97316'; e.target.style.boxShadow = '0 0 0 2px rgba(249, 115, 22, 0.15)'; }}
-                    onBlur={e => { e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'; e.target.style.boxShadow = 'none'; }}
+                    onFocus={e => { e.target.style.borderColor = '#FFFFFF'; }}
+                    onBlur={e => { e.target.style.borderColor = '#22252B'; }}
                     required
                   />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.4rem', fontFamily: 'var(--font-mono)' }}>PASSWORD</label>
+                  <label style={{ display: 'block', fontSize: '0.72rem', color: '#A1A1AA', marginBottom: '0.45rem', fontFamily: 'var(--font-mono)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>PASSWORD</label>
                   <input
                     type="password"
                     placeholder="••••••••"
@@ -1167,8 +1171,8 @@ function App() {
                     style={{
                       width: '100%',
                       padding: '0.75rem 0.9rem',
-                      background: 'rgba(8, 11, 18, 0.75)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      background: '#111418',
+                      border: '1px solid #22252B',
                       borderRadius: '8px',
                       color: '#ffffff',
                       fontSize: '0.875rem',
@@ -1176,51 +1180,53 @@ function App() {
                       boxSizing: 'border-box',
                       fontFamily: 'var(--font-body)'
                     }}
-                    onFocus={e => { e.target.style.borderColor = '#f97316'; e.target.style.boxShadow = '0 0 0 2px rgba(249, 115, 22, 0.15)'; }}
-                    onBlur={e => { e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'; e.target.style.boxShadow = 'none'; }}
+                    onFocus={e => { e.target.style.borderColor = '#FFFFFF'; }}
+                    onBlur={e => { e.target.style.borderColor = '#22252B'; }}
                     required
                   />
                 </div>
               </div>
 
-              {loginError && <p style={{ fontSize: '0.8125rem', color: '#ef4444', margin: 0 }}>{loginError}</p>}
+              {loginError && <p style={{ fontSize: '0.8125rem', color: '#FFFFFF', opacity: 0.85, margin: 0 }}>{loginError}</p>}
 
               <button
                 type="submit"
                 style={{
                   width: '100%',
-                  padding: '0.75rem',
-                  background: '#f97316',
-                  color: '#ffffff',
+                  padding: '0.65rem',
+                  background: '#FFFFFF',
+                  color: '#050607',
                   border: 'none',
-                  borderRadius: '8px',
+                  borderRadius: '5px',
                   fontWeight: 600,
-                  fontSize: '0.875rem',
+                  fontSize: '0.75rem',
                   cursor: 'pointer',
-                  boxShadow: '0 4px 18px rgba(249, 115, 22, 0.35)',
-                  transition: 'opacity 0.2s',
-                  fontFamily: 'var(--font-body)'
+                  transition: 'background-color 0.18s',
+                  fontFamily: 'var(--font-mono)',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase'
                 }}
-                onMouseEnter={e => e.currentTarget.style.opacity = '0.9'}
-                onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E4E4E7'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
               >
                 Sign In
               </button>
 
               <button
                 type="button"
-                onClick={() => { setView('portfolio'); window.location.hash = ''; if (window.location.pathname === '/ulac') window.history.pushState({}, '', '/'); }}
+                onClick={() => { setView('portfolio'); window.location.hash = ''; if (window.location.pathname === '/ulac' || window.location.pathname.startsWith('/admin')) window.history.pushState({}, '', '/'); }}
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#64748b',
+                  color: '#71717A',
                   fontSize: '0.8125rem',
                   cursor: 'pointer',
                   textAlign: 'center',
-                  fontFamily: 'var(--font-body)'
+                  fontFamily: 'var(--font-body)',
+                  transition: 'color 0.18s'
                 }}
-                onMouseEnter={e => e.currentTarget.style.color = '#cbd5e1'}
-                onMouseLeave={e => e.currentTarget.style.color = '#64748b'}
+                onMouseEnter={e => e.currentTarget.style.color = '#FFFFFF'}
+                onMouseLeave={e => e.currentTarget.style.color = '#71717A'}
               >
                 ← Back to portfolio
               </button>
@@ -1230,1067 +1236,19 @@ function App() {
       );
     }
 
-    const formatActivityDate = (dateStr) => {
-      if (!dateStr) return 'Recently';
-      try {
-        const d = new Date(dateStr);
-        if (isNaN(d.getTime())) return dateStr;
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const month = months[d.getMonth()];
-        const day = d.getDate();
-        const year = d.getFullYear();
-        let hours = d.getHours();
-        const minutes = d.getMinutes().toString().padStart(2, '0');
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-        hours = hours % 12;
-        hours = hours ? hours.toString().padStart(2, '0') : '12';
-        return `${month} ${day}, ${year} • ${hours}:${minutes} ${ampm}`;
-      } catch (_) {
-        return dateStr;
-      }
-    };
-
-    const fallbackActivities = [
-      {
-        id: 'mock-1',
-        type: 'review',
-        title: 'New review approved',
-        desc: 'A new testimonial has been approved and is now live on your site.',
-        time: 'Oct 25, 2025 • 10:24 AM'
-      },
-      {
-        id: 'mock-2',
-        type: 'inquiry',
-        title: 'New inquiry received',
-        desc: 'You have received a new inquiry from a potential client.',
-        time: 'Oct 24, 2025 • 04:17 PM'
-      },
-      {
-        id: 'mock-3',
-        type: 'review',
-        title: 'New review approved',
-        desc: 'A new testimonial has been approved and is now live on your site.',
-        time: 'Oct 22, 2025 • 09:36 AM'
-      },
-      {
-        id: 'mock-4',
-        type: 'inquiry',
-        title: 'New inquiry received',
-        desc: 'You have received a new inquiry from a potential client.',
-        time: 'Oct 20, 2025 • 02:11 PM'
-      }
-    ];
-
-    const dynamicActivities = [
-      ...testimonials.filter(t => t.is_approved).map(t => ({
-        id: `rev-${t.id}`,
-        type: 'review',
-        title: 'New review approved',
-        desc: t.name ? `Review from ${t.name} has been approved and is now live on your site.` : 'A new testimonial has been approved and is now live on your site.',
-        time: formatActivityDate(t.created_at),
-        rawTime: t.created_at ? new Date(t.created_at).getTime() : 0
-      })),
-      ...inquiries.map(i => ({
-        id: `inq-${i.id}`,
-        type: 'inquiry',
-        title: 'New inquiry received',
-        desc: i.name ? `You have received a new inquiry from ${i.name}.` : 'You have received a new inquiry from a potential client.',
-        time: formatActivityDate(i.created_at),
-        rawTime: i.created_at ? new Date(i.created_at).getTime() : 0
-      }))
-    ].sort((a, b) => b.rawTime - a.rawTime);
-
-    const displayActivities = dynamicActivities.length > 0 ? dynamicActivities.slice(0, 6) : fallbackActivities;
-
-    const q = searchQuery.toLowerCase().trim();
-    const filteredInquiries = q ? inquiries.filter(r =>
-      (r.name && r.name.toLowerCase().includes(q)) ||
-      (r.email && r.email.toLowerCase().includes(q)) ||
-      (r.subject && r.subject.toLowerCase().includes(q)) ||
-      (r.message && r.message.toLowerCase().includes(q))
-    ) : inquiries;
-
-    const filteredTestimonials = q ? testimonials.filter(r =>
-      (r.name && r.name.toLowerCase().includes(q)) ||
-      (r.role && r.role.toLowerCase().includes(q)) ||
-      (r.content && r.content.toLowerCase().includes(q))
-    ) : testimonials;
-
-    const filteredActivities = q ? displayActivities.filter(a =>
-      (a.title && a.title.toLowerCase().includes(q)) ||
-      (a.desc && a.desc.toLowerCase().includes(q))
-    ) : displayActivities;
-
     return (
-      <div className="mis-shell" style={{ flexDirection: isMobile ? 'column' : 'row' }}>
-        {/* ── Left Sidebar ────────────────────────────── */}
-        <div
-          className="mis-sidebar"
-          style={{
-            width: isMobile ? '100%' : (sidebarCollapsed ? '72px' : '240px'),
-            minWidth: isMobile ? '100%' : (sidebarCollapsed ? '72px' : '240px'),
-            height: isMobile ? 'auto' : '100vh',
-            position: isMobile ? 'relative' : 'sticky',
-            padding: sidebarCollapsed && !isMobile ? '1.75rem 0.75rem' : '1.75rem 1.25rem',
-            transition: 'width 0.25s ease, min-width 0.25s ease, padding 0.25s ease'
-          }}
-        >
-          {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: isMobile ? '1.25rem' : '2.25rem', overflow: 'hidden' }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}>
-              <rect x="2.5" y="4.5" width="7" height="15" rx="3.5" stroke="#f97316" strokeWidth="2.5" />
-              <rect x="14.5" y="4.5" width="7" height="15" rx="3.5" stroke="#f97316" strokeWidth="2.5" />
-              <line x1="8" y1="12" x2="16" y2="12" stroke="#f97316" strokeWidth="2.5" />
-            </svg>
-            {(!sidebarCollapsed || isMobile) && (
-              <span style={{ fontSize: '1.15rem', fontWeight: 800, color: '#ffffff', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>
-                Ulacdev MIS
-              </span>
-            )}
-          </div>
-
-          {/* Nav Items */}
-          <nav style={{ display: 'flex', flexDirection: isMobile ? 'row' : 'column', gap: '0.35rem', flexWrap: isMobile ? 'wrap' : 'nowrap' }}>
-            <button
-              onClick={() => setMisView('dashboard')}
-              className={`mis-nav-btn ${misView === 'dashboard' ? 'active' : ''}`}
-              style={{ justifyContent: sidebarCollapsed && !isMobile ? 'center' : 'flex-start', padding: sidebarCollapsed && !isMobile ? '0.72rem 0' : '0.72rem 0.95rem' }}
-              title={sidebarCollapsed && !isMobile ? 'Dashboard' : undefined}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={misView === 'dashboard' ? '#f97316' : '#94a3b8'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                <rect x="3" y="3" width="7" height="7" rx="1.5" />
-                <rect x="14" y="3" width="7" height="7" rx="1.5" />
-                <rect x="14" y="14" width="7" height="7" rx="1.5" />
-                <rect x="3" y="14" width="7" height="7" rx="1.5" />
-              </svg>
-              {(!sidebarCollapsed || isMobile) && <span>Dashboard</span>}
-            </button>
-
-            <button
-              onClick={() => setMisView('inquiries')}
-              className={`mis-nav-btn ${misView === 'inquiries' ? 'active' : ''}`}
-              style={{ justifyContent: sidebarCollapsed && !isMobile ? 'center' : 'flex-start', padding: sidebarCollapsed && !isMobile ? '0.72rem 0' : '0.72rem 0.95rem' }}
-              title={sidebarCollapsed && !isMobile ? 'Inquiries' : undefined}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={misView === 'inquiries' ? '#f97316' : '#94a3b8'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                <rect x="2" y="4" width="20" height="16" rx="2" />
-                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-              </svg>
-              {(!sidebarCollapsed || isMobile) && <span>Inquiries</span>}
-            </button>
-
-            <button
-              onClick={() => setMisView('testimonials')}
-              className={`mis-nav-btn ${misView === 'testimonials' ? 'active' : ''}`}
-              style={{ justifyContent: sidebarCollapsed && !isMobile ? 'center' : 'flex-start', padding: sidebarCollapsed && !isMobile ? '0.72rem 0' : '0.72rem 0.95rem' }}
-              title={sidebarCollapsed && !isMobile ? 'Testimonials' : undefined}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={misView === 'testimonials' ? '#f97316' : '#94a3b8'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-              </svg>
-              {(!sidebarCollapsed || isMobile) && <span>Testimonials</span>}
-            </button>
-          </nav>
-
-          {/* Sign Out Button */}
-          <div style={{ marginTop: isMobile ? '1rem' : 'auto', paddingTop: '1rem' }}>
-            <button
-              onClick={handleLogout}
-              style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: sidebarCollapsed && !isMobile ? 'center' : 'flex-start',
-                gap: '0.75rem',
-                padding: sidebarCollapsed && !isMobile ? '0.75rem 0' : '0.75rem 1rem',
-                borderRadius: '10px',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                background: 'rgba(255, 255, 255, 0.02)',
-                color: '#cbd5e1',
-                fontSize: '0.85rem',
-                fontWeight: 500,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                fontFamily: 'var(--font-body)',
-                boxSizing: 'border-box'
-              }}
-              title={sidebarCollapsed && !isMobile ? 'Sign Out' : undefined}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                <polyline points="16 17 21 12 16 7" />
-                <line x1="21" y1="12" x2="9" y2="12" />
-              </svg>
-              {(!sidebarCollapsed || isMobile) && <span>Sign Out</span>}
-            </button>
-          </div>
-        </div>
-
-        {/* ── Right Content Wrapper ─────────────────────── */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-          
-          {/* ── Top Header Bar ─────────────────────────── */}
-          <header className="mis-topbar">
-            {/* Left side: Hamburger collapse button & Search */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flex: 1, maxWidth: '480px' }}>
-              <button
-                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                title="Toggle sidebar"
-                style={{
-                  background: 'transparent',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  borderRadius: '8px',
-                  width: '36px',
-                  height: '36px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#cbd5e1',
-                  cursor: 'pointer',
-                  flexShrink: 0,
-                  transition: 'all 0.2s'
-                }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = '#ffffff'; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#cbd5e1'; }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <line x1="3" y1="6" x2="21" y2="6" />
-                  <line x1="3" y1="12" x2="21" y2="12" />
-                  <line x1="3" y1="18" x2="21" y2="18" />
-                </svg>
-              </button>
-
-              {/* Search bar */}
-              <div style={{ position: 'relative', width: '100%', maxWidth: '340px' }}>
-                <svg
-                  style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
-                  width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
-                <input
-                  type="text"
-                  placeholder="Search inquiries, reviews..."
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.52rem 0.8rem 0.52rem 2.25rem',
-                    background: 'rgba(255, 255, 255, 0.035)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    borderRadius: '8px',
-                    color: '#ffffff',
-                    fontSize: '0.825rem',
-                    outline: 'none',
-                    boxSizing: 'border-box',
-                    fontFamily: 'var(--font-body)',
-                    transition: 'border-color 0.2s, background 0.2s'
-                  }}
-                  onFocus={e => { e.target.style.borderColor = 'rgba(249, 115, 22, 0.5)'; e.target.style.background = 'rgba(255, 255, 255, 0.06)'; }}
-                  onBlur={e => { e.target.style.borderColor = 'rgba(255, 255, 255, 0.08)'; e.target.style.background = 'rgba(255, 255, 255, 0.035)'; }}
-                />
-              </div>
-            </div>
-
-            {/* Right side: Notifications & Logged-in User */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-              {/* Notification Bell */}
-              <div style={{ position: 'relative' }}>
-                <button
-                  onClick={() => setShowNotifications(!showNotifications)}
-                  title="Notifications"
-                  style={{
-                    position: 'relative',
-                    background: 'transparent',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    borderRadius: '8px',
-                    width: '36px',
-                    height: '36px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#cbd5e1',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s'
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = '#ffffff'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)'; e.currentTarget.style.color = '#cbd5e1'; }}
-                >
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                  </svg>
-                  {(inquiries.length + testimonials.filter(t => !t.is_approved).length) > 0 ? (
-                    <span style={{
-                      position: 'absolute',
-                      top: '-4px',
-                      right: '-4px',
-                      minWidth: '17px',
-                      height: '17px',
-                      borderRadius: '9px',
-                      background: '#f97316',
-                      color: '#ffffff',
-                      fontSize: '0.625rem',
-                      fontWeight: 700,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      padding: '0 4px',
-                      boxShadow: '0 0 8px rgba(249, 115, 22, 0.6)'
-                    }}>
-                      {inquiries.length + testimonials.filter(t => !t.is_approved).length}
-                    </span>
-                  ) : (
-                    <span style={{
-                      position: 'absolute',
-                      top: '7px',
-                      right: '7px',
-                      width: '7px',
-                      height: '7px',
-                      borderRadius: '50%',
-                      background: 'rgba(255, 255, 255, 0.2)'
-                    }} />
-                  )}
-                </button>
-
-                {showNotifications && (
-                  <div style={{
-                    position: 'absolute',
-                    top: 'calc(100% + 8px)',
-                    right: 0,
-                    width: '320px',
-                    background: '#0d121d',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    borderRadius: '12px',
-                    padding: '0.9rem',
-                    zIndex: 60,
-                    boxShadow: '0 12px 35px rgba(0,0,0,0.75)'
-                  }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#ffffff', letterSpacing: '0.05em' }}>NOTIFICATIONS</span>
-                        <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#f97316', background: 'rgba(249, 115, 22, 0.12)', padding: '0.15rem 0.45rem', borderRadius: '4px' }}>
-                          {inquiries.length + testimonials.filter(t => !t.is_approved).length} new
-                        </span>
-                      </div>
-                      <button
-                        onClick={() => { fetchInquiries(); fetchTestimonials(); }}
-                        title="Refresh"
-                        style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '0.7rem', padding: '2px 6px', borderRadius: '4px', transition: 'color 0.2s' }}
-                        onMouseEnter={e => e.currentTarget.style.color = '#fff'}
-                        onMouseLeave={e => e.currentTarget.style.color = '#94a3b8'}
-                      >
-                        ↻ Refresh
-                      </button>
-                    </div>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '260px', overflowY: 'auto' }}>
-                      {/* Unapproved Reviews */}
-                      {testimonials.filter(t => !t.is_approved).length > 0 && (
-                        <div
-                          onClick={() => { setMisView('testimonials'); setShowNotifications(false); }}
-                          style={{
-                            padding: '0.6rem 0.7rem',
-                            borderRadius: '8px',
-                            background: 'rgba(249, 115, 22, 0.08)',
-                            border: '1px solid rgba(249, 115, 22, 0.25)',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s'
-                          }}
-                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(249, 115, 22, 0.15)'}
-                          onMouseLeave={e => e.currentTarget.style.background = 'rgba(249, 115, 22, 0.08)'}
-                        >
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <span style={{ color: '#f97316', fontWeight: 700, fontSize: '0.75rem' }}>★ New Testimonial Pending</span>
-                            <span style={{ fontSize: '0.68rem', color: '#fb923c' }}>Approve →</span>
-                          </div>
-                          <div style={{ color: '#e2e8f0', fontSize: '0.72rem', marginTop: '0.2rem' }}>
-                            {testimonials.filter(t => !t.is_approved).length} client review(s) waiting for approval
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Inquiries */}
-                      {inquiries.length > 0 ? (
-                        inquiries.slice(0, 4).map((inq, idx) => (
-                          <div
-                            key={inq.id || idx}
-                            onClick={() => { setMisView('inquiries'); setShowNotifications(false); }}
-                            style={{
-                              padding: '0.6rem 0.7rem',
-                              borderRadius: '8px',
-                              background: 'rgba(255, 255, 255, 0.035)',
-                              border: '1px solid rgba(255, 255, 255, 0.06)',
-                              cursor: 'pointer',
-                              transition: 'all 0.2s'
-                            }}
-                            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.07)'; e.currentTarget.style.borderColor = 'rgba(249, 115, 22, 0.4)'; }}
-                            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.035)'; e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)'; }}
-                          >
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                              <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '0.78rem' }}>{inq.name}</span>
-                              <span style={{ color: '#64748b', fontSize: '0.65rem' }}>
-                                {inq.created_at ? new Date(inq.created_at).toLocaleDateString([], { month: 'short', day: 'numeric' }) : 'Recent'}
-                              </span>
-                            </div>
-                            <div style={{ color: '#f97316', fontSize: '0.72rem', fontWeight: 600, marginTop: '0.15rem' }}>{inq.subject}</div>
-                            <div style={{ color: '#94a3b8', fontSize: '0.7rem', marginTop: '0.15rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                              {inq.message}
-                            </div>
-                          </div>
-                        ))
-                      ) : (
-                        <div style={{ padding: '1rem', textAlign: 'center', color: '#64748b', fontSize: '0.75rem' }}>
-                          No new inquiries. Inbox is clear!
-                        </div>
-                      )}
-                    </div>
-
-                    <div style={{ marginTop: '0.75rem', paddingTop: '0.5rem', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                      <button
-                        onClick={() => { setMisView('inquiries'); setShowNotifications(false); }}
-                        style={{
-                          width: '100%',
-                          background: 'rgba(249, 115, 22, 0.1)',
-                          border: '1px solid rgba(249, 115, 22, 0.3)',
-                          borderRadius: '6px',
-                          color: '#f97316',
-                          fontWeight: 700,
-                          fontSize: '0.75rem',
-                          padding: '0.5rem',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '0.35rem'
-                        }}
-                        onMouseEnter={e => { e.currentTarget.style.background = '#f97316'; e.currentTarget.style.color = '#ffffff'; }}
-                        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(249, 115, 22, 0.1)'; e.currentTarget.style.color = '#f97316'; }}
-                      >
-                        View All Inquiries ({inquiries.length}) →
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Logged-in User Profile on Top Right Corner */}
-              <div style={{ position: 'relative' }}>
-                <button
-                  onClick={() => setShowUserMenu(!showUserMenu)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.65rem',
-                    padding: '0.3rem 0.65rem 0.3rem 0.4rem',
-                    borderRadius: '10px',
-                    background: 'rgba(255, 255, 255, 0.035)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    fontFamily: 'var(--font-body)'
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.background = 'rgba(255,255,255,0.035)'; }}
-                >
-                  <div style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #f97316, #ea580c)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 700,
-                    fontSize: '0.8rem',
-                    color: '#ffffff',
-                    position: 'relative',
-                    flexShrink: 0
-                  }}>
-                    U
-                    <span style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      right: 0,
-                      width: '8px',
-                      height: '8px',
-                      borderRadius: '50%',
-                      background: '#22c55e',
-                      border: '1.5px solid #080b11'
-                    }} />
-                  </div>
-                  <div style={{ textAlign: 'left' }}>
-                    <div style={{ fontSize: '0.825rem', fontWeight: 600, color: '#ffffff', lineHeight: 1.2 }}>
-                      {user?.email || 'Ulacdev'}
-                    </div>
-                    <div style={{ fontSize: '0.68rem', color: '#64748b', fontFamily: 'var(--font-mono)' }}>
-                      Administrator
-                    </div>
-                  </div>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '0.15rem' }}>
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
-                </button>
-
-                {showUserMenu && (
-                  <div style={{
-                    position: 'absolute',
-                    top: 'calc(100% + 8px)',
-                    right: 0,
-                    width: '180px',
-                    background: '#0d121d',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    borderRadius: '10px',
-                    padding: '0.4rem',
-                    zIndex: 60,
-                    boxShadow: '0 12px 30px rgba(0,0,0,0.65)'
-                  }}>
-                    <div style={{ padding: '0.5rem 0.75rem', borderBottom: '1px solid rgba(255,255,255,0.06)', marginBottom: '0.25rem' }}>
-                      <div style={{ fontSize: '0.78rem', color: '#ffffff', fontWeight: 600 }}>{user?.email || 'Ulacdev'}</div>
-                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>Active Session</div>
-                    </div>
-                    <button
-                      onClick={handleLogout}
-                      style={{
-                        width: '100%',
-                        textAlign: 'left',
-                        background: 'none',
-                        border: 'none',
-                        padding: '0.5rem 0.75rem',
-                        color: '#ef4444',
-                        fontSize: '0.8rem',
-                        fontWeight: 500,
-                        cursor: 'pointer',
-                        borderRadius: '6px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        fontFamily: 'var(--font-body)'
-                      }}
-                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)'}
-                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                        <polyline points="16 17 21 12 16 7" />
-                        <line x1="21" y1="12" x2="9" y2="12" />
-                      </svg>
-                      Sign Out
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </header>
-
-          {/* ── Main View Body ─────────────────────────── */}
-          <div style={{ flex: 1, padding: isMobile ? '1.5rem' : '2.5rem 3.5rem', minWidth: 0, boxSizing: 'border-box' }}>
-            <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-
-              {/* Title Section & Date Filter / Refresh */}
-              <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-start', gap: '1.25rem', marginBottom: '2.25rem' }}>
-                <div>
-                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600, margin: '0 0 0.4rem 0' }}>MANAGEMENT</p>
-                  <h1 style={{ fontSize: '2.2rem', fontWeight: 700, letterSpacing: '-0.02em', color: '#ffffff', margin: 0, textTransform: 'capitalize' }}>
-                    {misView}
-                  </h1>
-                  <p style={{ fontSize: '0.9rem', color: '#94a3b8', margin: '0.35rem 0 0 0' }}>
-                    {misView === 'dashboard' && "Quick overview of your platform's activity and key metrics."}
-                    {misView === 'inquiries' && "Manage and review messages sent through your contact form."}
-                    {misView === 'testimonials' && "Moderate, approve, and manage client feedback and ratings."}
-                  </p>
-                </div>
-
-                {/* Top Right Controls (Date Filter & Refresh) */}
-                {misView === 'dashboard' && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', position: 'relative' }}>
-                    <div style={{ position: 'relative' }}>
-                      <button
-                        onClick={() => setIsDateDropdownOpen(!isDateDropdownOpen)}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.65rem',
-                          padding: '0.55rem 0.95rem',
-                          borderRadius: '9px',
-                          border: '1px solid rgba(255, 255, 255, 0.1)',
-                          background: 'rgba(15, 20, 31, 0.85)',
-                          color: '#cbd5e1',
-                          fontSize: '0.825rem',
-                          cursor: 'pointer',
-                          backdropFilter: 'blur(8px)',
-                          transition: 'border-color 0.2s',
-                          fontFamily: 'var(--font-body)'
-                        }}
-                        onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.22)'}
-                        onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
-                      >
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                          <line x1="16" y1="2" x2="16" y2="6" />
-                          <line x1="8" y1="2" x2="8" y2="6" />
-                          <line x1="3" y1="10" x2="21" y2="10" />
-                        </svg>
-                        <span>{dateRange}</span>
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="6 9 12 15 18 9" />
-                        </svg>
-                      </button>
-
-                      {isDateDropdownOpen && (
-                        <div style={{
-                          position: 'absolute',
-                          top: 'calc(100% + 6px)',
-                          right: 0,
-                          background: '#0d121d',
-                          border: '1px solid rgba(255, 255, 255, 0.12)',
-                          borderRadius: '8px',
-                          padding: '0.4rem',
-                          minWidth: '210px',
-                          zIndex: 50,
-                          boxShadow: '0 10px 25px rgba(0,0,0,0.6)'
-                        }}>
-                          {['Oct 1, 2025 – Oct 31, 2025', 'This Month', 'Last 30 Days', 'All Time'].map(opt => (
-                            <div
-                              key={opt}
-                              onClick={() => { setDateRange(opt); setIsDateDropdownOpen(false); }}
-                              style={{
-                                padding: '0.5rem 0.75rem',
-                                fontSize: '0.8rem',
-                                color: dateRange === opt ? '#f97316' : '#cbd5e1',
-                                cursor: 'pointer',
-                                borderRadius: '5px',
-                                fontWeight: dateRange === opt ? 600 : 400
-                              }}
-                              onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
-                              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                            >
-                              {opt}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    <button
-                      onClick={handleAdminRefreshAll}
-                      title="Refresh data"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '38px',
-                        height: '38px',
-                        borderRadius: '9px',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        background: 'rgba(15, 20, 31, 0.85)',
-                        color: '#94a3b8',
-                        cursor: 'pointer',
-                        backdropFilter: 'blur(8px)',
-                        transition: 'all 0.2s',
-                      }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.22)'; e.currentTarget.style.color = '#ffffff'; }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)'; e.currentTarget.style.color = '#94a3b8'; }}
-                    >
-                      <svg className={isRefreshing ? 'mis-spin' : ''} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                        <path d="M3 3v5h5" />
-                        <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
-                        <path d="M16 21h5v-5" />
-                      </svg>
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* ── VIEW: DASHBOARD ───────────────────────────── */}
-              {misView === 'dashboard' && (
-                <div>
-                  {/* 3 Metric Cards */}
-                  <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: '1.25rem', marginBottom: '1.75rem' }}>
-                    {/* Card 1: Total Inquiries */}
-                    <div className="mis-card" style={{ padding: '1.5rem 1.6rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                          <line x1="9" y1="10" x2="9.01" y2="10" />
-                          <line x1="12" y1="10" x2="12.01" y2="10" />
-                          <line x1="15" y1="10" x2="15.01" y2="10" />
-                        </svg>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#8b96a5', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
-                          TOTAL INQUIRIES
-                        </span>
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
-                        <span style={{ fontSize: '2.85rem', fontWeight: 700, color: '#ffffff', lineHeight: 1, letterSpacing: '-0.03em' }}>
-                          {inquiries.length}
-                        </span>
-                        <svg width="110" height="34" viewBox="0 0 110 34" fill="none" style={{ opacity: 0.85 }}>
-                          <path d="M5 22 Q 25 18, 45 20 T 75 19 T 105 21" stroke="#334155" strokeWidth="2" strokeLinecap="round" />
-                          <circle cx="15" cy="20" r="2.5" fill="#475569" />
-                          <circle cx="45" cy="20" r="2.5" fill="#475569" />
-                          <circle cx="70" cy="19.5" r="2.5" fill="#475569" />
-                          <circle cx="92" cy="20.5" r="2.5" fill="#475569" />
-                          <circle cx="105" cy="21" r="2.5" fill="#475569" />
-                        </svg>
-                      </div>
-
-                      <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
-                        No change from last period
-                      </div>
-                    </div>
-
-                    {/* Card 2: Approved Reviews */}
-                    <div className="mis-card" style={{ padding: '1.5rem 1.6rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                        </svg>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#8b96a5', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
-                          APPROVED REVIEWS
-                        </span>
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
-                        <span style={{ fontSize: '2.85rem', fontWeight: 700, color: '#ffffff', lineHeight: 1, letterSpacing: '-0.03em' }}>
-                          {testimonials.filter(t => t.is_approved).length > 0 ? testimonials.filter(t => t.is_approved).length : 2}
-                        </span>
-                        <svg width="110" height="34" viewBox="0 0 110 34" fill="none">
-                          <defs>
-                            <linearGradient id="mis-glow-orange-1" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="0%" stopColor="#f97316" stopOpacity="0.25" />
-                              <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
-                            </linearGradient>
-                          </defs>
-                          <path d="M5 28 L 22 28 L 44 23 L 64 24 L 84 17 L 105 9 L 105 34 L 5 34 Z" fill="url(#mis-glow-orange-1)" />
-                          <path d="M5 28 L 22 28 L 44 23 L 64 24 L 84 17 L 105 9" stroke="#f97316" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                          <circle cx="22" cy="28" r="2.5" fill="#f97316" />
-                          <circle cx="44" cy="23" r="2.5" fill="#f97316" />
-                          <circle cx="64" cy="24" r="2.5" fill="#f97316" />
-                          <circle cx="84" cy="17" r="2.5" fill="#f97316" />
-                          <circle cx="105" cy="9" r="2.5" fill="#f97316" />
-                        </svg>
-                      </div>
-
-                      <div style={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                        <span style={{ color: '#22c55e', fontWeight: 600 }}>↑ 100%</span>
-                        <span style={{ color: '#64748b' }}>vs. last period</span>
-                      </div>
-                    </div>
-
-                    {/* Card 3: Site Views */}
-                    <div className="mis-card" style={{ padding: '1.5rem 1.6rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                          <circle cx="12" cy="12" r="3" />
-                        </svg>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#8b96a5', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
-                          SITE VIEWS
-                        </span>
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
-                        <span style={{ fontSize: '2.85rem', fontWeight: 700, color: '#ffffff', lineHeight: 1, letterSpacing: '-0.03em' }}>
-                          {totalViews > 0 ? totalViews : 34}
-                        </span>
-                        <svg width="110" height="34" viewBox="0 0 110 34" fill="none">
-                          <defs>
-                            <linearGradient id="mis-glow-orange-2" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="0%" stopColor="#f97316" stopOpacity="0.25" />
-                              <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
-                            </linearGradient>
-                          </defs>
-                          <path d="M5 28 L 18 24 L 36 27 L 54 15 L 72 22 L 90 12 L 105 18 L 105 34 L 5 34 Z" fill="url(#mis-glow-orange-2)" />
-                          <path d="M5 28 L 18 24 L 36 27 L 54 15 L 72 22 L 90 12 L 105 18" stroke="#f97316" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                          <circle cx="18" cy="24" r="2.5" fill="#f97316" />
-                          <circle cx="36" cy="27" r="2.5" fill="#f97316" />
-                          <circle cx="54" cy="15" r="2.5" fill="#f97316" />
-                          <circle cx="72" cy="22" r="2.5" fill="#f97316" />
-                          <circle cx="90" cy="12" r="2.5" fill="#f97316" />
-                          <circle cx="105" cy="18" r="2.5" fill="#f97316" />
-                        </svg>
-                      </div>
-
-                      <div style={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                        <span style={{ color: '#22c55e', fontWeight: 600 }}>↑ 32%</span>
-                        <span style={{ color: '#64748b' }}>vs. last period</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Recent Activity Card */}
-                  <div className="mis-card" style={{ padding: 0, overflow: 'hidden' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.4rem 1.6rem 1.2rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-                        <div style={{ marginTop: '0.15rem' }}>
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="12" cy="12" r="10" />
-                            <polyline points="12 6 12 12 16 14" />
-                          </svg>
-                        </div>
-                        <div>
-                          <h2 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#ffffff', letterSpacing: '0.08em', textTransform: 'uppercase', margin: 0, fontFamily: 'var(--font-mono)' }}>
-                            RECENT ACTIVITY
-                          </h2>
-                          <p style={{ fontSize: '0.8rem', color: '#64748b', margin: '0.2rem 0 0 0' }}>
-                            Latest updates from your platform.
-                          </p>
-                        </div>
-                      </div>
-
-                      <button
-                        onClick={() => setMisView('inquiries')}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: '#f97316',
-                          fontSize: '0.825rem',
-                          fontWeight: 600,
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.25rem',
-                          padding: '0.25rem 0.5rem',
-                          borderRadius: '4px',
-                          fontFamily: 'var(--font-body)',
-                          transition: 'opacity 0.2s'
-                        }}
-                        onMouseEnter={e => e.currentTarget.style.opacity = '0.8'}
-                        onMouseLeave={e => e.currentTarget.style.opacity = '1'}
-                      >
-                        View all ›
-                      </button>
-                    </div>
-
-                    {/* Activity Rows */}
-                    <div>
-                      {filteredActivities.length > 0 ? filteredActivities.map(item => (
-                        <div key={item.id} className="mis-activity-row">
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '1.1rem' }}>
-                            <div style={{
-                              width: '32px',
-                              height: '32px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              flexShrink: 0
-                            }}>
-                              {item.type === 'review' ? (
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                                </svg>
-                              ) : (
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                  <rect x="2" y="4" width="20" height="16" rx="2" />
-                                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                                </svg>
-                              )}
-                            </div>
-
-                            <div>
-                              <div style={{ color: '#ffffff', fontWeight: 600, fontSize: '0.875rem' }}>
-                                {item.title}
-                              </div>
-                              <div style={{ color: '#64748b', fontSize: '0.8rem', marginTop: '0.15rem' }}>
-                                {item.desc}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div style={{ color: '#64748b', fontSize: '0.78rem', whiteSpace: 'nowrap', marginLeft: '1rem', fontFamily: 'var(--font-mono)' }}>
-                            {item.time}
-                          </div>
-                        </div>
-                      )) : (
-                        <div style={{ padding: '2.5rem', textAlign: 'center', color: '#64748b', fontSize: '0.85rem' }}>
-                          No activities match your search
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* ── VIEW: INQUIRIES ───────────────────────────── */}
-              {misView === 'inquiries' && (
-                <div className="mis-card" style={{ padding: 0, overflow: 'hidden' }}>
-                  <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '700px', fontSize: '0.85rem' }}>
-                      <thead>
-                        <tr style={{ background: 'rgba(255, 255, 255, 0.03)', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                          {['SENDER', 'SUBJECT', 'MESSAGE', 'ACTION'].map(h => (
-                            <th key={h} style={{ padding: '1rem 1.25rem', textAlign: 'left', color: '#8b96a5', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.08em', fontWeight: 600 }}>
-                              {h}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filteredInquiries.length > 0 ? filteredInquiries.map((row, i) => (
-                          <tr key={row.id || i} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.04)', transition: 'background 0.15s' }}>
-                            <td style={{ padding: '1.1rem 1.25rem' }}>
-                              <div style={{ fontWeight: 600, color: '#ffffff' }}>{row.name}</div>
-                              <div style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '0.2rem' }}>{row.email}</div>
-                            </td>
-                            <td style={{ padding: '1.1rem 1.25rem', color: '#cbd5e1' }}>{row.subject}</td>
-                            <td style={{ padding: '1.1rem 1.25rem', color: '#94a3b8', maxWidth: '320px', lineHeight: 1.5 }}>{row.message}</td>
-                            <td style={{ padding: '1.1rem 1.25rem' }}>
-                              <button
-                                onClick={() => deleteInquiry(row.id)}
-                                style={{
-                                  background: 'transparent',
-                                  border: '1px solid rgba(239, 68, 68, 0.3)',
-                                  color: '#ef4444',
-                                  borderRadius: '6px',
-                                  padding: '0.35rem 0.75rem',
-                                  cursor: 'pointer',
-                                  fontSize: '0.78rem',
-                                  fontWeight: 500,
-                                  transition: 'all 0.2s',
-                                  fontFamily: 'var(--font-body)'
-                                }}
-                                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)'; e.currentTarget.style.borderColor = '#ef4444'; }}
-                                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)'; }}
-                              >
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                        )) : (
-                          <tr>
-                            <td colSpan={4} style={{ padding: '3.5rem', textAlign: 'center' }}>
-                              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#475569" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '0.75rem' }}>
-                                <rect x="2" y="4" width="20" height="16" rx="2" />
-                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                              </svg>
-                              <p style={{ color: '#64748b', fontSize: '0.9rem', margin: 0 }}>
-                                {q ? 'No inquiries matching your search' : 'No inquiries yet'}
-                              </p>
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-
-              {/* ── VIEW: TESTIMONIALS ────────────────────────── */}
-              {misView === 'testimonials' && (
-                <div className="mis-card" style={{ padding: 0, overflow: 'hidden' }}>
-                  <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '700px', fontSize: '0.85rem' }}>
-                      <thead>
-                        <tr style={{ background: 'rgba(255, 255, 255, 0.03)', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                          {['CLIENT', 'REVIEW', 'STATUS', 'ACTION'].map(h => (
-                            <th key={h} style={{ padding: '1rem 1.25rem', textAlign: 'left', color: '#8b96a5', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.08em', fontWeight: 600 }}>
-                              {h}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filteredTestimonials.length > 0 ? filteredTestimonials.map((row, i) => (
-                          <tr key={row.id || i} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.04)', transition: 'background 0.15s' }}>
-                            <td style={{ padding: '1.1rem 1.25rem' }}>
-                              <div style={{ fontWeight: 600, color: '#ffffff' }}>{row.name}</div>
-                              <div style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '0.2rem' }}>{row.role || 'Client'}</div>
-                            </td>
-                            <td style={{ padding: '1.1rem 1.25rem', color: '#94a3b8', maxWidth: '320px', lineHeight: 1.5 }}>
-                              <div style={{ color: '#cbd5e1' }}>{row.content}</div>
-                              {row.rating && (
-                                <div style={{ color: '#f97316', fontSize: '0.75rem', marginTop: '0.25rem' }}>
-                                  {'★'.repeat(row.rating)}{'☆'.repeat(Math.max(0, 5 - row.rating))}
-                                </div>
-                              )}
-                            </td>
-                            <td style={{ padding: '1.1rem 1.25rem' }}>
-                              <span style={{
-                                fontFamily: 'var(--font-mono)',
-                                fontSize: '0.65rem',
-                                fontWeight: 600,
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.08em',
-                                color: row.is_approved ? '#22c55e' : '#f97316',
-                                background: row.is_approved ? 'rgba(34, 197, 94, 0.12)' : 'rgba(249, 115, 22, 0.12)',
-                                border: `1px solid ${row.is_approved ? 'rgba(34, 197, 94, 0.3)' : 'rgba(249, 115, 22, 0.3)'}`,
-                                padding: '0.25rem 0.55rem',
-                                borderRadius: '4px'
-                              }}>
-                                {row.is_approved ? 'Approved' : 'Pending'}
-                              </span>
-                            </td>
-                            <td style={{ padding: '1.1rem 1.25rem' }}>
-                              <div style={{ display: 'flex', gap: '0.65rem' }}>
-                                <button
-                                  onClick={() => toggleTestimonialApproval(row.id, row.is_approved)}
-                                  style={{
-                                    background: 'rgba(255, 255, 255, 0.05)',
-                                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                                    color: '#cbd5e1',
-                                    borderRadius: '6px',
-                                    padding: '0.35rem 0.65rem',
-                                    cursor: 'pointer',
-                                    fontSize: '0.78rem',
-                                    fontWeight: 500,
-                                    transition: 'all 0.2s',
-                                    fontFamily: 'var(--font-body)'
-                                  }}
-                                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.color = '#ffffff'; }}
-                                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'; e.currentTarget.style.color = '#cbd5e1'; }}
-                                >
-                                  {row.is_approved ? 'Reject' : 'Approve'}
-                                </button>
-                                <button
-                                  onClick={() => deleteTestimonial(row.id)}
-                                  style={{
-                                    background: 'transparent',
-                                    border: '1px solid rgba(239, 68, 68, 0.3)',
-                                    color: '#ef4444',
-                                    borderRadius: '6px',
-                                    padding: '0.35rem 0.65rem',
-                                    cursor: 'pointer',
-                                    fontSize: '0.78rem',
-                                    fontWeight: 500,
-                                    transition: 'all 0.2s',
-                                    fontFamily: 'var(--font-body)'
-                                  }}
-                                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)'; e.currentTarget.style.borderColor = '#ef4444'; }}
-                                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)'; }}
-                                >
-                                  Delete
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        )) : (
-                          <tr>
-                            <td colSpan={4} style={{ padding: '3.5rem', textAlign: 'center' }}>
-                              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#475569" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '0.75rem' }}>
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                              </svg>
-                              <p style={{ color: '#64748b', fontSize: '0.9rem', margin: 0 }}>
-                                {q ? 'No testimonials matching your search' : 'No testimonials yet'}
-                              </p>
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-
-            </div>
-          </div>
-        </div>
-      </div>
+      <AdminDashboard
+        user={user}
+        onLogout={handleLogout}
+        inquiries={inquiries}
+        testimonials={testimonials}
+        totalViews={totalViews}
+        onDeleteInquiry={deleteInquiry}
+        onToggleApproval={toggleTestimonialApproval}
+        onDeleteTestimonial={deleteTestimonial}
+        onRefreshData={handleAdminRefreshAll}
+        isRefreshing={isRefreshing}
+      />
     );
   }
 
@@ -2785,7 +1743,7 @@ function App() {
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
               © 2026 John Carlo Aganan
             </span>
-            <button onClick={() => { setView('mis'); window.location.hash = '#login'; }} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-300)', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '0.08em', textTransform: 'uppercase', transition: 'color 0.2s', padding: 0 }}
+            <button onClick={() => { setView('mis'); window.location.hash = '#admin'; if (window.history.pushState) window.history.pushState({}, '', '/admin'); }} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-300)', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '0.08em', textTransform: 'uppercase', transition: 'color 0.2s', padding: 0 }}
               onMouseEnter={e => e.currentTarget.style.color = 'var(--gray-500)'}
               onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-300)'}
             >

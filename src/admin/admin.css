@@ -1,0 +1,578 @@
+/* ==========================================================================
+   ULACDEV MIS — OFFICIAL DESIGN SYSTEM & LANDING PAGE AESTHETIC INTEGRATION
+   Design Language:
+     - Typography: 'Geist' (Body/Headings) + 'Geist Mono' (Labels/Chips/Buttons/Codes)
+     - Palette: Monochrome Obsidian (#050607, #08090B, #0B0D10, #111418, #22252B)
+     - Icon style: Minimal outline stroke (1.8-2px) in subtle rounded-square containers
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --ulac-bg: #050607;
+  --ulac-sidebar: #08090B;
+  --ulac-card: #0B0D10;
+  --ulac-surface: #111418;
+  --ulac-text-primary: #FFFFFF;
+  --ulac-text-secondary: #A1A1AA;
+  --ulac-text-muted: #71717A;
+  --ulac-border: #22252B;
+  --ulac-hover: #171A1F;
+  --ulac-active: #171A1F;
+  --ulac-radius-sm: 5px;
+  --ulac-radius-md: 8px;
+  --ulac-radius-lg: 12px;
+
+  /* Typography identical to landing page */
+  --font-body: 'Geist', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-serif: 'Source Serif 4', Georgia, serif;
+}
+
+/* Master MIS Shell */
+.ulac-shell {
+  min-height: 100vh;
+  background-color: var(--ulac-bg);
+  color: var(--ulac-text-primary);
+  font-family: var(--font-body);
+  display: flex;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Headings with landing page tracking */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-body);
+  letter-spacing: -0.03em;
+}
+
+/* ─── Section label identical to landing page ──────────────── */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ulac-text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.section-label::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 1px;
+  background: #52525B;
+}
+
+/* ─── Chips & Tags matching landing page ───────────────────── */
+.chip-inverted {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: #FFFFFF;
+  color: #050607;
+  border: 1px solid #FFFFFF;
+  padding: 0.18rem 0.5rem;
+  border-radius: 3px;
+}
+
+.chip-border {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: transparent;
+  color: var(--ulac-text-secondary);
+  border: 1px solid var(--ulac-border);
+  padding: 0.18rem 0.5rem;
+  border-radius: 3px;
+}
+
+.skill-tag {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--ulac-text-secondary);
+  background: var(--ulac-surface);
+  border: 1px solid var(--ulac-border);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  transition: border-color 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.skill-tag:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #FFFFFF;
+}
+
+/* ─── Icon Containers matching landing page ───────────────── */
+.ulac-icon-container {
+  width: 38px;
+  height: 38px;
+  border-radius: 7px;
+  background: var(--ulac-surface);
+  border: 1px solid var(--ulac-border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--ulac-text-secondary);
+  transition: all 0.2s ease;
+}
+
+.ulac-icon-container:hover,
+.ulac-card:hover .ulac-icon-container {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+}
+
+/* ── Sidebar ── */
+.ulac-sidebar {
+  background-color: var(--ulac-sidebar);
+  border-right: 1px solid var(--ulac-border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  box-sizing: border-box;
+  z-index: 40;
+  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), min-width 0.25s cubic-bezier(0.16, 1, 0.3, 1), padding 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.ulac-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--font-body);
+}
+
+.ulac-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--ulac-radius-md);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ulac-text-secondary);
+  font-size: 0.86rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-family: var(--font-body);
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+.ulac-nav-item:hover {
+  color: #FFFFFF;
+  background: var(--ulac-hover);
+}
+
+.ulac-nav-item.active {
+  background: var(--ulac-active);
+  color: #FFFFFF;
+  font-weight: 600;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.ulac-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--ulac-radius-md);
+  border: 1px solid var(--ulac-border);
+  background: transparent;
+  color: var(--ulac-text-secondary);
+  font-size: 0.825rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-family: var(--font-body);
+  box-sizing: border-box;
+}
+
+.ulac-logout-btn:hover {
+  background: var(--ulac-hover);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Topbar ── */
+.ulac-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 2.5rem;
+  border-bottom: 1px solid var(--ulac-border);
+  background-color: var(--ulac-bg);
+  position: sticky;
+  top: 0;
+  z-index: 35;
+  box-sizing: border-box;
+  gap: 1.25rem;
+}
+
+@media (max-width: 900px) {
+  .ulac-topbar {
+    padding: 0.75rem 1.25rem;
+  }
+}
+
+.ulac-icon-btn {
+  background: var(--ulac-surface);
+  border: 1px solid var(--ulac-border);
+  border-radius: 7px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ulac-text-secondary);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.ulac-icon-btn:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+  background: var(--ulac-hover);
+}
+
+.ulac-search-input {
+  width: 100%;
+  padding: 0.55rem 0.85rem 0.55rem 2.35rem;
+  background: var(--ulac-surface);
+  border: 1px solid var(--ulac-border);
+  border-radius: 9999px;
+  color: #FFFFFF;
+  font-size: 0.835rem;
+  outline: none;
+  box-sizing: border-box;
+  font-family: var(--font-body);
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.ulac-search-input:focus {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: #15181E;
+}
+
+.ulac-search-input::placeholder {
+  color: var(--ulac-text-muted);
+}
+
+/* ── Cards & Surfaces ── */
+.ulac-card {
+  background-color: var(--ulac-card);
+  border: 1px solid var(--ulac-border);
+  border-radius: var(--ulac-radius-lg);
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ulac-card:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Buttons styled with landing page typography */
+.ulac-btn-primary {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background-color: #FFFFFF;
+  color: #050607;
+  border: 1px solid #FFFFFF;
+  border-radius: 5px;
+  padding: 0.6rem 1.15rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.ulac-btn-primary:hover {
+  background-color: #E4E4E7;
+  border-color: #E4E4E7;
+  opacity: 0.9;
+}
+
+.ulac-btn-secondary {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background-color: var(--ulac-card);
+  color: #FFFFFF;
+  border: 1px solid var(--ulac-border);
+  border-radius: 5px;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.ulac-btn-secondary:hover {
+  background-color: var(--ulac-hover);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.ulac-btn-danger {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background-color: transparent;
+  color: var(--ulac-text-secondary);
+  border: 1px solid var(--ulac-border);
+  border-radius: 5px;
+  padding: 0.5rem 0.85rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ulac-btn-danger:hover {
+  background-color: #171A1F;
+  color: #FFFFFF;
+  border-color: #71717A;
+}
+
+/* Quick Action Cards */
+.ulac-action-card {
+  background-color: var(--ulac-card);
+  border: 1px solid var(--ulac-border);
+  border-radius: var(--ulac-radius-lg);
+  padding: 1.35rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 145px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  text-decoration: none;
+  position: relative;
+}
+
+.ulac-action-card:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  background-color: var(--ulac-surface);
+  transform: translateY(-2px);
+}
+
+.ulac-action-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--ulac-surface);
+  border: 1px solid var(--ulac-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ulac-text-secondary);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.ulac-action-card:hover .ulac-action-circle {
+  background-color: #FFFFFF;
+  color: #050607;
+  border-color: #FFFFFF;
+  transform: translateX(2px);
+}
+
+/* Badges */
+.ulac-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+.ulac-badge-published {
+  background-color: #FFFFFF;
+  color: #050607;
+  border: 1px solid #FFFFFF;
+}
+
+.ulac-badge-draft {
+  background-color: transparent;
+  color: var(--ulac-text-secondary);
+  border: 1px solid var(--ulac-border);
+}
+
+/* Filter Controls */
+.ulac-select {
+  background-color: var(--ulac-card);
+  color: var(--ulac-text-secondary);
+  border: 1px solid var(--ulac-border);
+  border-radius: 5px;
+  padding: 0.52rem 0.85rem;
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.18s;
+  box-sizing: border-box;
+}
+
+.ulac-select:focus,
+.ulac-select:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+}
+
+/* Modals */
+.ulac-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(5, 6, 7, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  animation: ulac-fade-in 0.2s ease;
+}
+
+.ulac-modal {
+  background-color: var(--ulac-card);
+  border: 1px solid var(--ulac-border);
+  border-radius: var(--ulac-radius-lg);
+  width: 100%;
+  max-width: 540px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  box-sizing: border-box;
+  overflow: hidden;
+  animation: ulac-scale-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes ulac-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ulac-scale-in {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Form inputs */
+.ulac-form-group {
+  margin-bottom: 1.25rem;
+}
+
+.ulac-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--ulac-text-secondary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.45rem;
+}
+
+.ulac-input,
+.ulac-textarea {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  background-color: var(--ulac-surface);
+  border: 1px solid var(--ulac-border);
+  border-radius: 6px;
+  color: #FFFFFF;
+  font-size: 0.875rem;
+  outline: none;
+  font-family: var(--font-body);
+  box-sizing: border-box;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.ulac-input:focus,
+.ulac-textarea:focus {
+  border-color: rgba(255, 255, 255, 0.35);
+  background-color: #15181E;
+}
+
+.ulac-textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+}
+
+/* Custom Scrollbars */
+.ulac-custom-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.ulac-custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ulac-custom-scroll::-webkit-scrollbar-thumb {
+  background: var(--ulac-border);
+  border-radius: 3px;
+}
+
+.ulac-custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: #383D47;
+}
