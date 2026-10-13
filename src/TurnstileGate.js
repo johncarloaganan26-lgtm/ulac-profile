@@ -53,7 +53,7 @@ export default function TurnstileGate({ children }) {
     <div style={{
       position: 'fixed',
       inset: 0,
-      backgroundColor: '#050607',
+      backgroundColor: '#FFFFFF',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -75,7 +75,7 @@ export default function TurnstileGate({ children }) {
             cy="26"
             r="22"
             fill="none"
-            stroke="#22252B"
+            stroke="#E5E7EB"
             strokeWidth="3"
           />
           <circle
@@ -83,7 +83,7 @@ export default function TurnstileGate({ children }) {
             cy="26"
             r="22"
             fill="none"
-            stroke="#FFFFFF"
+            stroke="#111827"
             strokeWidth="3"
             strokeDasharray="138"
             strokeDashoffset="104"
@@ -111,7 +111,7 @@ export default function TurnstileGate({ children }) {
         <p style={{
           fontSize: '1.05rem',
           fontWeight: 600,
-          color: '#FFFFFF',
+          color: '#111827',
           margin: '0 0 0.5rem 0',
           letterSpacing: '-0.01em',
         }}>
@@ -120,7 +120,7 @@ export default function TurnstileGate({ children }) {
         {!error && (
           <p style={{
             fontSize: '0.8rem',
-            color: '#71717A',
+            color: '#6B7280',
             margin: 0,
             fontFamily: "'Geist Mono', monospace",
             letterSpacing: '0.04em',
@@ -131,7 +131,7 @@ export default function TurnstileGate({ children }) {
         {error && (
           <p style={{
             fontSize: '0.8rem',
-            color: '#71717A',
+            color: '#6B7280',
             margin: '0 0 1rem 0',
             fontFamily: "'Geist Mono', monospace",
           }}>
@@ -148,7 +148,7 @@ export default function TurnstileGate({ children }) {
           onError={handleError}
           onExpire={handleExpire}
           options={{
-            theme: 'dark',
+            theme: 'light',
             size: 'normal',
           }}
         />
@@ -161,7 +161,7 @@ export default function TurnstileGate({ children }) {
         display: 'flex',
         alignItems: 'center',
         gap: '0.5rem',
-        color: '#3F4249',
+        color: '#6B7280',
         fontSize: '0.72rem',
         fontFamily: "'Geist Mono', monospace",
         letterSpacing: '0.06em',
