@@ -29,7 +29,9 @@ module.exports = async (req, res) => {
     try {
       console.log(`📨 Setting up SMTP and dispatching inquiry emails for ${name} (${email})...`);
       const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
         auth: {
           user: process.env.SMTP_USER,
           pass: process.env.SMTP_PASS,
@@ -37,18 +39,28 @@ module.exports = async (req, res) => {
       });
 
       const recipientEmail = process.env.SMTP_TO || process.env.SMTP_USER;
+      const firstName = (name || '').trim().split(' ')[0] || 'there';
 
       // 2a. Notification Email to Receiver (John Carlo)
       await transporter.sendMail({
         from: `"Portfolio Contact Form" <${process.env.SMTP_USER}>`,
         to: recipientEmail,
         replyTo: email,
-        subject: `New Portfolio Inquiry from ${name}: ${subject}`,
+        subject: `New Inquiry from ${name}: ${subject}`,
+        text: `New contact inquiry received:
+
+From: ${name} <${email}>
+Subject: ${subject}
+
+Message:
+${message}
+
+Reply directly to: ${email}`,
         html: `
           <div style="background-color: #f3f4f6; padding: 40px 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
             <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
               <div style="background: linear-gradient(135deg, #111827 0%, #1f2937 100%); padding: 30px; text-align: center; border-bottom: 3px solid #f97316;">
-                <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: 1px;">NEW SYSTEM INQUIRY</h1>
+                <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 700;">New Inquiry Received</h1>
               </div>
               <div style="padding: 40px;">
                 <div style="margin-bottom: 24px; border-bottom: 1px solid #f3f4f6; padding-bottom: 16px;">
@@ -82,17 +94,34 @@ module.exports = async (req, res) => {
         from: `"John Carlo Aganan" <${process.env.SMTP_USER}>`,
         to: email,
         replyTo: recipientEmail,
-        subject: `Thank you for reaching out, ${name.split(' ')[0]}! [Message Received]`,
+        subject: `Thank you for reaching out, ${firstName}`,
+        headers: {
+          'Auto-Submitted': 'auto-replied',
+          'X-Priority': '3',
+        },
+        text: `Hi ${firstName},
+
+Thank you for reaching out! I have received your inquiry regarding "${subject}".
+
+I personally review all messages and will respond to your email as soon as possible (typically within 24 to 48 hours).
+
+A copy of your message:
+"${message}"
+
+Best regards,
+John Carlo Aganan
+Full-Stack Software Engineer
+${process.env.SMTP_USER}`,
         html: `
           <div style="background-color: #0f172a; padding: 40px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
             <div style="max-width: 580px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
               <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 32px 28px; text-align: left; border-bottom: 3px solid #f97316;">
                 <span style="display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #f97316; margin-bottom: 8px;">JOHN CARLO AGANAN &bull; PORTFOLIO</span>
-                <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 700;">Thank you for reaching out!</h1>
+                <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 700;">Thank you for reaching out</h1>
               </div>
               <div style="padding: 32px 28px; color: #334155; line-height: 1.6;">
-                <p style="margin: 0 0 16px 0; font-size: 16px; color: #0f172a;">Hi <strong>${name.split(' ')[0]}</strong>,</p>
-                <p style="margin: 0 0 18px 0; font-size: 15px;">I have received your inquiry regarding <strong>"${subject}"</strong>. Thank you for taking the time to write to me!</p>
+                <p style="margin: 0 0 16px 0; font-size: 16px; color: #0f172a;">Hi <strong>${firstName}</strong>,</p>
+                <p style="margin: 0 0 18px 0; font-size: 15px;">I have received your inquiry regarding <strong>"${subject}"</strong>. Thank you for taking the time to write to me.</p>
                 <p style="margin: 0 0 24px 0; font-size: 15px;">I personally review all messages and will respond to your email as soon as possible (typically within 24 to 48 hours).</p>
                 
                 <div style="background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; padding: 18px; margin-bottom: 24px;">
