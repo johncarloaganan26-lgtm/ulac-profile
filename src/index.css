@@ -790,14 +790,58 @@ body::before {
   padding: 7rem max(var(--page-gutter), calc((100% - var(--content-max-width)) / 2)) 5rem;
   color: #fff;
   background-color: #111315;
+}
+
+.hero-section::before {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
   background-image:
     linear-gradient(90deg, rgba(8, 10, 12, 0.72) 0%, rgba(8, 10, 12, 0.46) 44%, rgba(8, 10, 12, 0.04) 100%),
-    linear-gradient(0deg, rgba(8, 10, 12, 0.42), transparent 38%),
-    var(--hero-background-image);
-  background-position: center, center, right center;
+    linear-gradient(0deg, rgba(8, 10, 12, 0.42), transparent 38%);
+  content: '';
+  pointer-events: none;
+}
+
+.hero-background-slide {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background-image: var(--hero-slide-desktop-image);
+  background-position: right center;
   background-repeat: no-repeat;
-  background-size: cover, cover, auto 118vh;
-  background-attachment: scroll, scroll, fixed;
+  background-size: auto 118vh;
+  background-attachment: fixed;
+  opacity: 0;
+  transform: scale(1.06);
+  transition: opacity 1.8s cubic-bezier(0.22, 1, 0.36, 1), transform 7s ease-out;
+  will-change: opacity, transform;
+  pointer-events: none;
+}
+
+.hero-background-slide.is-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.hero-section .hero-content,
+.hero-section .hero-scroll-cue {
+  z-index: 2;
+}
+
+.hero-section .hero-content {
+  position: relative;
+}
+
+.hero-section .hero-scroll-cue {
+  position: absolute;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-background-slide {
+    transition: none;
+    transform: none;
+  }
 }
 
 .hero-content {
@@ -1208,6 +1252,19 @@ a.header-menu-option {
     --page-gutter: 1.5rem;
   }
 
+  .hero-section::before {
+    background-image:
+      linear-gradient(90deg, rgba(8, 10, 12, 0.72) 0%, rgba(8, 10, 12, 0.46) 44%, rgba(8, 10, 12, 0.04) 100%),
+      linear-gradient(0deg, rgba(8, 10, 12, 0.42), transparent 38%);
+  }
+
+  .hero-background-slide {
+    background-image: var(--hero-slide-mobile-image);
+    background-position: var(--hero-slide-mobile-position, center center);
+    background-size: auto 118vh;
+    background-attachment: scroll;
+  }
+
   body::before {
     background-image: radial-gradient(circle, var(--gray-300) 1px, transparent 1px);
     background-size: 32px 32px;
@@ -1312,12 +1369,15 @@ a.header-menu-option {
     align-items: flex-end;
     padding: 0 max(var(--page-gutter), calc((100% - var(--content-max-width)) / 2)) 5.5rem;
     background-color: #101214;
-    background-image:
-      linear-gradient(180deg, rgba(8, 10, 12, 0.02) 15%, rgba(8, 10, 12, 0.18) 43%, #101214 78%),
-      var(--hero-background-image);
-    background-position: center, right top;
-    background-size: cover, auto 82%;
-    background-attachment: scroll, fixed;
+  }
+
+  .hero-section::before {
+    background-image: linear-gradient(180deg, rgba(8, 10, 12, 0.02) 15%, rgba(8, 10, 12, 0.18) 43%, #101214 78%);
+  }
+
+  .hero-background-slide {
+    background-position: var(--hero-slide-mobile-position, center top);
+    background-size: auto 82%;
   }
 
   .hero-content h1 {

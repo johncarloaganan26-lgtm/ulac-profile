@@ -863,10 +863,12 @@ const SKILL_ICONS = {
 const launchOverlay = name => window.dispatchEvent(new CustomEvent('ulac-overlay', { detail: name }));
 
 function App() {
+  const shouldReduceMotion = useReducedMotion();
   const [preloaderRemoved, setPreloaderRemoved] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [lightboxImages, setLightboxImages] = useState([]);
   const [lightboxIndex, setLightboxIndex] = useState(-1);
+  const [heroSlide, setHeroSlide] = useState(0);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -887,6 +889,15 @@ function App() {
   const [showAllProjects, setShowAllProjects] = useState(true);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [view, setView] = useState('portfolio');
+  useEffect(() => {
+    if (view !== 'portfolio' || shouldReduceMotion) return undefined;
+
+    const slideTimer = setInterval(() => {
+      setHeroSlide(current => (current + 1) % 2);
+    }, 7000);
+    return () => clearInterval(slideTimer);
+  }, [shouldReduceMotion, view]);
+
   const [misView, setMisView] = useState('dashboard');
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
@@ -1472,8 +1483,25 @@ function App() {
         id="hero"
         className="hero-section"
         aria-labelledby="hero-title"
-        style={{ '--hero-background-image': "url('/assets/img/experience/about-hero-graduation.png')" }}
+        style={{
+          '--hero-desktop-image-one': "url('/assets/img/experience/about-hero-graduation.png')",
+          '--hero-desktop-image-two': "url('/hero-graduation-banner.png')",
+          '--hero-mobile-image-one': "url('/new-pfp.jpg')",
+          '--hero-mobile-image-two': "url('/me.jpg')"
+        }}
       >
+        {[0, 1].map(index => (
+          <div
+            key={index}
+            className={`hero-background-slide${heroSlide === index ? ' is-active' : ''}`}
+            style={{
+              '--hero-slide-desktop-image': `var(--hero-desktop-image-${index === 0 ? 'one' : 'two'})`,
+              '--hero-slide-mobile-image': `var(--hero-mobile-image-${index === 0 ? 'one' : 'two'})`,
+              '--hero-slide-mobile-position': 'center top'
+            }}
+            aria-hidden="true"
+          />
+        ))}
         <div className="hero-content">
           <p className="hero-eyebrow">Full-Stack Developer <span aria-hidden="true">/</span> Cavite, Philippines</p>
           <h1 id="hero-title">John Carlo<br />Aganan<span className="hero-title-period">.</span></h1>
