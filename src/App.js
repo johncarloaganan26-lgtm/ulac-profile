@@ -723,12 +723,13 @@ const GithubContributions = () => {
 // ─────────────────────────────────────────────────────────────
 // Theme Menu Component
 // ─────────────────────────────────────────────────────────────
+const THEME_OPTIONS = [
+  { value: 'dark', label: 'Dark mode', icon: <FaMoon size={12} /> },
+  { value: 'light', label: 'Light mode', icon: <FaSun size={12} /> },
+  { value: 'system', label: 'System', icon: <FaDesktop size={12} /> }
+];
+
 const HeaderMenu = ({ theme, setTheme, launchOverlay }) => {
-  const options = [
-    { value: 'dark', label: 'Dark mode', icon: <FaMoon size={12} /> },
-    { value: 'light', label: 'Light mode', icon: <FaSun size={12} /> },
-    { value: 'system', label: 'System', icon: <FaDesktop size={12} /> }
-  ];
 
   return (
     <details className="header-theme-menu">
@@ -740,7 +741,7 @@ const HeaderMenu = ({ theme, setTheme, launchOverlay }) => {
       </summary>
       <div className="header-menu-options">
         <div role="group" aria-label="Color theme">
-          {options.map(option => {
+          {THEME_OPTIONS.map(option => {
             const active = theme === option.value;
             return (
               <button
@@ -1425,6 +1426,58 @@ function App() {
                   {item.label}
                 </button>
               ))}
+              <div className="mobile-menu-divider" role="separator" />
+              <div className="mobile-menu-theme-options" role="group" aria-label="Color theme">
+                {THEME_OPTIONS.map(option => {
+                  const active = theme === option.value;
+                  return (
+                    <button
+                      type="button"
+                      key={option.value}
+                      onClick={() => {
+                        handleSetTheme(option.value);
+                        setMobileMenuOpen(false);
+                      }}
+                      className={`header-menu-option${active ? ' active' : ''}`}
+                      aria-pressed={active}
+                    >
+                      {option.icon}
+                      <span>{option.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <a
+                href="/resume.html"
+                target="_blank"
+                rel="noreferrer"
+                className="header-menu-option"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <span>See CV</span>
+              </a>
+              <button
+                type="button"
+                className="header-menu-option"
+                onClick={() => {
+                  launchOverlay('ask');
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <span>Ask anything</span>
+                <kbd>Alt K</kbd>
+              </button>
+              <button
+                type="button"
+                className="header-menu-option"
+                onClick={() => {
+                  launchOverlay('test');
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <span>Typing test</span>
+                <kbd>Alt J</kbd>
+              </button>
             </motion.nav>
           )}
         </AnimatePresence>
