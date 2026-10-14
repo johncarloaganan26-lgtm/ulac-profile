@@ -1415,6 +1415,31 @@ function App() {
         <ScrollReveal as="section" id="about" style={{ padding: '2rem 0 5rem' }}>
           <div className="about-grid">
 
+            {/* Text */}
+            <div style={{ flex: 1.2, display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <div className="section-label">01 — About</div>
+              <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)', margin: 0 }}>About Me</h2>
+              <p style={{ fontSize: '1.0625rem', lineHeight: '1.75', color: 'var(--gray-500)', fontFamily: 'var(--font-serif)' }}>
+                I'm a Full-Stack Developer with a deep focus on backend stability, clean frontend rendering, and database efficiency. Over the past few years, I have designed, built, and shipped production platforms for e-commerce, scheduling, point-of-sale, and loan management.
+              </p>
+              <p style={{ fontSize: '1.0625rem', lineHeight: '1.75', color: 'var(--gray-500)', fontFamily: 'var(--font-serif)' }}>
+                A BSIT graduate of Cavite State University, I'm now a Service Level Technician at CXI Services, where I build internal tools that keep operations running — and a freelance developer since 2026. I care about applications that are highly functional and snappy to use. When I'm not writing code, I'm working out, listening to music, or studying full-stack architectures.
+              </p>
+              {/* Stats row */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: isMobile ? '0.5rem' : '2.5rem', marginTop: '0.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--gray-200)' }}>
+                {[
+                  { num: '10+', label: 'Projects shipped' },
+                  { num: '< 1', label: 'Year of experience' },
+                  { num: '100%', label: 'Client satisfaction' }
+                ].map((s, i) => (
+                  <div key={i} style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--ink)' }}>{s.num}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: isMobile ? '0.55rem' : '0.625rem', lineHeight: 1.35, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: isMobile ? '0.06em' : '0.1em', marginTop: '2px' }}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Profile image (not in card) */}
             <div className="about-image-wrapper">
               <div className="about-image-container">
@@ -1448,31 +1473,6 @@ function App() {
                   </div>
                   <span className="chip-inverted">Available</span>
                 </div>
-              </div>
-            </div>
-
-            {/* Text */}
-            <div style={{ flex: 1.2, display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              <div className="section-label">01 — About</div>
-              <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)', margin: 0 }}>About Me</h2>
-              <p style={{ fontSize: '1.0625rem', lineHeight: '1.75', color: 'var(--gray-500)', fontFamily: 'var(--font-serif)' }}>
-                I'm a Full-Stack Developer with a deep focus on backend stability, clean frontend rendering, and database efficiency. Over the past few years, I have designed, built, and shipped production platforms for e-commerce, scheduling, point-of-sale, and loan management.
-              </p>
-              <p style={{ fontSize: '1.0625rem', lineHeight: '1.75', color: 'var(--gray-500)', fontFamily: 'var(--font-serif)' }}>
-                A BSIT graduate of Cavite State University, I'm now a Service Level Technician at CXI Services, where I build internal tools that keep operations running — and a freelance developer since 2026. I care about applications that are highly functional and snappy to use. When I'm not writing code, I'm working out, listening to music, or studying full-stack architectures.
-              </p>
-              {/* Stats row */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: isMobile ? '0.5rem' : '2.5rem', marginTop: '0.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--gray-200)' }}>
-                {[
-                  { num: '10+', label: 'Projects shipped' },
-                  { num: '< 1', label: 'Year of experience' },
-                  { num: '100%', label: 'Client satisfaction' }
-                ].map((s, i) => (
-                  <div key={i} style={{ minWidth: 0 }}>
-                    <div style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--ink)' }}>{s.num}</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: isMobile ? '0.55rem' : '0.625rem', lineHeight: 1.35, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: isMobile ? '0.06em' : '0.1em', marginTop: '2px' }}>{s.label}</div>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
