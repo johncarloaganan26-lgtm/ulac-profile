@@ -109,7 +109,7 @@ export default function TurnstileGate({ children }) {
         animation: 'ulac-fade-in 0.5s ease',
       }}>
         <p style={{
-          fontSize: '1.05rem',
+          fontSize: '1.35rem',
           fontWeight: 600,
           color: '#111827',
           margin: '0 0 0.5rem 0',
@@ -119,7 +119,7 @@ export default function TurnstileGate({ children }) {
         </p>
         {!error && (
           <p style={{
-            fontSize: '0.8rem',
+            fontSize: '0.95rem',
             color: '#6B7280',
             margin: 0,
             fontFamily: "'Geist Mono', monospace",
@@ -130,7 +130,7 @@ export default function TurnstileGate({ children }) {
         )}
         {error && (
           <p style={{
-            fontSize: '0.8rem',
+            fontSize: '0.95rem',
             color: '#6B7280',
             margin: '0 0 1rem 0',
             fontFamily: "'Geist Mono', monospace",
