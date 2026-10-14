@@ -1375,7 +1375,7 @@ function App() {
       )}
 
       {/* ── SITE HEADER ─────────────────────────────────────── */}
-      <header className={`site-header${headerScrolled ? ' site-header--scrolled' : ''}`}>
+      <header className={`site-header${headerScrolled ? ' site-header--scrolled' : ' site-header--over-hero'}`}>
         <button className="site-brand" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           Ulacdev
         </button>
@@ -1483,6 +1483,33 @@ function App() {
         </AnimatePresence>
       </header>
 
+      <section
+        id="hero"
+        className="hero-section"
+        aria-labelledby="hero-title"
+        style={{ '--hero-background-image': "url('/assets/img/experience/about-hero-graduation.png')" }}
+      >
+        <div className="hero-content">
+          <p className="hero-eyebrow">Full-Stack Developer <span aria-hidden="true">/</span> Cavite, Philippines</p>
+          <h1 id="hero-title">John Carlo<br />Aganan<span className="hero-title-period">.</span></h1>
+          <p className="hero-description">
+            I build reliable, thoughtful web applications — from clean interfaces to the systems behind them.
+          </p>
+          <div className="hero-actions">
+            <button type="button" className="hero-button hero-button--primary" onClick={() => scrollToSection('projects')}>
+              Explore my work <FaChevronRight aria-hidden="true" />
+            </button>
+            <button type="button" className="hero-button hero-button--secondary" onClick={() => scrollToSection('about')}>
+              About me
+            </button>
+          </div>
+        </div>
+        <button type="button" className="hero-scroll-cue" onClick={() => scrollToSection('about')}>
+          <span aria-hidden="true" />
+          Scroll to explore
+        </button>
+      </section>
+
       {/* ── MAIN CONTENT ─────────────────────────────────────── */}
       <main className="app-main" style={{ position: 'relative', zIndex: 1 }}>
 
@@ -1491,7 +1518,7 @@ function App() {
           <div className="about-grid">
 
             {/* Text */}
-            <div style={{ flex: 1.2, display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               <div className="section-label">01 — About</div>
               <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)', margin: 0 }}>About Me</h2>
               <p style={{ fontSize: '1.0625rem', lineHeight: '1.75', color: 'var(--gray-500)', fontFamily: 'var(--font-serif)' }}>
@@ -1515,41 +1542,6 @@ function App() {
               </div>
             </div>
 
-            {/* Profile image (not in card) */}
-            <div className="about-image-wrapper">
-              <div className="about-image-container">
-                <ScrollReveal
-                  as="img"
-                  image
-                  src="/new-pfp.jpg"
-                  alt="John Carlo"
-                  style={{
-                    width: '100%',
-                    aspectRatio: '1 / 1',
-                    objectFit: 'cover',
-                    borderRadius: '6px',
-                    border: '1px solid var(--gray-200)',
-                    filter: 'grayscale(20%)',
-                    transition: 'filter 0.3s, border-color 0.3s',
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => {
-                    setLightboxImages(['/new-pfp.jpg']);
-                    setLightboxIndex(0);
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.filter = 'grayscale(0%)'; e.currentTarget.style.borderColor = 'var(--gray-400)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(20%)'; e.currentTarget.style.borderColor = 'var(--gray-200)'; }}
-                />
-                <div style={{ marginTop: '0.75rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.9375rem', color: 'var(--ink)' }}>John Carlo Aganan</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: '2px' }}>Software Developer</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', marginTop: '2px' }}>Naic, Cavite, PH</div>
-                  </div>
-                  <span className="chip-inverted">Available</span>
-                </div>
-              </div>
-            </div>
           </div>
         </ScrollReveal>
 
