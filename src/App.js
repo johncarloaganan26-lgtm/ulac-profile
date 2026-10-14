@@ -4,11 +4,11 @@ import { supabase } from './supabaseClient';
 import AdminDashboard from './admin/AdminDashboard';
 import { respond } from './bot/respond';
 import {
-  FaEnvelope, FaMapMarkerAlt, FaCode, FaMoon, FaSun,
+  FaEnvelope, FaMapMarkerAlt, FaCode,
   FaLinkedin, FaTimes, FaGithub, FaCalendarAlt,
   FaChevronRight, FaChevronLeft, FaStar, FaLaptopCode,
   FaCheck, FaCheckCircle, FaUser, FaLock, FaExternalLinkAlt,
-  FaDesktop, FaCoffee
+  FaCoffee
 } from 'react-icons/fa';
 import { MdVerified } from 'react-icons/md';
 import {
@@ -723,14 +723,7 @@ const GithubContributions = () => {
 // ─────────────────────────────────────────────────────────────
 // Theme Menu Component
 // ─────────────────────────────────────────────────────────────
-const THEME_OPTIONS = [
-  { value: 'dark', label: 'Dark mode', icon: <FaMoon size={12} /> },
-  { value: 'light', label: 'Light mode', icon: <FaSun size={12} /> },
-  { value: 'system', label: 'System', icon: <FaDesktop size={12} /> }
-];
-
-const HeaderMenu = ({ theme, setTheme, launchOverlay }) => {
-
+const HeaderMenu = ({ launchOverlay }) => {
   return (
     <details className="header-theme-menu">
       <summary aria-label="Menu options">
@@ -740,27 +733,6 @@ const HeaderMenu = ({ theme, setTheme, launchOverlay }) => {
         </span>
       </summary>
       <div className="header-menu-options">
-        <div role="group" aria-label="Color theme">
-          {THEME_OPTIONS.map(option => {
-            const active = theme === option.value;
-            return (
-              <button
-                type="button"
-                key={option.value}
-                onClick={event => {
-                  setTheme(option.value);
-                  event.currentTarget.closest('details').open = false;
-                }}
-                className={`header-menu-option${active ? ' active' : ''}`}
-                aria-pressed={active}
-              >
-                {option.icon}
-                <span>{option.label}</span>
-              </button>
-            );
-          })}
-        </div>
-        <div className="header-menu-divider" role="separator" />
         <a href="/resume.html" target="_blank" rel="noreferrer" className="header-menu-option">
           <span>See CV</span>
         </a>
@@ -918,48 +890,12 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [theme, setTheme] = useState(() => {
-    const stored = localStorage.getItem('theme');
-    if (stored) return stored;
-    return 'system';
-  });
+  const resolvedDark = true;
 
-  const handleSetTheme = (newTheme) => {
-    if (!document.startViewTransition) {
-      setTheme(newTheme);
-      return;
-    }
-    document.startViewTransition(() => {
-      setTheme(newTheme);
-    });
-  };
-
-  const [resolvedDark, setResolvedDark] = useState(false);
-  // Apply theme
   useEffect(() => {
-    const resolveTheme = () => {
-      let active = false;
-      if (theme === 'dark') {
-        active = true;
-      } else if (theme === 'light') {
-        active = false;
-      } else {
-        active = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      }
-      document.documentElement.setAttribute('data-theme', active ? 'dark' : 'light');
-      setResolvedDark(active);
-    };
-
-    resolveTheme();
-    localStorage.setItem('theme', theme);
-
-    if (theme === 'system') {
-      const media = window.matchMedia('(prefers-color-scheme: dark)');
-      const listener = () => resolveTheme();
-      media.addEventListener('change', listener);
-      return () => media.removeEventListener('change', listener);
-    }
-  }, [theme]);
+    document.documentElement.setAttribute('data-theme', 'dark');
+    localStorage.removeItem('theme');
+  }, []);
 
   useEffect(() => {
     const r = () => setIsMobile(window.innerWidth < 900);
@@ -1385,7 +1321,7 @@ function App() {
         </nav>
 
         <div className="site-header-actions">
-          <HeaderMenu theme={theme} setTheme={handleSetTheme} launchOverlay={launchOverlay} />
+          <HeaderMenu launchOverlay={launchOverlay} />
           <button
             type="button"
             className="mobile-menu-toggle"
@@ -1422,27 +1358,6 @@ function App() {
                   {item.label}
                 </button>
               ))}
-              <div className="mobile-menu-divider" role="separator" />
-              <div className="mobile-menu-theme-options" role="group" aria-label="Color theme">
-                {THEME_OPTIONS.map(option => {
-                  const active = theme === option.value;
-                  return (
-                    <button
-                      type="button"
-                      key={option.value}
-                      onClick={() => {
-                        handleSetTheme(option.value);
-                        setMobileMenuOpen(false);
-                      }}
-                      className={`header-menu-option${active ? ' active' : ''}`}
-                      aria-pressed={active}
-                    >
-                      {option.icon}
-                      <span>{option.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
               <a
                 href="/resume.html"
                 target="_blank"
