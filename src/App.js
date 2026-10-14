@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { supabase } from './supabaseClient';
 import AdminDashboard from './admin/AdminDashboard';
 import { respond } from './bot/respond';
@@ -8,7 +8,7 @@ import {
   FaLinkedin, FaBars, FaTimes, FaGithub, FaCalendarAlt,
   FaChevronRight, FaChevronLeft, FaStar, FaLaptopCode,
   FaCheck, FaCheckCircle, FaUser, FaLock, FaExternalLinkAlt,
-  FaDesktop, FaCoffee
+  FaDesktop, FaCoffee, FaEllipsisH
 } from 'react-icons/fa';
 import { MdVerified } from 'react-icons/md';
 import {
@@ -171,6 +171,23 @@ const RecommendationSlider = ({ testimonials }) => {
 // ─────────────────────────────────────────────────────────────
 // Gallery Component
 // ─────────────────────────────────────────────────────────────
+const ScrollReveal = ({ as = 'div', children, delay = 0, image = false, ...props }) => {
+  const shouldReduceMotion = useReducedMotion();
+  const MotionElement = motion[as];
+
+  return (
+    <MotionElement
+      {...props}
+      initial={shouldReduceMotion ? false : { opacity: 0, y: image ? 0 : 20 }}
+      whileInView={shouldReduceMotion ? false : { opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.05 }}
+      transition={{ duration: 0.55, delay: shouldReduceMotion ? 0 : delay, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </MotionElement>
+  );
+};
+
 const Gallery = ({ onImageClick }) => {
   const images = ['/me.jpg', '/gal2.jpg', '/gal3.jpg', '/gal4.jpg', '/gall.jpg', '/thesis.jpg', '/baby.jpg', '/baby2.jpg', '/bb.jpg'];
   const ref = useRef(null);
@@ -182,7 +199,7 @@ const Gallery = ({ onImageClick }) => {
   };
 
   return (
-    <section id="gallery" style={{ padding: '5rem 0', borderTop: '1px solid var(--gray-200)' }}>
+    <ScrollReveal as="section" id="gallery" style={{ padding: '5rem 0', borderTop: '1px solid var(--gray-200)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem' }}>
         <div>
           <div className="section-label">08 — Gallery</div>
@@ -211,7 +228,7 @@ const Gallery = ({ onImageClick }) => {
 
       <div ref={ref} className="no-scrollbar" style={{ display: 'flex', gap: '0.75rem', overflowX: 'auto', scrollSnapType: 'x mandatory' }}>
         {images.map((src, i) => (
-          <div key={i} style={{
+          <ScrollReveal as="div" key={i} image delay={i * 0.07} style={{
             flex: '0 0 240px',
             aspectRatio: '4/3',
             borderRadius: '7px',
@@ -229,10 +246,10 @@ const Gallery = ({ onImageClick }) => {
               onMouseEnter={e => { e.currentTarget.style.filter = 'grayscale(0%)'; e.currentTarget.style.transform = 'scale(1.04)'; }}
               onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(15%)'; e.currentTarget.style.transform = 'scale(1)'; }}
             />
-          </div>
+          </ScrollReveal>
         ))}
       </div>
-    </section>
+    </ScrollReveal>
   );
 };
 
@@ -626,7 +643,7 @@ const GithubContributions = () => {
   }, []);
 
   return (
-    <section id="github" style={{ padding: '5rem 0', borderTop: '1px solid var(--gray-200)' }}>
+    <ScrollReveal as="section" id="github" style={{ padding: '5rem 0', borderTop: '1px solid var(--gray-200)' }}>
       <div style={{ border: '1px solid var(--gray-200)', borderRadius: '20px', padding: 'clamp(1.25rem, 4vw, 2.25rem)', background: 'var(--bg)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.75rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
@@ -699,61 +716,71 @@ const GithubContributions = () => {
           <span style={{ marginLeft: '0.2rem' }}>More</span>
         </div>
       </div>
-    </section>
+    </ScrollReveal>
   );
 };
 
 // ─────────────────────────────────────────────────────────────
-// Theme Toggle Capsule Component
+// Theme Menu Component
 // ─────────────────────────────────────────────────────────────
-const ThemeToggleCapsule = ({ theme, setTheme }) => {
+const HeaderMenu = ({ theme, setTheme, launchOverlay }) => {
+  const options = [
+    { value: 'dark', label: 'Dark mode', icon: <FaMoon size={12} /> },
+    { value: 'light', label: 'Light mode', icon: <FaSun size={12} /> },
+    { value: 'system', label: 'System', icon: <FaDesktop size={12} /> }
+  ];
+
   return (
-    <div style={{
-      display: 'inline-flex',
-      alignItems: 'center',
-      background: 'var(--gray-100)',
-      border: '1px solid var(--gray-200)',
-      borderRadius: '9999px',
-      padding: '3px',
-      gap: '3px',
-      width: 'fit-content'
-    }}>
-      {[
-        { value: 'system', icon: <FaDesktop size={11} />, title: 'System preference' },
-        { value: 'light', icon: <FaSun size={11} />, title: 'Light theme' },
-        { value: 'dark', icon: <FaMoon size={11} />, title: 'Dark theme' }
-      ].map(opt => {
-        const active = theme === opt.value;
-        return (
-          <button
-            key={opt.value}
-            type="button"
-            onClick={() => setTheme(opt.value)}
-            title={opt.title}
-            style={{
-              width: '28px',
-              height: '28px',
-              borderRadius: '50%',
-              border: 'none',
-              background: active ? 'var(--bg)' : 'transparent',
-              color: active ? 'var(--ink)' : 'var(--gray-400)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              boxShadow: active ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-              transition: 'all 0.2s ease',
-              outline: 'none',
-              padding: 0
-            }}
-            onMouseEnter={e => { if(!active) e.currentTarget.style.color = 'var(--ink)'; }}
-            onMouseLeave={e => { if(!active) e.currentTarget.style.color = 'var(--gray-400)'; }}
-          >
-            {opt.icon}
-          </button>
-        );
-      })}
-    </div>
+    <details className="header-theme-menu">
+      <summary aria-label="Theme options">
+        <FaEllipsisH size={16} />
+      </summary>
+      <div className="header-menu-options">
+        <div role="group" aria-label="Color theme">
+          {options.map(option => {
+            const active = theme === option.value;
+            return (
+              <button
+                type="button"
+                key={option.value}
+                onClick={event => {
+                  setTheme(option.value);
+                  event.currentTarget.closest('details').open = false;
+                }}
+                className={`header-menu-option${active ? ' active' : ''}`}
+                aria-pressed={active}
+              >
+                {option.icon}
+                <span>{option.label}</span>
+              </button>
+            );
+          })}
+        </div>
+        <div className="header-menu-divider" role="separator" />
+        <button
+          type="button"
+          className="header-menu-option"
+          onClick={event => {
+            launchOverlay('ask');
+            event.currentTarget.closest('details').open = false;
+          }}
+        >
+          <span>Ask anything</span>
+          <kbd>Alt K</kbd>
+        </button>
+        <button
+          type="button"
+          className="header-menu-option"
+          onClick={event => {
+            launchOverlay('test');
+            event.currentTarget.closest('details').open = false;
+          }}
+        >
+          <span>Typing test</span>
+          <kbd>Alt J</kbd>
+        </button>
+      </div>
+    </details>
   );
 };
 
@@ -830,6 +857,7 @@ const launchOverlay = name => window.dispatchEvent(new CustomEvent('ulac-overlay
 
 function App() {
   const [preloaderRemoved, setPreloaderRemoved] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [lightboxImages, setLightboxImages] = useState([]);
   const [lightboxIndex, setLightboxIndex] = useState(-1);
 
@@ -850,8 +878,6 @@ function App() {
 
   const [activeSection, setActiveSection] = useState('hero');
   const [showAllProjects, setShowAllProjects] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentService, setCurrentService] = useState(null);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [view, setView] = useState('portfolio');
   const [misView, setMisView] = useState('dashboard');
@@ -891,8 +917,6 @@ function App() {
   };
 
   const [resolvedDark, setResolvedDark] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
   // Apply theme
   useEffect(() => {
     const resolveTheme = () => {
@@ -979,11 +1003,11 @@ function App() {
   };
 
   const scrollToSection = id => {
-    setMenuOpen(false);
+    setMobileMenuOpen(false);
     window.requestAnimationFrame(() => {
       const el = document.getElementById(id);
       if (!el) return;
-      const headerOffset = isMobile ? 64 : 0;
+      const headerOffset = isMobile ? 104 : 64;
       const top = Math.max(0, el.getBoundingClientRect().top + window.scrollY - headerOffset);
       window.scrollTo({ top, behavior: 'smooth' });
     });
@@ -998,7 +1022,7 @@ function App() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    setFormStatus({ ...formStatus, loading: true });
+    setFormStatus({ loading: true, success: false, error: false, message: '' });
     try {
       const res = await fetch(`${BASE}/api/contact`, {
         method: 'POST',
@@ -1006,7 +1030,7 @@ function App() {
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          subject: currentService?.title || 'General Inquiry',
+          subject: 'General Inquiry',
           message: formData.message,
         }),
       });
@@ -1014,7 +1038,7 @@ function App() {
       setFormStatus({ loading: false, success: true, error: false, message: 'Message sent. Thank you!' });
       setFormData({ name: '', email: '', message: '' });
       if (isLoggedIn) fetchInquiries();
-      setTimeout(() => setFormStatus({ ...formStatus, success: false }), 5000);
+      setTimeout(() => setFormStatus(status => ({ ...status, success: false, message: '' })), 5000);
     } catch (err) {
       setFormStatus({ loading: false, success: false, error: true, message: err.message || 'Something went wrong.' });
     }
@@ -1324,96 +1348,62 @@ function App() {
         </div>
       )}
 
-      {/* ── DESKTOP SIDEBAR ─────────────────────────────────── */}
-      <aside className="app-sidebar">
-        {/* Top: Logo */}
-        <div>
-          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: '"Geist Pixel", "Geist Mono", monospace', fontWeight: 500, fontSize: '15px', color: 'var(--ink)', letterSpacing: 'normal', padding: 0 }}>
-            Ulacdev
-          </button>
-        </div>
-
-        {/* Middle: Navigation Links + Tools */}
-        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', margin: '2rem 0' }}>
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            {navItems.map(n => (
-              <button key={n.id} onClick={() => scrollToSection(n.id)} className={`nav-link${activeSection === n.id ? ' active' : ''}`} style={{ textAlign: 'left' }}>
-                {n.label}
-              </button>
-            ))}
-          </nav>
-
-          {/* Tools: fullscreen overlays */}
-          <div className="sidebar-tools">
-            <button type="button" className="tool-link" onClick={() => launchOverlay('ask')}>
-              <span>ask anything</span><b>alt k</b>
-            </button>
-            <button type="button" className="tool-link" onClick={() => launchOverlay('test')}>
-              <span>typing test</span><b>alt j</b>
-            </button>
-          </div>
-        </div>
-
-        {/* Bottom: Theme toggle & CTA stacked */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', alignItems: 'center', width: '100%' }}>
-          <ThemeToggleCapsule theme={theme} setTheme={handleSetTheme} />
-          
-          <a href="/resume.html" target="_blank" rel="noreferrer" className="btn-glow" style={{ width: '100%', justifyContent: 'center', textDecoration: 'none' }}>
-            See CV
-          </a>
-        </div>
-      </aside>
-
-      {/* ── MOBILE HEADER ───────────────────────────────────── */}
-      <header className="mobile-header">
-        {/* Logo */}
-        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: '"Geist Pixel", "Geist Mono", monospace', fontWeight: 500, fontSize: '15px', color: 'var(--ink)', letterSpacing: 'normal', padding: 0 }}>
+      {/* ── SITE HEADER ─────────────────────────────────────── */}
+      <header className="site-header">
+        <button className="site-brand" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           Ulacdev
         </button>
 
-        {/* Right actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <ThemeToggleCapsule theme={theme} setTheme={handleSetTheme} />
+        <nav className="site-nav" aria-label="Main navigation">
+          {[...navItems, { label: 'Contact', id: 'contact' }].map(n => (
+            <button key={n.id} onClick={() => scrollToSection(n.id)} className={`nav-link${activeSection === n.id ? ' active' : ''}`}>
+              {n.label}
+            </button>
+          ))}
+        </nav>
 
+        <div className="site-header-actions">
+          <HeaderMenu theme={theme} setTheme={handleSetTheme} launchOverlay={launchOverlay} />
+          <a href="/resume.html" target="_blank" rel="noreferrer" className="btn-glow site-cv-link">
+            See CV
+          </a>
           <button
             type="button"
-            aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-            aria-expanded={menuOpen}
+            className="mobile-menu-toggle"
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileMenuOpen}
             aria-controls="mobile-navigation"
-            onClick={() => setMenuOpen(m => !m)}
-            style={{ background: 'none', border: '1px solid var(--gray-200)', width: 32, height: 32, borderRadius: '5px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ink)' }}
+            onClick={() => setMobileMenuOpen(open => !open)}
           >
-            {menuOpen ? <FaTimes size={12} /> : <FaBars size={12} />}
+            {mobileMenuOpen ? <FaTimes size={14} /> : <FaBars size={14} />}
           </button>
         </div>
 
-        {/* Mobile menu dropdown */}
         <AnimatePresence>
-          {menuOpen && (
-            <motion.div
+          {mobileMenuOpen && (
+            <motion.nav
+              id="mobile-navigation"
+              className="mobile-navigation"
+              aria-label="Mobile navigation"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.22 }}
-              style={{ position: 'absolute', top: '56px', left: 0, right: 0, overflow: 'hidden', borderBottom: '1px solid var(--gray-200)', background: 'var(--bg)', zIndex: 999 }}
             >
-              <div id="mobile-navigation" style={{ padding: '1rem 2rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {[...navItems, { label: 'Contact', id: 'contact' }].map(n => (
-                  <button key={n.id} onClick={() => scrollToSection(n.id)} className="nav-link" style={{ textAlign: 'left', padding: '0.5rem 0', borderBottom: '1px solid var(--gray-100)' }}>
-                    {n.label}
-                  </button>
-                ))}
-                <button type="button" className="tool-link tool-link--mobile" onClick={() => { setMenuOpen(false); launchOverlay('ask'); }}>
-                  <span>ask anything</span><b>alt k</b>
+              {[...navItems, { label: 'Contact', id: 'contact' }].map(item => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => scrollToSection(item.id)}
+                  className={`nav-link${activeSection === item.id ? ' active' : ''}`}
+                >
+                  {item.label}
                 </button>
-                <button type="button" className="tool-link tool-link--mobile" onClick={() => { setMenuOpen(false); launchOverlay('test'); }}>
-                  <span>typing test</span><b>alt j</b>
-                </button>
-                <a href="/resume.html" target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)} className="btn-glow" style={{ justifyContent: 'center', marginTop: '0.75rem' }}>
-                  See CV
-                </a>
-              </div>
-            </motion.div>
+              ))}
+              <a href="/resume.html" target="_blank" rel="noreferrer" className="btn-glow mobile-cv-link">
+                See CV
+              </a>
+            </motion.nav>
           )}
         </AnimatePresence>
       </header>
@@ -1422,13 +1412,15 @@ function App() {
       <main className="app-main" style={{ position: 'relative', zIndex: 1 }}>
 
         {/* ── 01 ABOUT ───────────────────────────────────────── */}
-        <section id="about" style={{ padding: '2rem 0 5rem' }}>
+        <ScrollReveal as="section" id="about" style={{ padding: '2rem 0 5rem' }}>
           <div className="about-grid">
 
             {/* Profile image (not in card) */}
             <div className="about-image-wrapper">
               <div className="about-image-container">
-                <img
+                <ScrollReveal
+                  as="img"
+                  image
                   src="/new-pfp.jpg"
                   alt="John Carlo"
                   style={{
@@ -1484,12 +1476,12 @@ function App() {
               </div>
             </div>
           </div>
-        </section>
+        </ScrollReveal>
 
         <div style={{ width: '100%', height: '1px', background: 'var(--gray-200)' }} />
 
         {/* ── 02 SKILLS ───────────────────────────────────────── */}
-        <section id="skills" style={{ padding: '5rem 0' }}>
+        <ScrollReveal as="section" id="skills" style={{ padding: '5rem 0' }}>
           <div style={{ marginBottom: '3rem' }}>
             <div className="section-label">02 — Skills</div>
             <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)', margin: 0 }}>Technical Toolkit</h2>
@@ -1502,7 +1494,7 @@ function App() {
               { category: 'Database', skills: ['MySQL', 'PostgreSQL', 'Supabase', 'Neon', 'Clever Cloud'] },
               { category: 'Tools & Platform', skills: ['Git', 'GitHub', 'VS Code', 'Cursor', 'Antigravity', 'Vercel', 'Render', 'Cloudflare'] }
             ].map((cat, i) => (
-              <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <ScrollReveal as="div" key={i} delay={i * 0.07} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--ink)', borderBottom: '1px solid var(--gray-200)', paddingBottom: '0.5rem', margin: 0 }}>
                   {cat.category}
                 </h3>
@@ -1520,15 +1512,15 @@ function App() {
                     );
                   })}
                 </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
-        </section>
+        </ScrollReveal>
 
         <div style={{ width: '100%', height: '1px', background: 'var(--gray-200)' }} />
 
         {/* ── 03 EXPERTISE ───────────────────────────────────── */}
-        <section id="services" style={{ padding: '5rem 0' }}>
+        <ScrollReveal as="section" id="services" style={{ padding: '5rem 0' }}>
           <div style={{ marginBottom: '3rem' }}>
             <div className="section-label">03 — Expertise</div>
             <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)', margin: 0 }}>What I Build</h2>
@@ -1543,7 +1535,7 @@ function App() {
               { num: '05', title: 'Responsive UI/UX', desc: 'Modern, mobile-first interfaces focused on user experience and brand identity.', tag: 'Pixel-perfect', image: responsiveUiUxArt },
               { num: '06', title: 'API Development', desc: 'Secure RESTful APIs connecting platforms with mobile apps and third-party services.', tag: 'Documented', image: apiDevelopmentArt }
             ].map((s, i) => (
-              <div key={i} className="service-card"
+              <ScrollReveal as="div" key={i} delay={i * 0.07} className="service-card"
                 style={{
                   position: 'relative',
                   isolation: 'isolate',
@@ -1565,15 +1557,15 @@ function App() {
                   <p style={{ fontSize: '0.875rem', color: 'var(--gray-500)', lineHeight: '1.6', margin: 0 }}>{s.desc}</p>
                   <span className="chip-border" style={{ marginTop: '0.5rem', width: 'fit-content' }}>{s.tag}</span>
                 </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
-        </section>
+        </ScrollReveal>
 
         <div style={{ width: '100%', height: '1px', background: 'var(--gray-200)' }} />
 
         {/* ── 04 EXPERIENCE ──────────────────────────────────── */}
-        <section id="experience" style={{ padding: '5rem 0' }}>
+        <ScrollReveal as="section" id="experience" style={{ padding: '5rem 0' }}>
           <div style={{ marginBottom: '3rem' }}>
             <div className="section-label">04 — Experience</div>
             <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)', margin: 0 }}>Professional Path</h2>
@@ -1607,7 +1599,7 @@ function App() {
                 badge: 'Internship'
               }
             ].map((exp, i) => (
-              <div key={i} className="timeline-item" style={{ position: 'relative', paddingLeft: '2.5rem', paddingBottom: '2.5rem' }}>
+              <ScrollReveal as="div" key={i} delay={i * 0.08} className="timeline-item" style={{ position: 'relative', paddingLeft: '2.5rem', paddingBottom: '2.5rem' }}>
                 <div className="timeline-dot" />
                 <div style={{ position: 'relative', overflow: 'hidden', border: '1px solid var(--gray-200)', borderRadius: '8px', padding: '1.5rem', background: 'var(--gray-50)', textAlign: 'left', transition: 'border-color 0.2s' }}
                   onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gray-400)'}
@@ -1634,15 +1626,15 @@ function App() {
                     <p style={{ fontSize: '0.9375rem', color: 'var(--gray-500)', lineHeight: '1.65', margin: 0 }}>{exp.desc}</p>
                   </div>
                 </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
-        </section>
+        </ScrollReveal>
 
         <div style={{ width: '100%', height: '1px', background: 'var(--gray-200)' }} />
 
         {/* ── 05 PROJECTS ────────────────────────────────────── */}
-        <section id="projects" style={{ padding: '5rem 0' }}>
+        <ScrollReveal as="section" id="projects" style={{ padding: '5rem 0' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
               <div className="section-label">05 — Works</div>
@@ -1662,7 +1654,7 @@ function App() {
             ) : (
               <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: isMobile ? '1rem' : '1.25rem' }}>
                 {ALL_PROJECTS_DATA.map((p, i) => (
-                  <a key={i} href={p.url} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', border: '1px solid var(--gray-200)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'var(--bg)', transition: 'border-color 0.2s' }}
+                  <ScrollReveal as="a" key={i} delay={i * 0.07} href={p.url} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', border: '1px solid var(--gray-200)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'var(--bg)', transition: 'border-color 0.2s' }}
                     onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gray-400)'}
                     onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--gray-200)'}
                   >
@@ -1679,17 +1671,17 @@ function App() {
                         {p.tags.map(t => <span key={t} className="skill-tag">{t}</span>)}
                       </div>
                     </div>
-                  </a>
+                  </ScrollReveal>
                 ))}
               </div>
             )}
           </div>
-        </section>
+        </ScrollReveal>
 
         <div style={{ width: '100%', height: '1px', background: 'var(--gray-200)' }} />
 
         {/* ── 06 CREDENTIALS ─────────────────────────────────── */}
-        <section id="credentials" style={{ padding: '5rem 0' }}>
+        <ScrollReveal as="section" id="credentials" style={{ padding: '5rem 0' }}>
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1.3fr', gap: isMobile ? '3.5rem' : '5rem', alignItems: 'start' }}>
 
             {/* Certifications */}
@@ -1710,7 +1702,7 @@ function App() {
                   url: 'https://drive.google.com/file/d/1cglPPYuWbCDnZOVmWlq5bx0pZ3keFK1M/view?usp=drive_link'
                 }
               ].map((cert, i) => (
-                <div key={i} onClick={() => cert.url !== '#' && window.open(cert.url, '_blank')} style={{
+                <ScrollReveal as="div" key={i} delay={i * 0.08} onClick={() => cert.url !== '#' && window.open(cert.url, '_blank')} style={{
                   border: '1px solid var(--gray-200)', borderRadius: '8px', padding: '1.25rem',
                   background: 'var(--gray-50)', cursor: 'pointer', display: 'flex', gap: '1rem', alignItems: 'center',
                   transition: 'border-color 0.2s'
@@ -1726,12 +1718,12 @@ function App() {
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', marginTop: '3px' }}>{cert.issuer}</div>
                   </div>
                   <FaExternalLinkAlt size={11} style={{ color: 'var(--gray-400)' }} />
-                </div>
+                </ScrollReveal>
               ))}
             </div>
 
             {/* Reviews */}
-            <div id="reviews" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <ScrollReveal as="div" id="reviews" delay={0.08} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <div>
                   <div className="section-label">07 — Reviews</div>
@@ -1745,9 +1737,9 @@ function App() {
                 </button>
               </div>
               <RecommendationSlider testimonials={testimonials} />
-            </div>
+            </ScrollReveal>
           </div>
-        </section>
+        </ScrollReveal>
 
         {/* ── 08 GALLERY ─────────────────────────────────────── */}
         <Gallery onImageClick={(imgs, idx) => {
@@ -1759,8 +1751,8 @@ function App() {
         <GithubContributions />
 
       {/* ── FOOTER / CONTACT ───────────────────────────────── */}
-      <footer id="contact" style={{ borderTop: '1px solid var(--gray-200)', background: 'var(--bg)' }}>
-        <div style={{ padding: '5rem 0 3.5rem', maxWidth: '880px', margin: '0 auto' }}>
+      <ScrollReveal as="footer" id="contact" style={{ borderTop: '1px solid var(--gray-200)', background: 'var(--bg)' }}>
+        <div style={{ padding: '5rem 0 3.5rem', maxWidth: '1280px', margin: '0 auto' }}>
           <div className="footer-contact-grid">
 
             {/* Left CTA */}
@@ -1772,38 +1764,78 @@ function App() {
               <p style={{ fontSize: '1.0625rem', color: 'var(--gray-500)', lineHeight: '1.7', margin: 0 }}>
                 Have a project, idea, or full-time position to discuss? Drop me a message and I'll get back within 24 hours.
               </p>
-              <div style={{ marginTop: '0.5rem' }}>
-                <button onClick={() => setIsModalOpen(true)} className="btn-glow">
-                  Start a conversation
-                </button>
+              <div className="footer-contact-details">
+                <div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.35rem' }}>Email</div>
+                  <a href="mailto:johncarloaganan.startuplab@gmail.com" style={{ fontSize: '0.9375rem', color: 'var(--ink)', textDecoration: 'none', transition: 'color 0.2s' }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'var(--gray-500)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'var(--ink)'}
+                  >
+                    johncarloaganan.startuplab@gmail.com
+                  </a>
+                </div>
+                <div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.35rem' }}>Location</div>
+                  <span style={{ fontSize: '0.9375rem', color: 'var(--gray-500)' }}>Naic, Cavite, Philippines</span>
+                </div>
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+                  <a href="https://github.com" target="_blank" rel="noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--gray-400)', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.08em', transition: 'color 0.2s' }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-400)'}
+                  >GitHub</a>
+                  <a href="https://linkedin.com" target="_blank" rel="noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--gray-400)', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.08em', transition: 'color 0.2s' }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-400)'}
+                  >LinkedIn</a>
+                </div>
               </div>
             </div>
 
-            {/* Right: contact links */}
-            <div className="footer-right-links">
-              <div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.35rem' }}>Email</div>
-                <a href="mailto:johncarloaganan.startuplab@gmail.com" style={{ fontSize: '0.9375rem', color: 'var(--ink)', textDecoration: 'none', transition: 'color 0.2s' }}
-                  onMouseEnter={e => e.currentTarget.style.color = 'var(--gray-500)'}
-                  onMouseLeave={e => e.currentTarget.style.color = 'var(--ink)'}
-                >
-                  johncarloaganan.startuplab@gmail.com
-                </a>
+            {/* Right: inquiry form and contact links */}
+            <div className="contact-form-column">
+              <div className="contact-form-panel">
+                <p className="contact-form-eyebrow">Inquiry</p>
+                <h3 className="contact-form-title">Start a conversation</h3>
+                <form onSubmit={handleSubmit} className="contact-form">
+                  <input
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    type="text"
+                    placeholder="Your name"
+                    className="form-input"
+                  />
+                  <input
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                    type="email"
+                    placeholder="your@email.com"
+                    className="form-input"
+                  />
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
+                    placeholder="Tell me about your project..."
+                    rows="4"
+                    className="form-input"
+                    style={{ resize: 'vertical' }}
+                  />
+                  {formStatus.message && (
+                    <p className={`contact-form-status${formStatus.error ? ' error' : ' success'}`} role="status">
+                      {formStatus.message}
+                    </p>
+                  )}
+                  <button type="submit" disabled={formStatus.loading} className="btn-glow contact-form-submit">
+                    {formStatus.loading ? 'Sending…' : 'Send Message'}
+                  </button>
+                </form>
               </div>
-              <div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.35rem' }}>Location</div>
-                <span style={{ fontSize: '0.9375rem', color: 'var(--gray-500)' }}>Naic, Cavite, Philippines</span>
-              </div>
-              <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-                <a href="https://github.com" target="_blank" rel="noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--gray-400)', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.08em', transition: 'color 0.2s' }}
-                  onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
-                  onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-400)'}
-                >GitHub</a>
-                <a href="https://linkedin.com" target="_blank" rel="noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--gray-400)', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.08em', transition: 'color 0.2s' }}
-                  onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
-                  onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-400)'}
-                >LinkedIn</a>
-              </div>
+
             </div>
           </div>
 
@@ -1820,47 +1852,12 @@ function App() {
             </button>
           </div>
         </div>
-      </footer>
+      </ScrollReveal>
 
       </main>
 
       {/* ── CHATBOT ─────────────────────────────────────────── */}
       <ChatBot />
-
-      {/* ── INQUIRY MODAL ───────────────────────────────────── */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <div style={{ position: 'fixed', inset: 0, zIndex: 10005, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsModalOpen(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(4px)' }} />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              style={{ background: 'var(--bg)', border: '1px solid var(--gray-200)', borderRadius: '12px', padding: '2.5rem', width: '100%', maxWidth: '420px', zIndex: 1, position: 'relative' }}
-            >
-              <button onClick={() => setIsModalOpen(false)} style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'none', border: '1px solid var(--gray-200)', color: 'var(--gray-500)', width: 28, height: 28, borderRadius: '5px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'border-color 0.2s' }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--ink)'}
-                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--gray-200)'}
-              >×</button>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>Inquiry</p>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, marginBottom: '1.5rem', color: 'var(--ink)' }}>
-                {currentService ? `Re: ${currentService.title}` : 'Start a conversation'}
-              </h3>
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <input name="name" value={formData.name} onChange={handleInputChange} required type="text" placeholder="Your name" className="form-input" />
-                <input name="email" value={formData.email} onChange={handleInputChange} required type="email" placeholder="your@email.com" className="form-input" />
-                <textarea name="message" value={formData.message} onChange={handleInputChange} required placeholder="Tell me about your project..." rows="4" className="form-input" style={{ resize: 'none' }} />
-                {formStatus.message && (
-                  <p style={{ fontSize: '0.8125rem', color: formStatus.success ? '#16a34a' : '#dc2626', fontWeight: 500 }}>{formStatus.message}</p>
-                )}
-                <button type="submit" disabled={formStatus.loading} className="btn-glow" style={{ width: '100%', justifyContent: 'center' }}>
-                  {formStatus.loading ? 'Sending…' : 'Send Message'}
-                </button>
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
       {/* ── FEEDBACK MODAL ──────────────────────────────────── */}
       <AnimatePresence>
