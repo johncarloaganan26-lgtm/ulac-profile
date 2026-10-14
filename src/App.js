@@ -8,7 +8,7 @@ import {
   FaLinkedin, FaBars, FaTimes, FaGithub, FaCalendarAlt,
   FaChevronRight, FaChevronLeft, FaStar, FaLaptopCode,
   FaCheck, FaCheckCircle, FaUser, FaLock, FaExternalLinkAlt,
-  FaDesktop, FaCoffee, FaEllipsisH
+  FaDesktop, FaCoffee, FaEllipsisV
 } from 'react-icons/fa';
 import { MdVerified } from 'react-icons/md';
 import {
@@ -733,7 +733,7 @@ const HeaderMenu = ({ theme, setTheme, launchOverlay }) => {
   return (
     <details className="header-theme-menu">
       <summary aria-label="Theme options">
-        <FaEllipsisH size={16} />
+        <FaEllipsisV size={16} />
       </summary>
       <div className="header-menu-options">
         <div role="group" aria-label="Color theme">
@@ -858,6 +858,7 @@ const launchOverlay = name => window.dispatchEvent(new CustomEvent('ulac-overlay
 function App() {
   const [preloaderRemoved, setPreloaderRemoved] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [headerScrolled, setHeaderScrolled] = useState(false);
   const [lightboxImages, setLightboxImages] = useState([]);
   const [lightboxIndex, setLightboxIndex] = useState(-1);
 
@@ -1139,6 +1140,20 @@ function App() {
   }, [isLoggedIn]);
 
   useEffect(() => {
+    let isScrolled = null;
+    const updateHeader = () => {
+      const nextIsScrolled = window.scrollY > 64;
+      if (nextIsScrolled === isScrolled) return;
+      isScrolled = nextIsScrolled;
+      setHeaderScrolled(nextIsScrolled);
+    };
+
+    updateHeader();
+    window.addEventListener('scroll', updateHeader, { passive: true });
+    return () => window.removeEventListener('scroll', updateHeader);
+  }, []);
+
+  useEffect(() => {
     const timer = setTimeout(() => setPreloaderRemoved(true), 600);
     const observer = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) setActiveSection(e.target.id); });
@@ -1337,6 +1352,10 @@ function App() {
     { label: 'Gallery', id: 'gallery' },
     { label: 'GitHub', id: 'github' },
   ];
+  const primaryNavItems = navItems.filter(item =>
+    ['about', 'skills', 'services', 'experience', 'projects'].includes(item.id)
+  );
+  primaryNavItems.push({ label: 'Contact', id: 'contact' });
 
   return (
     <div className="app-layout" style={{ position: 'relative', minHeight: '100vh' }}>
@@ -1349,13 +1368,13 @@ function App() {
       )}
 
       {/* ── SITE HEADER ─────────────────────────────────────── */}
-      <header className="site-header">
+      <header className={`site-header${headerScrolled ? ' site-header--scrolled' : ''}`}>
         <button className="site-brand" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           Ulacdev
         </button>
 
         <nav className="site-nav" aria-label="Main navigation">
-          {[...navItems, { label: 'Contact', id: 'contact' }].map(n => (
+          {primaryNavItems.map(n => (
             <button key={n.id} onClick={() => scrollToSection(n.id)} className={`nav-link${activeSection === n.id ? ' active' : ''}`}>
               {n.label}
             </button>

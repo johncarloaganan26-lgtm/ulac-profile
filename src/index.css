@@ -781,6 +781,10 @@ body::before {
   position: sticky;
   top: 0;
   display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: 1.5rem;
@@ -790,7 +794,78 @@ body::before {
   background: var(--bg);
   border-bottom: 1px solid var(--gray-200);
   z-index: 1000;
-  transition: var(--theme-transition);
+  interpolate-size: allow-keywords;
+  transition: top 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    gap 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    grid-template-columns 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-radius 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+@media (min-width: 1100px) {
+  .site-header--scrolled {
+    top: 0.75rem;
+    width: fit-content;
+    max-width: calc(100% - 2rem);
+
+    padding: 0 1rem;
+    grid-template-columns: auto auto auto;
+    justify-content: center;
+    gap: 2.5rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 999px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .site-header--scrolled .site-nav {
+    gap: 0.75rem;
+  }
+
+  .site-header .site-brand {
+    transition: font-size 0.3s ease;
+  }
+
+  .site-header--scrolled .site-brand,
+  .site-header--scrolled .site-cv-link {
+    font-size: 0.6875rem;
+  }
+
+  .site-cv-link {
+    transition: font-size 0.3s ease, padding 0.3s ease, opacity 0.2s ease;
+  }
+
+  .site-header--scrolled .site-cv-link {
+    padding: 0.4rem 0.8rem;
+  }
+
+  .site-header .header-theme-menu summary {
+    transition: width 0.3s ease, height 0.3s ease, background-color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .site-header--scrolled .header-theme-menu summary {
+    width: 28px;
+    height: 28px;
+    border-color: var(--gray-300);
+    background: var(--gray-100);
+  }
+
+  .site-header .header-theme-menu summary svg {
+    transition: width 0.3s ease, height 0.3s ease;
+  }
+
+  .site-header--scrolled .header-theme-menu summary svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .site-header--scrolled .header-theme-menu summary:hover,
+  .site-header--scrolled .header-theme-menu[open] summary {
+    background: var(--gray-200);
+  }
 }
 
 .site-brand {
@@ -814,6 +889,7 @@ body::before {
   min-width: 0;
   overflow-x: auto;
   scrollbar-width: none;
+  transition: gap 0.3s ease;
 }
 
 .site-nav::-webkit-scrollbar {
@@ -822,6 +898,7 @@ body::before {
 
 .site-nav .nav-link {
   flex: 0 0 auto;
+  text-transform: none;
 }
 
 .mobile-menu-toggle,
@@ -925,6 +1002,7 @@ body::before {
 
 .site-cv-link {
   white-space: nowrap;
+  text-transform: none;
   text-decoration: none;
 }
 
@@ -1020,12 +1098,14 @@ body::before {
     flex: 0 0 auto;
     padding: 0.55rem 0;
     border-bottom: 1px solid var(--gray-100);
+    text-transform: none;
     text-align: left;
   }
 
   .mobile-cv-link {
     justify-content: center;
     margin-top: 0.65rem;
+    text-transform: none;
     text-decoration: none;
   }
 }
