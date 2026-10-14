@@ -5,7 +5,7 @@ import AdminDashboard from './admin/AdminDashboard';
 import { respond } from './bot/respond';
 import {
   FaEnvelope, FaMapMarkerAlt, FaCode, FaMoon, FaSun,
-  FaLinkedin, FaBars, FaTimes, FaGithub, FaCalendarAlt,
+  FaLinkedin, FaTimes, FaGithub, FaCalendarAlt,
   FaChevronRight, FaChevronLeft, FaStar, FaLaptopCode,
   FaCheck, FaCheckCircle, FaUser, FaLock, FaExternalLinkAlt,
   FaDesktop, FaCoffee
@@ -732,11 +732,10 @@ const HeaderMenu = ({ theme, setTheme, launchOverlay }) => {
 
   return (
     <details className="header-theme-menu">
-      <summary aria-label="Theme options">
-        <span className="header-menu-dots" aria-hidden="true">
-          <span className="header-menu-dot" />
-          <span className="header-menu-dot" />
-          <span className="header-menu-dot" />
+      <summary aria-label="Menu options">
+        <span className="header-menu-burger" aria-hidden="true">
+          <span />
+          <span />
         </span>
       </summary>
       <div className="header-menu-options">
@@ -761,6 +760,9 @@ const HeaderMenu = ({ theme, setTheme, launchOverlay }) => {
           })}
         </div>
         <div className="header-menu-divider" role="separator" />
+        <a href="/resume.html" target="_blank" rel="noreferrer" className="header-menu-option">
+          <span>See CV</span>
+        </a>
         <button
           type="button"
           className="header-menu-option"
@@ -1387,9 +1389,6 @@ function App() {
 
         <div className="site-header-actions">
           <HeaderMenu theme={theme} setTheme={handleSetTheme} launchOverlay={launchOverlay} />
-          <a href="/resume.html" target="_blank" rel="noreferrer" className="btn-glow site-cv-link">
-            See CV
-          </a>
           <button
             type="button"
             className="mobile-menu-toggle"
@@ -1398,7 +1397,10 @@ function App() {
             aria-controls="mobile-navigation"
             onClick={() => setMobileMenuOpen(open => !open)}
           >
-            {mobileMenuOpen ? <FaTimes size={14} /> : <FaBars size={14} />}
+            <span className="mobile-menu-icon" aria-hidden="true">
+              <span />
+              <span />
+            </span>
           </button>
         </div>
 
@@ -1423,9 +1425,6 @@ function App() {
                   {item.label}
                 </button>
               ))}
-              <a href="/resume.html" target="_blank" rel="noreferrer" className="btn-glow mobile-cv-link">
-                See CV
-              </a>
             </motion.nav>
           )}
         </AnimatePresence>
