@@ -872,13 +872,17 @@ body::before {
     background: var(--gray-100);
   }
 
-  .site-header .header-theme-menu summary svg {
-    transition: width 0.3s ease, height 0.3s ease;
+  .site-header .header-menu-dots {
+    transition: transform 0.3s ease;
   }
 
-  .site-header--scrolled .header-theme-menu summary svg {
-    width: 14px;
-    height: 14px;
+  .site-header--scrolled .header-theme-menu summary .header-menu-dots {
+    transform: scale(0.82);
+  }
+
+  .site-header--scrolled .header-theme-menu summary .header-menu-dot {
+    width: 2.5px;
+    height: 2.5px;
   }
 
   .site-header--scrolled .header-theme-menu summary:hover,
@@ -947,6 +951,24 @@ body::before {
   color: var(--ink);
   cursor: pointer;
   list-style: none;
+}
+
+.header-menu-dots {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  line-height: 0;
+}
+
+.header-menu-dot {
+  display: block;
+  width: 2.5px;
+  height: 2.5px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.8;
 }
 
 .header-theme-menu summary::-webkit-details-marker {

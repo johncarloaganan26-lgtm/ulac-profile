@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.291d9f93.css",
-    "main.js": "./static/js/main.b68cd985.js",
+    "main.css": "./static/css/main.95d25580.css",
+    "main.js": "./static/js/main.05901013.js",
     "static/media/Screenshot 2026-01-28 035743.png": "./static/media/Screenshot 2026-01-28 035743.f703da5b58f5f1c0b9d5.png",
     "static/media/Screenshot 2026-02-27 090848.png": "./static/media/Screenshot 2026-02-27 090848.ece56793aeb3d7fc0ec8.png",
     "static/media/dormpulse.png": "./static/media/dormpulse.d27fd614570f1e98c1b6.png",
@@ -22,12 +22,18 @@
     "static/media/babybliss-logo.png": "./static/media/babybliss-logo.e71913c2c7cd5b4f79f2.png",
     "static/media/nagco-dashboard.png": "./static/media/nagco-dashboard.ba315b68475b3f760f9b.png",
     "static/media/startuplab-logo.webp": "./static/media/startuplab-logo.ebb7bede39dae13a5112.webp",
+    "static/media/database-architecture.svg": "./static/media/database-architecture.1246fb9ecd317fc0aee85788cbb01031.svg",
+    "static/media/custom-web-apps.svg": "./static/media/custom-web-apps.1254a603ec7291302d99d283ff485ed5.svg",
+    "static/media/full-stack-systems.svg": "./static/media/full-stack-systems.8bcddbff688baa0c22ac0f67cf296d59.svg",
+    "static/media/ecommerce-solutions.svg": "./static/media/ecommerce-solutions.1dccd32ae516d424cd6e57dfd20c2a96.svg",
+    "static/media/responsive-ui-ux.svg": "./static/media/responsive-ui-ux.5a7ec93d872e9ceaa5079173db972e27.svg",
+    "static/media/api-development.svg": "./static/media/api-development.1c215b550ffd591d7cb7f47d359bec17.svg",
     "index.html": "./index.html",
-    "main.291d9f93.css.map": "./static/css/main.291d9f93.css.map",
-    "main.b68cd985.js.map": "./static/js/main.b68cd985.js.map"
+    "main.95d25580.css.map": "./static/css/main.95d25580.css.map",
+    "main.05901013.js.map": "./static/js/main.05901013.js.map"
   },
   "entrypoints": [
-    "static/css/main.291d9f93.css",
-    "static/js/main.b68cd985.js"
+    "static/css/main.95d25580.css",
+    "static/js/main.05901013.js"
   ]
 }

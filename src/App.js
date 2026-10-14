@@ -8,7 +8,7 @@ import {
   FaLinkedin, FaBars, FaTimes, FaGithub, FaCalendarAlt,
   FaChevronRight, FaChevronLeft, FaStar, FaLaptopCode,
   FaCheck, FaCheckCircle, FaUser, FaLock, FaExternalLinkAlt,
-  FaDesktop, FaCoffee, FaEllipsisV
+  FaDesktop, FaCoffee
 } from 'react-icons/fa';
 import { MdVerified } from 'react-icons/md';
 import {
@@ -733,7 +733,11 @@ const HeaderMenu = ({ theme, setTheme, launchOverlay }) => {
   return (
     <details className="header-theme-menu">
       <summary aria-label="Theme options">
-        <FaEllipsisV size={16} />
+        <span className="header-menu-dots" aria-hidden="true">
+          <span className="header-menu-dot" />
+          <span className="header-menu-dot" />
+          <span className="header-menu-dot" />
+        </span>
       </summary>
       <div className="header-menu-options">
         <div role="group" aria-label="Color theme">
