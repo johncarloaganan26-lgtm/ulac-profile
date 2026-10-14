@@ -721,7 +721,7 @@ body::before {
 
 @media (max-width: 900px) {
   .about-grid {
-    flex-direction: column;
+    flex-direction: column-reverse;
     gap: 3.5rem;
     align-items: stretch;
   }
