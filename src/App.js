@@ -865,7 +865,6 @@ const launchOverlay = name => window.dispatchEvent(new CustomEvent('ulac-overlay
 function App() {
   const [preloaderRemoved, setPreloaderRemoved] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [headerScrolled, setHeaderScrolled] = useState(false);
   const [lightboxImages, setLightboxImages] = useState([]);
   const [lightboxIndex, setLightboxIndex] = useState(-1);
 
@@ -1147,20 +1146,6 @@ function App() {
   }, [isLoggedIn]);
 
   useEffect(() => {
-    let isScrolled = null;
-    const updateHeader = () => {
-      const nextIsScrolled = window.scrollY > 64;
-      if (nextIsScrolled === isScrolled) return;
-      isScrolled = nextIsScrolled;
-      setHeaderScrolled(nextIsScrolled);
-    };
-
-    updateHeader();
-    window.addEventListener('scroll', updateHeader, { passive: true });
-    return () => window.removeEventListener('scroll', updateHeader);
-  }, []);
-
-  useEffect(() => {
     const timer = setTimeout(() => setPreloaderRemoved(true), 600);
     const observer = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) setActiveSection(e.target.id); });
@@ -1375,7 +1360,7 @@ function App() {
       )}
 
       {/* ── SITE HEADER ─────────────────────────────────────── */}
-      <header className={`site-header${headerScrolled ? ' site-header--scrolled' : ' site-header--over-hero'}`}>
+      <header className="site-header site-header--over-hero">
         <button className="site-brand" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           Ulacdev
         </button>
@@ -1545,7 +1530,7 @@ function App() {
           </div>
         </ScrollReveal>
 
-        <div style={{ width: '100%', height: '1px', background: 'var(--gray-200)' }} />
+        <div className="section-divider" />
 
         {/* ── 02 SKILLS ───────────────────────────────────────── */}
         <ScrollReveal as="section" id="skills" style={{ padding: '5rem 0' }}>
@@ -1584,7 +1569,7 @@ function App() {
           </div>
         </ScrollReveal>
 
-        <div style={{ width: '100%', height: '1px', background: 'var(--gray-200)' }} />
+        <div className="section-divider" />
 
         {/* ── 03 EXPERTISE ───────────────────────────────────── */}
         <ScrollReveal as="section" id="services" style={{ padding: '5rem 0' }}>
@@ -1629,7 +1614,7 @@ function App() {
           </div>
         </ScrollReveal>
 
-        <div style={{ width: '100%', height: '1px', background: 'var(--gray-200)' }} />
+        <div className="section-divider" />
 
         {/* ── 04 EXPERIENCE ──────────────────────────────────── */}
         <ScrollReveal as="section" id="experience" style={{ padding: '5rem 0' }}>
@@ -1698,7 +1683,7 @@ function App() {
           </div>
         </ScrollReveal>
 
-        <div style={{ width: '100%', height: '1px', background: 'var(--gray-200)' }} />
+        <div className="section-divider" />
 
         {/* ── 05 PROJECTS ────────────────────────────────────── */}
         <ScrollReveal as="section" id="projects" style={{ padding: '5rem 0' }}>
@@ -1745,7 +1730,7 @@ function App() {
           </div>
         </ScrollReveal>
 
-        <div style={{ width: '100%', height: '1px', background: 'var(--gray-200)' }} />
+        <div className="section-divider" />
 
         {/* ── 06 CREDENTIALS ─────────────────────────────────── */}
         <ScrollReveal as="section" id="credentials" style={{ padding: '5rem 0' }}>
