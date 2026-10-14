@@ -1896,12 +1896,6 @@ function App() {
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
               © 2026 John Carlo Aganan
             </span>
-            <button onClick={() => { setView('mis'); window.location.hash = '#admin'; if (window.history.pushState) window.history.pushState({}, '', '/admin'); }} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-300)', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '0.08em', textTransform: 'uppercase', transition: 'color 0.2s', padding: 0 }}
-              onMouseEnter={e => e.currentTarget.style.color = 'var(--gray-500)'}
-              onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-300)'}
-            >
-              Admin
-            </button>
           </div>
         </div>
       </ScrollReveal>
