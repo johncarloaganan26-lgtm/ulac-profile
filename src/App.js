@@ -266,7 +266,7 @@ const Gallery = ({ onImageClick }) => {
 };
 
 // ─────────────────────────────────────────────────────────────
-// Project 3D Carousel Component & Data
+// Project Data
 // ─────────────────────────────────────────────────────────────
 const ALL_PROJECTS_DATA = [
   {
@@ -370,218 +370,6 @@ const ALL_PROJECTS_DATA = [
     icon: <img src={startuplabLogo} alt="StartupLab Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
   }
 ];
-
-const Project3DCarousel = ({ projects, isMobile, isDark }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const handleNext = () => {
-    setActiveIndex(prev => (prev + 1) % projects.length);
-  };
-
-  const handlePrev = () => {
-    setActiveIndex(prev => (prev - 1 + projects.length) % projects.length);
-  };
-
-  const total = projects.length;
-  const leftIndex = (activeIndex - 1 + total) % total;
-  const rightIndex = (activeIndex + 1) % total;
-
-  return (
-    <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2.5rem' }}>
-      <div style={{ position: 'relative', width: '100%', height: '340px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        overflow: 'visible',
-        perspective: '1000px',
-        padding: '1rem 0'
-      }}>
-        {projects.map((project, idx) => {
-          let position = 'hidden';
-          if (idx === activeIndex) position = 'center';
-          else if (idx === leftIndex && !isMobile) position = 'left';
-          else if (idx === rightIndex && !isMobile) position = 'right';
-
-          if (position === 'hidden') return null;
-
-          const isCenter = position === 'center';
-          const isLeft = position === 'left';
-          const isRight = position === 'right';
-
-          let translate = '0px';
-          let rotate = '0deg';
-          let scale = 1;
-          let zIndex = 10;
-          let opacity = 1;
-
-          if (isLeft) {
-            translate = '-130px';
-            rotate = '-6deg';
-            scale = 0.92;
-            zIndex = 5;
-            opacity = 0.85;
-          } else if (isRight) {
-            translate = '130px';
-            rotate = '6deg';
-            scale = 0.92;
-            zIndex = 5;
-            opacity = 0.85;
-          }
-
-          return (
-            <motion.div
-              key={project.title}
-              onClick={() => {
-                if (isLeft) handlePrev();
-                if (isRight) handleNext();
-              }}
-              style={{
-                position: 'absolute',
-                width: 'clamp(240px, 32vw, 300px)',
-                height: '300px',
-                background: isDark ? '#0d0d11' : '#ffffff',
-                border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid var(--gray-200)',
-                borderRadius: '16px',
-                padding: '1.5rem',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                boxShadow: isCenter ? (isDark ? '0 25px 50px -12px rgba(0, 0, 0, 0.5)' : '0 25px 50px -12px rgba(0, 0, 0, 0.08)') : (isDark ? '0 10px 20px -5px rgba(0, 0, 0, 0.3)' : '0 10px 20px -5px rgba(0, 0, 0, 0.05)'),
-                cursor: isCenter ? 'default' : 'pointer',
-                userSelect: 'none',
-                zIndex,
-                transformStyle: 'preserve-3d',
-                x: translate,
-                rotateZ: rotate,
-                scale,
-                opacity
-              }}
-              animate={{
-                x: translate,
-                rotateZ: rotate,
-                scale,
-                opacity,
-                zIndex
-              }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            >
-              {/* Card Badge */}
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <span style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  background: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
-                  color: isDark ? '#ffffff' : 'var(--ink)',
-                  border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid var(--gray-200)',
-                  borderRadius: '9999px',
-                  padding: '4px 14px',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.625rem',
-                  fontWeight: 700,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  boxShadow: isDark ? '0 2px 4px rgba(0,0,0,0.15)' : 'none'
-                }}>
-                  {project.badge}
-                </span>
-              </div>
-
-              {/* Card Body */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem', flex: 1, justifyContent: 'center' }}>
-                <div style={{
-                  width: '56px',
-                  height: '56px',
-                  borderRadius: '12px',
-                  background: (project.gradient === '#ffffff') ? (isDark ? '#18181b' : '#ffffff') : project.gradient,
-                  border: (project.gradient === '#ffffff' && !isDark) ? '1px solid var(--gray-200)' : 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: isDark ? '#ffffff' : 'var(--ink)',
-                  boxShadow: '0 8px 16px rgba(0,0,0,0.15)',
-                  overflow: 'hidden'
-                }}>
-                  {project.icon}
-                </div>
-
-                <div style={{ textAlign: 'center' }}>
-                  <h4 style={{ fontSize: '1.15rem', fontWeight: 700, color: isDark ? '#ffffff' : 'var(--ink)', margin: 0, letterSpacing: '-0.02em' }}>{project.title}</h4>
-                  <p style={{ fontSize: '0.8125rem', color: isDark ? '#a1a1aa' : 'var(--gray-500)', lineHeight: '1.5', margin: '0.5rem 0 0', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
-                    {project.desc}
-                  </p>
-                </div>
-              </div>
-
-              {/* Card Footer (Launch Link button) */}
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '0.75rem' }}>
-                <a
-                  href={project.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    background: isDark ? 'rgba(255, 255, 255, 0.06)' : '#f4f4f5',
-                    color: isDark ? '#ffffff' : 'var(--ink)',
-                    border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid var(--gray-200)',
-                    padding: '0.55rem 1.25rem',
-                    borderRadius: '8px',
-                    fontSize: '0.75rem',
-                    fontWeight: 600,
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    transition: 'all 0.2s'
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.12)' : '#e4e4e7'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.06)' : '#f4f4f5'; }}
-                >
-                  Launch Project <FaExternalLinkAlt size={10} />
-                </a>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-
-      {/* Navigation Controls */}
-      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-        <button onClick={handlePrev} style={{
-          width: '36px', height: '36px',
-          border: '1px solid var(--gray-300)',
-          background: 'var(--bg)',
-          borderRadius: '50%',
-          cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: 'var(--gray-500)',
-          transition: 'all 0.2s'
-        }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--ink)'; e.currentTarget.style.color = 'var(--ink)'; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--gray-300)'; e.currentTarget.style.color = 'var(--gray-500)'; }}
-        >
-          <FaChevronLeft size={12} />
-        </button>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--gray-400)' }}>
-          {String(activeIndex + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
-        </span>
-        <button onClick={handleNext} style={{
-          width: '36px', height: '36px',
-          border: '1px solid var(--gray-300)',
-          background: 'var(--bg)',
-          borderRadius: '50%',
-          cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: 'var(--gray-500)',
-          transition: 'all 0.2s'
-        }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--ink)'; e.currentTarget.style.color = 'var(--ink)'; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--gray-300)'; e.currentTarget.style.color = 'var(--gray-500)'; }}
-        >
-          <FaChevronRight size={12} />
-        </button>
-      </div>
-    </div>
-  );
-};
 
 // ─────────────────────────────────────────────────────────────
 // GitHub Contributions Component
@@ -870,7 +658,6 @@ function App() {
   }, [lightboxImages]);
 
   const [activeSection, setActiveSection] = useState('hero');
-  const [showAllProjects, setShowAllProjects] = useState(true);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [view, setView] = useState('portfolio');
   const [isLoggedIn, setIsLoggedIn] = useState(null);
@@ -1666,41 +1453,26 @@ function App() {
               <div className="section-label">05 — Works</div>
               <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ink)', margin: 0 }}>Selected Projects</h2>
             </div>
-            <button onClick={() => setShowAllProjects(p => !p)} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gray-500)', textDecoration: 'underline', transition: 'color 0.2s', padding: 0 }}
-              onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
-              onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-500)'}
-            >
-              {showAllProjects ? 'Show 3D Carousel' : 'Show All Projects'}
-            </button>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
-            {!showAllProjects ? (
-              <Project3DCarousel projects={ALL_PROJECTS_DATA} isMobile={isMobile} isDark={resolvedDark} />
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: isMobile ? '1rem' : '1.25rem' }}>
-                {ALL_PROJECTS_DATA.map((p, i) => (
-                  <ScrollReveal as="a" key={i} delay={i * 0.07} href={p.url} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', border: '1px solid var(--gray-200)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'var(--bg)', transition: 'border-color 0.2s' }}
-                    onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gray-400)'}
-                    onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--gray-200)'}
-                  >
-                    <div style={{ height: '160px', overflow: 'hidden', borderBottom: '1px solid var(--gray-200)' }}>
-                      <img src={p.img} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(15%)', transition: 'filter 0.3s, transform 0.4s' }}
-                        onMouseEnter={e => { e.currentTarget.style.filter = 'grayscale(0%)'; e.currentTarget.style.transform = 'scale(1.04)'; }}
-                        onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(15%)'; e.currentTarget.style.transform = 'scale(1)'; }}
-                      />
-                    </div>
-                    <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                      <h4 style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'var(--ink)', margin: 0, letterSpacing: '-0.02em' }}>{p.title}</h4>
-                      <p style={{ fontSize: '0.8125rem', color: 'var(--gray-500)', lineHeight: '1.55', margin: 0 }}>{p.desc}</p>
-                      <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', marginTop: 'auto', paddingTop: '0.75rem' }}>
-                        {p.tags.map(t => <span key={t} className="skill-tag">{t}</span>)}
-                      </div>
-                    </div>
-                  </ScrollReveal>
-                ))}
-              </div>
-            )}
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: isMobile ? '1rem' : '1.25rem' }}>
+            {ALL_PROJECTS_DATA.map((p, i) => (
+              <ScrollReveal as="a" key={i} delay={i * 0.07} href={p.url} target="_blank" rel="noreferrer" className="project-card" style={{ position: 'relative', textDecoration: 'none', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'var(--bg)' }}>
+                <div style={{ height: '160px', overflow: 'hidden' }}>
+                  <img src={p.img} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(15%)', transition: 'filter 0.3s, transform 0.4s' }}
+                    onMouseEnter={e => { e.currentTarget.style.filter = 'grayscale(0%)'; e.currentTarget.style.transform = 'scale(1.04)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(15%)'; e.currentTarget.style.transform = 'scale(1)'; }}
+                  />
+                </div>
+                <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <h4 style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'var(--ink)', margin: 0, letterSpacing: '-0.02em' }}>{p.title}</h4>
+                  <p style={{ fontSize: '0.8125rem', color: 'var(--gray-500)', lineHeight: '1.55', margin: 0 }}>{p.desc}</p>
+                  <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', marginTop: 'auto', paddingTop: '0.75rem' }}>
+                    {p.tags.map(t => <span key={t} className="skill-tag">{t}</span>)}
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
           </div>
         </ScrollReveal>
 
@@ -1793,11 +1565,11 @@ function App() {
               <div className="footer-contact-details">
                 <div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.35rem' }}>Email</div>
-                  <a href="mailto:johncarloaganan.startuplab@gmail.com" style={{ fontSize: '0.9375rem', color: 'var(--ink)', textDecoration: 'none', transition: 'color 0.2s' }}
+                  <a href="mailto:johncarloaganan26@gmail.com" style={{ fontSize: '0.9375rem', color: 'var(--ink)', textDecoration: 'none', transition: 'color 0.2s' }}
                     onMouseEnter={e => e.currentTarget.style.color = 'var(--gray-500)'}
                     onMouseLeave={e => e.currentTarget.style.color = 'var(--ink)'}
                   >
-                    johncarloaganan.startuplab@gmail.com
+                    johncarloaganan26@gmail.com
                   </a>
                 </div>
                 <div>
@@ -1805,7 +1577,7 @@ function App() {
                   <span style={{ fontSize: '0.9375rem', color: 'var(--gray-500)' }}>Naic, Cavite, Philippines</span>
                 </div>
                 <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-                  <a href="https://github.com" target="_blank" rel="noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--gray-400)', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.08em', transition: 'color 0.2s' }}
+                  <a href="https://github.com/Ulacdev" target="_blank" rel="noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--gray-400)', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.08em', transition: 'color 0.2s' }}
                     onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
                     onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-400)'}
                   >GitHub</a>
@@ -1813,6 +1585,10 @@ function App() {
                     onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
                     onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-400)'}
                   >LinkedIn</a>
+                  <a href="https://www.facebook.com/carlo.dronze" target="_blank" rel="noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--gray-400)', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.08em', transition: 'color 0.2s' }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-400)'}
+                  >Facebook</a>
                 </div>
               </div>
             </div>
