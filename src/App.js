@@ -189,7 +189,19 @@ const ScrollReveal = ({ as = 'div', children, delay = 0, image = false, ...props
 };
 
 const Gallery = ({ onImageClick }) => {
-  const images = ['/me.jpg', '/gal2.jpg', '/gal3.jpg', '/gal4.jpg', '/gall.jpg', '/thesis.jpg', '/baby.jpg', '/baby2.jpg', '/bb.jpg'];
+  const images = [
+    { src: '/me.jpg', alt: 'John Carlo' },
+    { src: '/gal2.jpg', alt: 'Life and work gallery photo' },
+    { src: '/gal3.jpg', alt: 'Life and work gallery photo' },
+    { src: '/gal4.jpg', alt: 'Life and work gallery photo' },
+    { src: '/gall.jpg', alt: 'Life and work gallery photo' },
+    { src: '/thesis.jpg', alt: 'Thesis project' },
+    { src: '/baby.jpg', alt: 'Life and work gallery photo' },
+    { src: '/baby2.jpg', alt: 'Life and work gallery photo' },
+    { src: '/bb.jpg', alt: 'Life and work gallery photo' },
+    { src: '/work-presentation.jpg', alt: 'Presenting a software project to a group' },
+    { src: '/work-system-demo.jpg', alt: 'Demonstrating a barangay management system' }
+  ];
   const ref = useRef(null);
 
   const scroll = dir => {
@@ -227,7 +239,7 @@ const Gallery = ({ onImageClick }) => {
       </div>
 
       <div ref={ref} className="no-scrollbar" style={{ display: 'flex', gap: '0.75rem', overflowX: 'auto', scrollSnapType: 'x mandatory' }}>
-        {images.map((src, i) => (
+        {images.map(({ src, alt }, i) => (
           <ScrollReveal as="div" key={i} image delay={i * 0.07} style={{
             flex: '0 0 240px',
             aspectRatio: '4/3',
@@ -241,8 +253,8 @@ const Gallery = ({ onImageClick }) => {
             onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gray-400)'}
             onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--gray-200)'}
           >
-            <img src={src} alt={`Gallery ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(15%)', transition: 'filter 0.3s, transform 0.4s', cursor: 'pointer' }}
-              onClick={() => onImageClick && onImageClick(images, i)}
+            <img src={src} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(15%)', transition: 'filter 0.3s, transform 0.4s', cursor: 'pointer' }}
+              onClick={() => onImageClick && onImageClick(images.map(image => image.src), i)}
               onMouseEnter={e => { e.currentTarget.style.filter = 'grayscale(0%)'; e.currentTarget.style.transform = 'scale(1.04)'; }}
               onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(15%)'; e.currentTarget.style.transform = 'scale(1)'; }}
             />
@@ -840,7 +852,7 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [lightboxImages, setLightboxImages] = useState([]);
   const [lightboxIndex, setLightboxIndex] = useState(-1);
-  const [heroSlide, setHeroSlide] = useState(0);
+  const heroStageRef = useRef(null);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -861,17 +873,33 @@ function App() {
   const [showAllProjects, setShowAllProjects] = useState(true);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [view, setView] = useState('portfolio');
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
   useEffect(() => {
-    if (view !== 'portfolio' || shouldReduceMotion) return undefined;
+    if (view !== 'portfolio') return undefined;
 
-    const slideTimer = setInterval(() => {
-      setHeroSlide(current => (current + 1) % 2);
-    }, 7000);
-    return () => clearInterval(slideTimer);
-  }, [shouldReduceMotion, view]);
+    const stage = heroStageRef.current;
+    if (!stage) return undefined;
+
+    const updateSlide = () => {
+      const scrollDistance = stage.offsetHeight - window.innerHeight;
+      const progress = scrollDistance > 0
+        ? Math.min(1, Math.max(0, -stage.getBoundingClientRect().top / scrollDistance))
+        : 0;
+      stage.style.setProperty('--hero-transition-progress', progress > 0 ? 1 : 0);
+      stage.style.setProperty('--hero-content-shift', `${-progress * window.innerHeight * 0.22}px`);
+      stage.style.setProperty('--hero-scroll-progress', progress);
+    };
+
+    updateSlide();
+    window.addEventListener('scroll', updateSlide, { passive: true });
+    window.addEventListener('resize', updateSlide);
+    return () => {
+      window.removeEventListener('scroll', updateSlide);
+      window.removeEventListener('resize', updateSlide);
+    };
+  }, [isLoggedIn, shouldReduceMotion, view]);
 
   const [misView, setMisView] = useState('dashboard');
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
   const [formStatus, setFormStatus] = useState({ loading: false, success: false, error: false, message: '' });
   const [totalViews, setTotalViews] = useState(0);
@@ -1396,46 +1424,49 @@ function App() {
 
       <section
         id="hero"
-        className="hero-section"
+        ref={heroStageRef}
+        className="hero-scroll-stage hero-scroll-stage--pinned"
         aria-labelledby="hero-title"
         style={{
           '--hero-desktop-image-one': "url('/assets/img/experience/about-hero-graduation.png')",
           '--hero-desktop-image-two': "url('/hero-graduation-banner.png')",
-          '--hero-mobile-image-one': "url('/new-pfp.jpg')",
-          '--hero-mobile-image-two': "url('/me.jpg')"
+          '--hero-mobile-image-one': "url('/me.jpg')",
+          '--hero-mobile-image-two': "url('/new-pfp.jpg')"
         }}
       >
-        {[0, 1].map(index => (
-          <div
-            key={index}
-            className={`hero-background-slide${heroSlide === index ? ' is-active' : ''}`}
-            style={{
-              '--hero-slide-desktop-image': `var(--hero-desktop-image-${index === 0 ? 'one' : 'two'})`,
-              '--hero-slide-mobile-image': `var(--hero-mobile-image-${index === 0 ? 'one' : 'two'})`,
-              '--hero-slide-mobile-position': 'center top'
-            }}
-            aria-hidden="true"
-          />
-        ))}
-        <div className="hero-content">
-          <p className="hero-eyebrow">Full-Stack Developer <span aria-hidden="true">/</span> Cavite, Philippines</p>
-          <h1 id="hero-title">John Carlo<br />Aganan<span className="hero-title-period">.</span></h1>
-          <p className="hero-description">
-            I build reliable, thoughtful web applications — from clean interfaces to the systems behind them.
-          </p>
-          <div className="hero-actions">
-            <button type="button" className="hero-button hero-button--primary" onClick={() => scrollToSection('projects')}>
-              Explore my work <FaChevronRight aria-hidden="true" />
-            </button>
-            <button type="button" className="hero-button hero-button--secondary" onClick={() => scrollToSection('about')}>
-              About me
-            </button>
+        <div className="hero-section">
+          {[0, 1].map(index => (
+            <div
+              key={index}
+              className={`hero-background-slide hero-background-slide--${index === 0 ? 'first' : 'second'}`}
+              style={{
+                '--hero-slide-desktop-image': `var(--hero-desktop-image-${index === 0 ? 'one' : 'two'})`,
+                '--hero-slide-mobile-image': `var(--hero-mobile-image-${index === 0 ? 'one' : 'two'})`,
+                '--hero-slide-mobile-position': 'center top'
+              }}
+              aria-hidden="true"
+            />
+          ))}
+          <div className="hero-content">
+            <p className="hero-eyebrow">Full-Stack Developer <span aria-hidden="true">/</span> Cavite, Philippines</p>
+            <h1 id="hero-title">John Carlo<br />Aganan<span className="hero-title-period">.</span></h1>
+            <p className="hero-description">
+              I build reliable, thoughtful web applications — from clean interfaces to the systems behind them.
+            </p>
+            <div className="hero-actions">
+              <button type="button" className="hero-button hero-button--primary" onClick={() => scrollToSection('projects')}>
+                Explore my work <FaChevronRight aria-hidden="true" />
+              </button>
+              <button type="button" className="hero-button hero-button--secondary" onClick={() => scrollToSection('about')}>
+                About me
+              </button>
+            </div>
           </div>
+          <button type="button" className="hero-scroll-cue" onClick={() => scrollToSection('about')}>
+            <span aria-hidden="true" />
+            Scroll to explore
+          </button>
         </div>
-        <button type="button" className="hero-scroll-cue" onClick={() => scrollToSection('about')}>
-          <span aria-hidden="true" />
-          Scroll to explore
-        </button>
       </section>
 
       {/* ── MAIN CONTENT ─────────────────────────────────────── */}

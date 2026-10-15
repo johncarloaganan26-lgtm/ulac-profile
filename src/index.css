@@ -779,6 +779,16 @@ body::before {
   min-height: 100vh;
 }
 
+.hero-scroll-stage {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-scroll-stage--pinned {
+  height: 200vh;
+  height: 200svh;
+}
+
 .hero-section {
   position: relative;
   z-index: 1;
@@ -790,6 +800,14 @@ body::before {
   padding: 7rem max(var(--page-gutter), calc((100% - var(--content-max-width)) / 2)) 5rem;
   color: #fff;
   background-color: #111315;
+}
+
+.hero-scroll-stage--pinned .hero-section {
+  position: sticky;
+  top: 0;
+  box-sizing: border-box;
+  height: 100vh;
+  height: 100svh;
 }
 
 .hero-section::before {
@@ -812,21 +830,25 @@ body::before {
   background-repeat: no-repeat;
   background-size: auto 118vh;
   background-attachment: fixed;
-  opacity: 0;
-  transform: scale(1.06);
-  transition: opacity 1.8s cubic-bezier(0.22, 1, 0.36, 1), transform 7s ease-out;
-  will-change: opacity, transform;
+  transform: none;
+  will-change: opacity;
   pointer-events: none;
 }
 
-.hero-background-slide.is-active {
-  opacity: 1;
-  transform: scale(1);
+.hero-background-slide--first {
+  opacity: calc(1 - var(--hero-transition-progress, 0));
+}
+
+.hero-background-slide--second {
+  opacity: var(--hero-transition-progress, 0);
 }
 
 .hero-section .hero-content,
 .hero-section .hero-scroll-cue {
   z-index: 2;
+  opacity: calc(1 - var(--hero-scroll-progress, 0));
+  transform: translateY(var(--hero-content-shift, 0px));
+  will-change: opacity, transform;
 }
 
 .hero-section .hero-content {
@@ -839,7 +861,6 @@ body::before {
 
 @media (prefers-reduced-motion: reduce) {
   .hero-background-slide {
-    transition: none;
     transform: none;
   }
 }
@@ -1367,7 +1388,7 @@ a.header-menu-option {
 @media (max-width: 600px) {
   .hero-section {
     align-items: flex-end;
-    padding: 0 max(var(--page-gutter), calc((100% - var(--content-max-width)) / 2)) 5.5rem;
+    padding: 0 max(var(--page-gutter), calc((100% - var(--content-max-width)) / 2)) 4.75rem;
     background-color: #101214;
   }
 
@@ -1377,33 +1398,35 @@ a.header-menu-option {
 
   .hero-background-slide {
     background-position: var(--hero-slide-mobile-position, center top);
-    background-size: auto 82%;
+    background-size: auto 100%;
   }
 
   .hero-content h1 {
-    font-size: clamp(3rem, 14vw, 4.5rem);
+    font-size: clamp(2.25rem, 10.5vw, 3.5rem);
   }
 
   .hero-eyebrow {
-    font-size: 0.58rem;
-    letter-spacing: 0.09em;
+    margin-bottom: 1rem;
+    font-size: clamp(0.5rem, 2.6vw, 0.58rem);
+    letter-spacing: 0.07em;
   }
 
   .hero-description {
-    max-width: 28rem;
-    margin-top: 1.1rem;
-    font-size: 1rem;
+    max-width: 24rem;
+    margin-top: 0.9rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 
   .hero-actions {
-    gap: 0.6rem;
-    margin-top: 1.5rem;
+    gap: 0.5rem;
+    margin-top: 1rem;
   }
 
   .hero-button {
-    min-height: 42px;
-    padding: 0.65rem 0.8rem;
-    font-size: 0.6rem;
+    min-height: 40px;
+    padding: 0.6rem 0.72rem;
+    font-size: 0.55rem;
   }
 
   .hero-scroll-cue {
