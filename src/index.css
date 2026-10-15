@@ -670,7 +670,7 @@ body::before {
   padding: 1.5rem;
   border: 1px solid var(--gray-200);
   border-radius: 8px;
-  background: var(--surface-subtle);
+  background: #000;
 }
 
 .contact-form-eyebrow {
